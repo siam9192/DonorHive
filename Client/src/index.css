@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Jost:ital@0;1&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import "tailwindcss";
+
+@theme {
+    --color-primary:rgb(4,181,99);
+    --color-secondary:rgb(255,187,4);
+    --font-primary: "Poppins", "serif";
+    --font-secondary:"Open Sans", "serif";
+}
+body{
+    font-family: "Poppins", serif;
+}
+button:hover{
+    cursor: pointer;
+}
+
+.get-involved-section{
+    background-image: url('/images/hands-png.png');
+    background-repeat:repeat-x;
+    background-position: left bottom;
+    background-blend-mode: multiply;
+}
+
+.responsive-navbar {
+  animation: navbar-animation 700ms ease-in-out ;
+}
+
+@keyframes navbar-animation{
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+   to {
+    opacity: 100;
+    transform: translateY(0px);
+   }
+}
+
+.auth-popup-button-container::after {
+  content:'';
+  width: 50%;
+  position: absolute;
+  left: 0;
+  height: 100%;
+  z-index: -1;
+  background-color: green;
+}
+
+.auth-form {
+  animation:auth-arrive 600ms ease-in-out;
+}
+
+.auth-popup {
+    animation:auth-arrive 300ms ease-in-out;
+}
+
+@keyframes  auth-arrive {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 100;
+        transform: translateY(0px);
+    }
+}

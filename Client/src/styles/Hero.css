@@ -1,0 +1,9 @@
+.hero {
+    width: 100%;
+
+    background-image: url('/images/banner-2.jpg'),linear-gradient(329deg, rgba(101,75,42,0.08167016806722693) 0%, rgba(14,14,14,0.5494572829131652) 0%);
+    background-size: cover;
+    background-blend-mode: overlay;
+    background-position: center;
+    
+}

@@ -1,0 +1,10 @@
+.campaign-header {
+    height: 40vh;
+    width: 100%;
+    background-image: url('./images/banner.jpg'),linear-gradient(148deg, rgba(14,14,14,0.4542191876750701) 0%, rgba(14,14,14,0.700717787114846) 100%, rgba(14,14,14,1) 100%, rgba(142,137,144,0.23573179271708689) 100%);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-blend-mode: overlay;
+   
+}
