@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { FcNext, FcPrevious } from "react-icons/fc";
 import { IMeta } from "../../interfaces/response.interface";
@@ -72,7 +71,7 @@ function Pagination({ total, limit, page, delta = 2, onPageChange }: TProps) {
             setCurrentPage(p);
             onPageChange(p);
           }}
-          className={`${currentPage === page ? "bg-secondary text-black" : "bg-primary text-white "} size-10 `}
+          className={`${currentPage === page ? "bg-secondary text-black" : "bg-primary text-white "} md:size-10 size-8 `}
         >
           {page}
         </button>

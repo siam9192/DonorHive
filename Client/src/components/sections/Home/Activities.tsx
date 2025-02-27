@@ -9,6 +9,7 @@ const Activities = () => {
     triggerOnce: false,
     threshold: 0.5,
   });
+
   return (
     <section className="py-10 bg-[#F9F9F9]">
       <Container>
@@ -40,7 +41,7 @@ const Activities = () => {
               rerum architecto. Est, iste?
             </p>
             {inView ? (
-              <div className="flex items-center  justify-between">
+              <div className="flex md:flex-row flex-col md:gap-0 gap-3 md:items-center    md:justify-between">
                 <div className="text-center">
                   <h1 className="md:text-5xl text-4xl text-primary font-bold">
                     <CountUp end={12} duration={2} />

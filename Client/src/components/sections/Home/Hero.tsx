@@ -4,24 +4,26 @@ import Container from "../../container/Container";
 import HeroSearchForm from "../../forms/HeroSearchForm";
 const Hero = () => {
   return (
-    <div className="hero lg:min-h-[100vh] h-[90vh]">
+    <div className="hero lg:min-h-[100vh] min-h-[90vh]">
       <Container>
         <div className="grid lg:grid-cols-2 grid-cols-1 gap-10 ">
-          <div className="space-y-5 md:py-32 py-10">
-            <h1 className=" lg:text-8xl md:text-7xl text-6xl text-white font-medium">
+          <div className="md:space-y-5 space-y-10 md:py-32 py-10">
+            <h1 className=" lg:text-8xl md:text-7xl text-5xl text-white font-medium">
               Habitat for <span className="text-primary font-bold">Humanity</span> Donations
             </h1>
-            <p className="text-gray-200 text-[0.9rem] font-secondary">
+            <p className="text-gray-200 text-[0.9rem] font-secondary md:block hidden">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam suscipit doloribus
               rerum reprehenderit, eaque dolorem illo! Odit consequatur pariatur maxime nulla
               magnam? Nesciunt atque ipsam fugit tempore debitis qui nisi aperiam. Soluta ea
               doloribus ullam reiciendis facilis exercitationem explicabo. Rem!
             </p>
             <div className="flex items-center gap-3">
-              <button className=" text-primary lg:text-[70px] md:text-[60px] text-[50px] animate-pulse border-4 border-secondary rounded-full p-2">
+              <button className=" text-primary lg:text-[70px] md:text-[60px] text-[40px] animate-pulse border-4 border-secondary rounded-full p-2">
                 <FaPlayCircle />
               </button>
-              <h2 className="text-gray-300 text-3xl font-medium font-secondary">Watching Video</h2>
+              <h2 className="text-gray-300 md:text-3xl text-2xl font-medium font-secondary">
+                Watching Video
+              </h2>
             </div>
             <div className="absolute bottom-0 left-0 w-full space-y-2 px-2 lg:hidden">
               <button className="w-full py-3 font-medium bg-secondary text-gray-950 float-right  lg:hidden">

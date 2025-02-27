@@ -1,5 +1,3 @@
-
-
 const ActivityCard = () => {
   return (
     <div className="md:flex gap-3  hover:border-b-4 p-2  border-primary shadow">

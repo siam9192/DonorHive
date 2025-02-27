@@ -1,4 +1,3 @@
-
 import AuthProviderButtons from "../ui/AuthProviderButtons";
 
 const LoginForm = () => {

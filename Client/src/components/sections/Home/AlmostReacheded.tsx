@@ -3,6 +3,7 @@ import CampaignCard from "../../cards/CampaignCard";
 import Container from "../../container/Container";
 import Heading from "../../ui/Heading";
 import { CSSProperties, useEffect, useState } from "react";
+import UseScreen from "../../../hooks/UseScreen";
 
 const headingProps = {
   heading: "Almost Reacheded",
@@ -12,21 +13,8 @@ const headingProps = {
 
 const AlmostReacheded = () => {
   const [current, setCurrent] = useState(0);
-  const [screenType, setScreenType] = useState("lg");
 
-  // 	40rem (640px)	@media (width >= 40rem) { ... }
-  // md	48rem (768px)	@media (width >= 48rem) { ... }
-  // lg	64rem (1024px)	@media (width >= 64rem) { ... }
-  // xl	80rem (1280px)	@media (width >= 80rem) { ... }
-  // 2xl	96rem (1536px)
-  useEffect(() => {
-    const innerWidth = window.innerWidth;
-    if (innerWidth > 768) {
-      setScreenType("lg");
-    } else if (innerWidth < 768 && innerWidth > 640) {
-      setScreenType("md");
-    } else setScreenType("sm");
-  }, [window.innerWidth]);
+  const { screenType } = UseScreen();
 
   const total = 9;
   const limit = screenType === "lg" ? 3 : screenType === "md" ? 2 : 1;
@@ -47,7 +35,6 @@ const AlmostReacheded = () => {
     }
   };
 
- 
   return (
     <section className="py-10 ">
       <Container>
@@ -68,7 +55,7 @@ const AlmostReacheded = () => {
             <MdOutlineArrowForwardIos />
           </button>
         </div>
-        <div className="mt-10 flex   relative h-[60vh]  overflow-hidden ">
+        <div className="mt-10 flex   relative md:h-[60vh] h-[65vh]  overflow-hidden ">
           {Array.from({ length: total }).map((_, index) => (
             <div
               className="absolute  p-2  transition-all duration-500 ease-in-out"

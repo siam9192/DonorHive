@@ -51,8 +51,8 @@ const NavShortcut = () => {
     };
   }, [isOpen]);
   return (
-    <div className="relative z-50">
-      <div onMouseEnter={() => setIsOpen(true)}  className="flex items-center gap-2">
+    <div className="relative z-40">
+      <div onMouseEnter={() => setIsOpen(true)} className="flex items-center gap-2">
         <img
           src="https://cdn-icons-png.flaticon.com/512/3001/3001758.png"
           alt=""
@@ -67,14 +67,14 @@ const NavShortcut = () => {
             ref={ref}
             className="absolute top-16 -right-5 w-52 min-h-60 bg-white shadow-xl p-3 rounded-md "
           >
-           <div className="pb-3 border-b border-gray-200/55 flex items-center gap-1">
-           <img
-          src="https://cdn-icons-png.flaticon.com/512/3001/3001758.png"
-          alt=""
-          className="size-10 p-1 bg-white  rounded-full"
-        />
-           <h2 className="text-[1.1rem] font-medium text-gray-950">Siam Hasan</h2>
-           </div>
+            <div className="pb-3 border-b border-gray-200/55 flex items-center gap-1">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/3001/3001758.png"
+                alt=""
+                className="size-10 p-1 bg-white  rounded-full"
+              />
+              <h2 className="text-[1.1rem] font-medium text-gray-950">Siam Hasan</h2>
+            </div>
             <div className="mt-3 space-y-4 font-secondary">
               {routes.map((item) => (
                 <Link

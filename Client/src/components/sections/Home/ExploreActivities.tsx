@@ -1,4 +1,3 @@
-
 import Container from "../../container/Container";
 import Heading from "../../ui/Heading";
 import ActivityCard from "../../cards/ActivityCard";

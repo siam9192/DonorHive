@@ -77,10 +77,10 @@ const Header = () => {
         <Container>
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <span className="md:text-5xl text-4xl text-white">
+              <span className="md:text-5xl text-3xl text-white">
                 <FaDonate />
               </span>
-              <h1 className="md:text-2xl text-xl font-semibold text-gray-200">DonorHive</h1>
+              <h1 className="md:text-2xl text-lg font-semibold text-gray-200">DonorHive</h1>
             </div>
             <nav className="lg:flex items-center gap-2 text-white uppercase lg:block hidden ">
               {navLinks.map((item) => (
@@ -94,7 +94,7 @@ const Header = () => {
                 Donate Now
               </button>
               <LoginPopup>
-                <span className="text-3xl text-white">
+                <span className="md:text-3xl text-2xl text-white">
                   <FaUser />
                 </span>
               </LoginPopup>

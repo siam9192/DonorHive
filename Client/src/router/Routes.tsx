@@ -1,4 +1,5 @@
 import App from "../App";
+import Campaign from "../pages/Campaign";
 import Campaigns from "../pages/Campaigns";
 import Home from "../pages/Home";
 
@@ -12,8 +13,12 @@ const routes = [
         element: <Home />,
       },
       {
-        path: "/campaigns",
+        path: "campaigns",
         element: <Campaigns />,
+      },
+      {
+        path: "campaigns/:slug",
+        element: <Campaign />,
       },
     ],
   },

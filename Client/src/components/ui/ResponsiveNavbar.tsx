@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { RxCross1 } from "react-icons/rx";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const navLinks = [
   {
@@ -10,7 +10,7 @@ const navLinks = [
   },
   {
     name: "Campaigns",
-    href: "/",
+    href: "/campaigns",
   },
   {
     name: "News",
@@ -28,16 +28,20 @@ const navLinks = [
 
 const ResponsiveNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { pathname } = useLocation();
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
   }, [isOpen]);
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   return (
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="text-2xl text-gray-950 p-2 bg-secondary   lg:hidden"
+        className="text-xl text-gray-950 p-1 bg-secondary   lg:hidden"
       >
         <AiOutlineMenu />
       </button>

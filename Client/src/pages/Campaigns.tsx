@@ -1,16 +1,15 @@
-import React from 'react'
-import CampaignHeader from '../components/sections/Campaigns/CampaignHeader'
-import ShowCampaigns from '../components/sections/Campaigns/ShowCampaigns'
-import CampaignFilterBox from '../components/sections/Campaigns/CampaignFilterBox'
+import ShowCampaigns from "../components/sections/Campaigns/ShowCampaigns";
+import CampaignFilterBox from "../components/sections/Campaigns/CampaignFilterBox";
+import CampaignsHeader from "../components/sections/Campaigns/CampaignsHeader";
 
 const Campaigns = () => {
   return (
     <div>
-        <CampaignHeader/>
-        <CampaignFilterBox/>
-        <ShowCampaigns/>
+      <CampaignsHeader />
+      <CampaignFilterBox />
+      <ShowCampaigns />
     </div>
-  )
-}
+  );
+};
 
-export default Campaigns
+export default Campaigns;
