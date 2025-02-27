@@ -19,3 +19,21 @@
     background-blend-mode: overlay;
    
 }
+
+
+.donation-popup-form {
+    animation:donation-popup-form-arrive 300ms ease-in-out;
+}
+
+
+@keyframes  donation-popup-form-arrive {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+    to {
+        opacity: 100;
+        transform: translateX(0px);
+    }
+}
+

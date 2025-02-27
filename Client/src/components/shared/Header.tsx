@@ -38,7 +38,7 @@ const Header = () => {
     },
     {
       name: "About Us",
-      href: "/",
+      href: "/about-us",
     },
     {
       name: "Contact Us",

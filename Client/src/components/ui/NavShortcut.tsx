@@ -4,7 +4,7 @@ import { FaChevronDown, FaDonate } from "react-icons/fa";
 import { FiSettings } from "react-icons/fi";
 import { ImProfile } from "react-icons/im";
 import { TbLogout } from "react-icons/tb";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 const donorRoutes = [
   {
     name: "My Profile",
@@ -31,7 +31,7 @@ const donorRoutes = [
 const NavShortcut = () => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-
+ const {pathname} = useLocation()
   const routes = donorRoutes;
 
   useEffect(() => {
@@ -50,8 +50,11 @@ const NavShortcut = () => {
       document.removeEventListener("click", handler);
     };
   }, [isOpen]);
+
+  useEffect(()=>{setIsOpen(false)},[pathname])
+  
   return (
-    <div className="relative z-40">
+    <div className="relative  ">
       <div onMouseEnter={() => setIsOpen(true)} className="flex items-center gap-2">
         <img
           src="https://cdn-icons-png.flaticon.com/512/3001/3001758.png"
@@ -65,9 +68,9 @@ const NavShortcut = () => {
           <div
             onMouseLeave={() => setIsOpen(false)}
             ref={ref}
-            className="absolute top-16 -right-5 w-52 min-h-60 bg-white shadow-xl p-3 rounded-md "
+            className="absolute top-16 -right-5 w-52 min-h-60 bg-white shadow-xl p-3 rounded-md z-30 "
           >
-            <div className="pb-3 border-b border-gray-200/55 flex items-center gap-1">
+            <div className="pb-3 border-b border-gray-200/55 flex items-center gap-1 ">
               <img
                 src="https://cdn-icons-png.flaticon.com/512/3001/3001758.png"
                 alt=""

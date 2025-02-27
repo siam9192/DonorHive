@@ -32,11 +32,13 @@ const ShowCampaigns = () => {
             ))}
           </select>
         </div>
+
         <div className="mt-10 grid lg:grid-cols-3 grid-cols-2  md:gap-5 gap-3">
-          {Array.from({ length: 10 }).map((_, index) => (
+          {Array.from({ length: 14 }).map((_, index) => (
             <CampaignCard key={index} />
           ))}
         </div>
+
         <div className="mt-10 flex justify-center items-center">
           <Pagination total={50} limit={10} page={3} onPageChange={() => {}} />
         </div>

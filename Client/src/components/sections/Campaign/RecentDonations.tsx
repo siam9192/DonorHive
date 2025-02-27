@@ -1,6 +1,7 @@
 import React from "react";
 import DonationCard from "../../cards/DonationCard";
 import { FaLongArrowAltRight } from "react-icons/fa";
+import ViewAllDonationsPopup from "../../ui/ViewAllDonationsPopup";
 
 const RecentDonations = () => {
   return (
@@ -12,12 +13,14 @@ const RecentDonations = () => {
         ))}
       </div>
       <div className="flex justify-end">
-        <button className=" flex items-center gap-1 border-b font-semibold text-amber-600 hover:text-black md:text-lg text-[0.8rem]">
-          <span>View All</span>
-          <span>
-            <FaLongArrowAltRight />
-          </span>
-        </button>
+        <ViewAllDonationsPopup>
+          <button className=" flex items-center gap-1 border-b font-semibold text-amber-600 hover:text-black md:text-lg text-[0.8rem]">
+            <span>View All</span>
+            <span>
+              <FaLongArrowAltRight />
+            </span>
+          </button>
+        </ViewAllDonationsPopup>
       </div>
     </div>
   );

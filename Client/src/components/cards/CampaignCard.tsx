@@ -14,7 +14,7 @@ const CampaignCard = () => {
       <div className="bg-white">
         <div className="relative">
           <img
-            src="https://images.pexels.com/photos/1739842/pexels-photo-1739842.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+            src="https://media.istockphoto.com/id/496276728/photo/group-of-happy-gypsy-indian-children-desert-village-india.jpg?s=612x612&w=0&k=20&c=p7WwGJTF0rIbBbj2Gt4TGAol4nbmjjHekXc9qxkk3Os="
             alt=""
             className="rounded-md"
           />
