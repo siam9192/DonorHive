@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import { FiDollarSign } from "react-icons/fi";
 import DonorDetailsForm from "../../ui/DonorDetailsForm";
+import DonateButton from "../../ui/DonateButton";
 
 const Donation = () => {
   const [selectedAmount, setSelectedAmount] = useState<number | null>();
@@ -69,12 +70,7 @@ const Donation = () => {
         ) : null}
       </div>
       <div className="mt-14">
-        <button
-          disabled={!selectedAmount}
-          className="py-3 disabled:bg-gray-100 disabled:text-gray-600 bg-primary text-white font-semibold w-full rounded-lg font-secondary"
-        >
-          Donate {selectedAmount ? "$" + selectedAmount : ""}
-        </button>
+    <DonateButton selectedAmount={selectedAmount}/>
       </div>
 
       <div className=" mt-10 pt-4 border-t border-gray-700/20">

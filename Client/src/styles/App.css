@@ -25,6 +25,21 @@
     animation:donation-popup-form-arrive 300ms ease-in-out;
 }
 
+.donation-details {
+    animation:donation-details-arrive 300ms ease-in-out;
+}
+
+@keyframes  donation-details-arrive {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+    to {
+        opacity: 100;
+        transform: translateX(0px);
+    }
+}
+
 
 @keyframes  donation-popup-form-arrive {
     from {

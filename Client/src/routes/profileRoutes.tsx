@@ -1,5 +1,6 @@
 import EditProfile from "../pages/profile/EditProfile";
 import MyDonations from "../pages/profile/MyDonations";
+import MyWatchList from "../pages/profile/MyWatchList";
 import PersonalInformation from "../pages/profile/PersonalInformation";
 import Profile from "../pages/profile/Profile";
 
@@ -20,6 +21,10 @@ const profileRoutes = [
   {
     path:"my-donations",
     element:<MyDonations/>
+  },
+  {
+    path:"watch-list",
+    element:<MyWatchList/>
   }
 ];
 

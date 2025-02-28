@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { AiOutlineMenu } from "react-icons/ai";
 import { BiSolidDonateHeart } from "react-icons/bi";
 import { CiLogout } from "react-icons/ci";
 import { FaCog, FaHistory, FaUserCircle } from "react-icons/fa";
@@ -37,8 +38,19 @@ const ProfileSidebar = () => {
   ];
 
   const {pathname} = useLocation();
+   
+  const [isOpen,setIsOpen] = useState(false)
   return (
-    <div className="p-5 bg-white  h-full flex flex-col justify-between ">
+   <div className="relative">
+  <div className="flex items-center justify-between p-2 lg:hidden">
+    <h2 className="text-xl font-medium">
+      Profile Menu 
+    </h2>
+    <button onClick={()=>setIsOpen(!isOpen)} className="  p-2 bg-gray-50 rounded-md text-2xl  top-2  right-1 rotate-2">
+    <AiOutlineMenu />
+    </button>
+  </div>
+     <div className={`bg-white  flex flex-col justify-between lg:h-full lg:p-5 ${isOpen ? '  md:h-[800px] p-5':'h-0 overflow-hidden'} duration-200 transition-all`}>
       <div>
         <div className="flex  gap-2">
           <div className="border-2 border-gray-700/10 rounded-full h-fit ">
@@ -75,6 +87,7 @@ const ProfileSidebar = () => {
         <span className="text-red-500 md:text-xl text-lg font-medium">Logout</span>
       </button>
     </div>
+   </div>
   );
 };
 
