@@ -52,3 +52,32 @@
     }
 }
 
+
+
+.custom-barchart-bar {
+    animation: bar-chart-arrive 500ms ease-in-out;
+}
+
+
+@keyframes  bar-chart-arrive {
+    from {
+        height: 0;
+       
+    }
+    to {
+        
+    }
+}
+
+
+.date-range-wrapper {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  
+  @media (max-width: 768px) {
+    .date-range-wrapper {
+      transform: scale(0.85); /* Adjust scaling */
+      transform-origin: top left;
+    }
+  }

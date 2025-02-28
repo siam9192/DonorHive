@@ -70,7 +70,7 @@ const Donation = () => {
         ) : null}
       </div>
       <div className="mt-14">
-    <DonateButton selectedAmount={selectedAmount}/>
+        <DonateButton selectedAmount={selectedAmount} />
       </div>
 
       <div className=" mt-10 pt-4 border-t border-gray-700/20">

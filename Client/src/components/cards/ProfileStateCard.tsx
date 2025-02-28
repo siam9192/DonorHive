@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const ProfileStateCard = () => {
-  return (
-    <div>ProfileStateCard</div>
-  )
-}
+  return <div>ProfileStateCard</div>;
+};
 
-export default ProfileStateCard
+export default ProfileStateCard;

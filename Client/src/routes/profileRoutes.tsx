@@ -4,28 +4,27 @@ import MyWatchList from "../pages/profile/MyWatchList";
 import PersonalInformation from "../pages/profile/PersonalInformation";
 import Profile from "../pages/profile/Profile";
 
-
 const profileRoutes = [
   {
     path: "",
-    element:<Profile/>,
+    element: <Profile />,
   },
   {
-    path:"personal-information",
-    element:<PersonalInformation/>
+    path: "personal-information",
+    element: <PersonalInformation />,
   },
   {
-    path:"edit-personal-information",
-    element:<EditProfile/>
+    path: "edit-personal-information",
+    element: <EditProfile />,
   },
   {
-    path:"my-donations",
-    element:<MyDonations/>
+    path: "my-donations",
+    element: <MyDonations />,
   },
   {
-    path:"watch-list",
-    element:<MyWatchList/>
-  }
+    path: "watch-list",
+    element: <MyWatchList />,
+  },
 ];
 
 export default profileRoutes;

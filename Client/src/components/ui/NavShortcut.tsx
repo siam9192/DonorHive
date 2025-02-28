@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { BiEdit } from "react-icons/bi";
+import { CiGrid42 } from "react-icons/ci";
 import { FaChevronDown, FaDonate } from "react-icons/fa";
 import { FiSettings } from "react-icons/fi";
 import { ImProfile } from "react-icons/im";
@@ -22,6 +23,11 @@ const donorRoutes = [
     href: "/profile",
   },
   {
+    name: "Dashboard",
+    icon: CiGrid42,
+    href: "/dashboard",
+  },
+  {
     name: "Setting",
     icon: FiSettings,
     href: "/profile",
@@ -31,7 +37,7 @@ const donorRoutes = [
 const NavShortcut = () => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
- const {pathname} = useLocation()
+  const { pathname } = useLocation();
   const routes = donorRoutes;
 
   useEffect(() => {
@@ -51,8 +57,10 @@ const NavShortcut = () => {
     };
   }, [isOpen]);
 
-  useEffect(()=>{setIsOpen(false)},[pathname])
-  
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
   return (
     <div className="relative  ">
       <div onMouseEnter={() => setIsOpen(true)} className="flex items-center gap-2">
