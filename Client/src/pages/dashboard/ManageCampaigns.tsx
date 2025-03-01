@@ -10,17 +10,15 @@ const ManageCampaigns = () => {
       <CampaignsSummary />
 
       <DashboardShowCampaigns />
-         {/* Add Campaign  */}
-    <AddCampaignPopup>
-    <button className="flex items-center gap-2 fixed bottom-10  lg:right-20 md:right-10 right-5 md:p-3 p-2  rounded-full bg-secondary">
+      {/* Add Campaign  */}
+      <AddCampaignPopup>
+        <button className="flex items-center gap-2 fixed bottom-10  lg:right-20 md:right-10 right-5 md:p-3 p-2  rounded-full bg-secondary">
           <span className="text-2xl text-black">
-          <FaPlus />
+            <FaPlus />
           </span>
-          <p className="font-medium lg:block hidden">
-            Add Campaign
-          </p>
-      </button>
-    </AddCampaignPopup>
+          <p className="font-medium lg:block hidden">Add Campaign</p>
+        </button>
+      </AddCampaignPopup>
     </div>
   );
 };

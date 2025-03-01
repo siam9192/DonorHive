@@ -7,10 +7,10 @@ const UserCard = () => {
         <img
           src="https://cdn-icons-png.flaticon.com/512/3001/3001758.png"
           alt=""
-          className="size-16 rounded-full"
+          className="md:size-16 size-12 rounded-full"
         />
         <div className="font-secondary">
-          <h3 className="text-xl font-medium text-gray-900">John Doe</h3>
+          <h3 className="md:text-xl text-lg font-medium text-gray-900">John Doe</h3>
           <p className="text-gray-500 text-sm ">john@gmail.com</p>
         </div>
       </div>

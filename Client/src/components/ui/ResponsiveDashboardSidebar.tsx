@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { FiMenu } from "react-icons/fi";
 import DashboardSidebar from "./DashboardSidebar";
+import { useLocation } from "react-router-dom";
 
 const ResponsiveDashboardSidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const { pathname } = useLocation();
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
   }, [isOpen]);
 
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
   return (
     <>
       <button

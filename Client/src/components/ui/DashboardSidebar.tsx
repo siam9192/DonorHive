@@ -2,7 +2,7 @@ import React from "react";
 import { IoHomeOutline, IoSettingsOutline } from "react-icons/io5";
 import { MdCampaign } from "react-icons/md";
 import { BiSolidDonateHeart } from "react-icons/bi";
-import { HiMiniUsers } from "react-icons/hi2";
+import { HiMiniUsers, HiOutlineHome } from "react-icons/hi2";
 import { Link, useLocation } from "react-router-dom";
 import { CiLogout } from "react-icons/ci";
 import { TbLogout2 } from "react-icons/tb";
@@ -33,6 +33,11 @@ const routes = [
     name: "Setting",
     icon: <IoSettingsOutline />,
     href: "/dashboard/setting",
+  },
+  {
+    name: "Main Home",
+    icon: <HiOutlineHome />,
+    href: "/",
   },
 ];
 

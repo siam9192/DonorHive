@@ -3,9 +3,13 @@ import Container from "../../container/Container";
 import CampaignCard from "../../cards/CampaignCard";
 import Pagination from "../../pagination/Pagination";
 import { Link } from "react-router-dom";
+import CampaignLoadingCard from "../../loading-card/CampaignLoadingCard";
+import useLoadingBounce from "../../../hooks/useLoadingBounce";
 
 const ShowCampaigns = () => {
   const popularSearchers = ["Food", "House", "Education", "Children"];
+  const bouncedLoading = useLoadingBounce(true,5000)
+  
   return (
     <section className="md:py-10 py-6">
       <Container>
@@ -34,9 +38,15 @@ const ShowCampaigns = () => {
         </div>
 
         <div className="mt-10 grid lg:grid-cols-3 grid-cols-2  md:gap-5 gap-3">
-          {Array.from({ length: 14 }).map((_, index) => (
-            <CampaignCard key={index} />
-          ))}
+          {
+            bouncedLoading ? Array.from({ length: 14 }).map((_, index) => (
+              <CampaignLoadingCard key={index}/>
+             ))
+             :
+             Array.from({ length: 14 }).map((_, index) => (
+              <CampaignCard key={index}/>
+             ))
+          }
         </div>
 
         <div className="mt-10 flex justify-center items-center">

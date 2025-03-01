@@ -3,6 +3,7 @@ import ManageCampaignCard from "../../../cards/ManageCampaignCard";
 import Pagination from "../../../pagination/Pagination";
 import { IoChevronDownOutline, IoSearchOutline } from "react-icons/io5";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
+import ManageUserTableCard from "../../../cards/ManageUserTableCard";
 
 type THead = {
   name: string;
@@ -19,18 +20,13 @@ const heads: THead[] = [
     isSortable: true,
   },
   {
-    name: "category",
-    value: "category",
+    name: "email",
+    value: "email",
     isSortable: true,
   },
   {
-    name: "total collection",
-    value: "raised",
-    isSortable: true,
-  },
-  {
-    name: "end in",
-    value: "end_at",
+    name: "provider",
+    value: "provider",
     isSortable: true,
   },
   {
@@ -60,7 +56,7 @@ type TSort = {
   order: TOrder;
 };
 
-const DashboardShowCampaigns = () => {
+const DashboardShowUsers = () => {
   const [sort, setSort] = useState<TSort>({
     by: "createdAt",
     order: "asc",
@@ -83,13 +79,13 @@ const DashboardShowCampaigns = () => {
           />
         </div>
         <div className=" lg:w-1/4 md:w-1/2 flex  items-center justify-between  p-4 border-2 border-gray-400/40 rounded-md">
-          <p className=" font-semibold text-primary">All Category</p>
+          <p className=" font-semibold text-primary">All Status</p>
           <button className="text-2xl">
             <IoChevronDownOutline />
           </button>
         </div>
       </div>
-      <h4 className=" mt-5 text-xl font-semibold  text-primary">20 Campaigns Found</h4>
+      <h4 className=" mt-5 text-xl font-semibold  text-primary">20 Users Found</h4>
 
       {/* Table */}
       <div className="  py-5 relative overflow-x-auto ">
@@ -125,7 +121,7 @@ const DashboardShowCampaigns = () => {
             {Array.from({
               length: 20,
             }).map((_, index) => (
-              <ManageCampaignCard key={index} />
+              <ManageUserTableCard key={index} />
             ))}
           </tbody>
         </table>
@@ -138,4 +134,4 @@ const DashboardShowCampaigns = () => {
   );
 };
 
-export default DashboardShowCampaigns;
+export default DashboardShowUsers;

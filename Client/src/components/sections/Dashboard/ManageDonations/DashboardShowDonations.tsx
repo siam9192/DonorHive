@@ -3,6 +3,7 @@ import ManageCampaignCard from "../../../cards/ManageCampaignCard";
 import Pagination from "../../../pagination/Pagination";
 import { IoChevronDownOutline, IoSearchOutline } from "react-icons/io5";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
+import ManageDonationTableCard from "../../../cards/ManageDonationTableCard";
 
 type THead = {
   name: string;
@@ -14,24 +15,20 @@ type TOrder = "asc" | "desc";
 
 const heads: THead[] = [
   {
-    name: "name",
-    value: "fullName",
+    name: "amount",
+    value: "amount",
     isSortable: true,
   },
   {
-    name: "category",
-    value: "category",
+    name: "Campaign Name",
+    value: "campaignName",
     isSortable: true,
   },
+
   {
-    name: "total collection",
+    name: "donor",
     value: "raised",
-    isSortable: true,
-  },
-  {
-    name: "end in",
-    value: "end_at",
-    isSortable: true,
+    isSortable: false,
   },
   {
     name: "status",
@@ -60,7 +57,7 @@ type TSort = {
   order: TOrder;
 };
 
-const DashboardShowCampaigns = () => {
+const DashboardShowDonations = () => {
   const [sort, setSort] = useState<TSort>({
     by: "createdAt",
     order: "asc",
@@ -89,7 +86,7 @@ const DashboardShowCampaigns = () => {
           </button>
         </div>
       </div>
-      <h4 className=" mt-5 text-xl font-semibold  text-primary">20 Campaigns Found</h4>
+      <h4 className=" mt-5 text-xl font-semibold  text-primary">20 Donations Found</h4>
 
       {/* Table */}
       <div className="  py-5 relative overflow-x-auto ">
@@ -125,7 +122,7 @@ const DashboardShowCampaigns = () => {
             {Array.from({
               length: 20,
             }).map((_, index) => (
-              <ManageCampaignCard key={index} />
+              <ManageDonationTableCard key={index} />
             ))}
           </tbody>
         </table>
@@ -138,4 +135,4 @@ const DashboardShowCampaigns = () => {
   );
 };
 
-export default DashboardShowCampaigns;
+export default DashboardShowDonations;

@@ -3,6 +3,7 @@ import AboutUs from "../pages/AboutUs";
 import Campaign from "../pages/Campaign";
 import Campaigns from "../pages/Campaigns";
 import DashboardLayout from "../pages/dashboard/DashboardLayout";
+import DonationSuccessful from "../pages/DonationSuccessful";
 import Home from "../pages/Home";
 import ProfileLayout from "../pages/profile/ProfileLayout";
 import dashboardRoutes from "../routes/dashboardRoutes";
@@ -28,6 +29,10 @@ const routes = [
       {
         path: "about-us",
         element: <AboutUs />,
+      },
+      {
+        path: "donation-success",
+        element: <DonationSuccessful />,
       },
       {
         path: "profile",

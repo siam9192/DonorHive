@@ -15,7 +15,7 @@ const DonationStates = () => {
   const maxTotal = Math.max(...data.map((item) => item.total));
   const max = maxTotal + (5 / 100) * maxTotal;
   return (
-    <section className=" md:p-5 p-3 bg-gray-900 border-2 border-gray-600/10 rounded-lg ">
+    <section className=" md:p-5 p-3 bg-gray-900 border-2 border-gray-600/10 rounded-lg h-fit ">
       <h1 className="md:text-2xl text-xl font-semibold text-gray-50">Last 12 Months</h1>
       <div className="mt-10 flex items-center justify-between h-[35vh] ">
         {data.map((item) => (

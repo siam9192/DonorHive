@@ -1,0 +1,14 @@
+.animate-pop-up-scale {
+ animation: animation-popup-scale   200ms ease-in-out;
+} 
+
+
+@keyframes animation-popup-scale {
+    from {
+
+        transform: translateY(20px);
+    }
+    to{
+    
+    }
+}
