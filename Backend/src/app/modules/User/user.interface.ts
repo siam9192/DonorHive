@@ -55,10 +55,3 @@ export enum EAuthProvider {
 
 
 
-
-export interface IUserRegistrationPayload {
-    fullName:string,
-    email:string,
-    password:string,
-
-}

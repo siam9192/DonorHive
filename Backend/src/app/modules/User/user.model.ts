@@ -53,6 +53,7 @@ const UserModelSchema = new Schema<IUser>({
     role:{
         type:String,
         enum:Object.values(EUserRole),
+        default:EUserRole.Donor,
         required:true
     },
     email:{
@@ -78,11 +79,13 @@ const UserModelSchema = new Schema<IUser>({
         },
         password:{
             type:String,
+            index:false,
             required:true
         },
         status:{
             type:String,
             enum:Object.values(EUserStatus),
+            default:EUserStatus.Active,
             required:true
         },
         passwordChangedAt:{
