@@ -3,7 +3,7 @@ import mongoose, { FilterQuery, Query } from 'mongoose';
 class QueryBuilder<T> {
   constructor(
     public modelQuery: Query<T[], T>,
-    private query: any,
+    private query: any
   ) {}
 
   private defaultPage = 1;
@@ -17,7 +17,7 @@ class QueryBuilder<T> {
           (field) =>
             ({
               [field]: { $regex: searchTerm, $options: 'i' },
-            }) as FilterQuery<T>,
+            }) as FilterQuery<T>
         ),
       });
     }
@@ -92,9 +92,7 @@ class QueryBuilder<T> {
     const total = await this.modelQuery.countDocuments();
     const page = Number(this.query.page) || this.defaultPage;
     const limit = Number(this.query.limit) || this.defaultLimit;
-    const pages = [...Array(Math.ceil(total / limit)).keys()].map(
-      (page) => page + 1,
-    );
+    const pages = [...Array(Math.ceil(total / limit)).keys()].map((page) => page + 1);
     return {
       page,
       pages,

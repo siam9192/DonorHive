@@ -1,32 +1,29 @@
-import e from "express"
-import { TUserRole } from "../User/user.interface"
+import e from 'express';
+import { TAuthProvider, TUserRole } from '../User/user.interface';
 
 export interface IRegistrationPayload {
-    fullName:string,
-    email:string,
-    password:string,
-
+  fullName: string;
+  email: string;
+  password: string;
 }
-
-
 
 export interface IVerifyRegistrationRequest {
-    token:string
+  token: string;
 }
 
-
-export interface ILoginPayload  {
-    email:string,
-    password:string
+export interface ILoginPayload {
+  email: string;
+  password: string;
 }
 
 export interface IChangePasswordPayload {
-    oldPassword:string,
-    newPassword:string
+  oldPassword: string;
+  newPassword: string;
 }
 
 export interface IAuthUser {
-    id:string,
-    email?:string,
-    role:TUserRole
+  id: string;
+  role: TUserRole;
+  email?: string;
+  provider: TAuthProvider;
 }
