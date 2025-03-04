@@ -46,8 +46,9 @@ export interface IFilterCampaign {
 export type TCampaignStatus = `${ECampaignStatus}`;
 
 export enum ECampaignStatus {
+  NotStarted = 'Not_Started',
   Active = 'Active',
-  Inactive = 'Inactive',
+  Paused = 'Paused',
   Completed = 'Completed',
-  Incomplete = 'Incomplete',
+  Expired = 'Expired',
 }

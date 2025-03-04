@@ -19,7 +19,7 @@ export interface IUser {
 }
 
 export interface IUserAddress {
-  street: string;
+  street?: string;
   city: string;
   state?: string;
   country: string;

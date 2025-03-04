@@ -38,6 +38,10 @@ const createCampaignIntoDB = async (payload: ICreateCampaignPayload) => {
   const data = {
     ...payload,
     slug,
+    status:
+      startAt.getTime() <= new Date().getTime()
+        ? ECampaignStatus.Active
+        : ECampaignStatus.NotStarted,
   };
   const result = await Campaign.create(data);
   return result;
@@ -61,7 +65,9 @@ const getCampaignsFromDB = async (
   const { searchTerm, ...othersData } = filter;
 
   const whereConditions: any = {
-    status: ECampaignStatus.Active,
+    status: {
+      $in: [ECampaignStatus.Active, ECampaignStatus.Completed],
+    },
     isDeleted: false,
   };
 
@@ -80,7 +86,10 @@ const getCampaignsFromDB = async (
     [sortBy]: sortOrder,
   };
 
-  const campaigns = await Campaign.find(whereConditions,{isDeleted:false}).sort(sort).skip(skip).limit(limit);
+  const campaigns = await Campaign.find(whereConditions, { isDeleted: false })
+    .sort(sort)
+    .skip(skip)
+    .limit(limit);
 
   const data = campaigns;
   const total = await Campaign.countDocuments();
@@ -133,7 +142,10 @@ const getCampaignsFromDBForManage = async (
     [sortBy]: sortOrder,
   };
 
-  const campaigns = await Campaign.find(whereConditions,{isDeleted:false}).sort(sort).skip(skip).limit(limit);
+  const campaigns = await Campaign.find(whereConditions, { isDeleted: false })
+    .sort(sort)
+    .skip(skip)
+    .limit(limit);
 
   const data = campaigns;
   const total = await Campaign.countDocuments();
@@ -161,6 +173,12 @@ const updateCampaignIntoDB = async (id: string, payload: IUpdateCampaignPayload)
   const endAt = new Date(payload.endAt);
   const today = new Date();
 
+  if (
+    campaign.status === ECampaignStatus.Active &&
+    startAt.getTime() !== new Date(campaign.startAt).getTime()
+  ) {
+    throw new AppError(httpStatus.NOT_ACCEPTABLE, 'Campaign is already started');
+  }
   if (startAt.getTime() < today.getTime())
     throw new AppError(httpStatus.NOT_ACCEPTABLE, 'invalid startAt');
   if (endAt.getTime() > startAt.getTime()) {
@@ -216,14 +234,79 @@ const getCampaignBySlugFromDB = async (slug: string) => {
   return campaign;
 };
 
+const getRecentCampaignsFromDB = async () => {
+  const recentDate = new Date(new Date().toDateString());
+  recentDate.setDate(recentDate.getDate() - 30);
+  const campaigns = await Campaign.find(
+    {
+      startAt: {
+        $gte: recentDate,
+      },
+      status: {
+        $in: [ECampaignStatus.Active, ECampaignStatus.Completed],
+      },
+    },
+    {
+      isDeleted: false,
+    }
+  ).limit(6);
+  return campaigns;
+};
+
+const getAlmostCompletedCampaignsFromDB = async () => {
+  const minPercentage = 0;
+  const campaigns = await Campaign.aggregate([
+    {
+      $match: {
+        status: ECampaignStatus.Active,
+      },
+    },
+    {
+      $addFields: {
+        completePercentage: {
+          $multiply: [
+            {
+              $divide: ['$raisedAmount', '$targetAmount'],
+            },
+            100,
+          ],
+        },
+      },
+    },
+    {
+      $match: {
+        completePercentage: {
+          $gte: minPercentage,
+        },
+      },
+    },
+    {
+      $sort: {
+        completePercentage: -1,
+      },
+    },
+    {
+      $limit: 10,
+    },
+    {
+      $project: {
+        isDeleted: false,
+      },
+    },
+  ]);
+  return campaigns;
+};
+
 const CampaignServices = {
   createCampaignIntoDB,
   createManyCampaignIntoDB,
   getCampaignsFromDB,
   getCampaignsFromDBForManage,
+  getCampaignBySlugFromDB,
+  getRecentCampaignsFromDB,
+  getAlmostCompletedCampaignsFromDB,
   updateCampaignIntoDB,
   softDeleteCampaignFromDB,
-  getCampaignBySlugFromDB,
 };
 
 export default CampaignServices;

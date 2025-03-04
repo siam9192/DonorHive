@@ -22,6 +22,8 @@ router.delete('/:id', CampaignControllers.softDeleteCampaign);
 router.get('/', CampaignControllers.getCampaigns);
 router.get('/manage', CampaignControllers.getCampaignsForManage);
 router.get('/:slug/visit', CampaignControllers.getCampaignBySlug);
+router.get('/recent', CampaignControllers.getRecentCampaigns);
+router.get('/almost-completed', CampaignControllers.getAlmostCompletedCampaigns);
 const CampaignRouter = router;
 
 export default CampaignRouter;

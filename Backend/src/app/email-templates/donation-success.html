@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation Successful</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: #4CAF50;
+            color: #ffffff;
+            text-align: center;
+            padding: 15px;
+            font-size: 22px;
+            font-weight: bold;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            text-align: center;
+            color: #777;
+        }
+        .btn {
+            display: inline-block;
+            background: #4CAF50;
+            color: #ffffff;
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">Donation Successful 🎉</div>
+        <div class="content">
+            <p>Dear <strong><%=name%></strong>,</p>
+            <p>Thank you for your generous donation of <strong><%=amount%></strong>. Your support helps us continue our mission.</p>
+            <p>Donation Date: <strong><%=date%></strong></p>
+            <p>Transaction ID: <strong><%=transactionId%></strong></p>
+            <a href="{{receiptLink}}" class="btn">Download Receipt</a>
+        </div>
+        <div class="footer">
+            <p>If you have any questions, contact us at <a href="mailto:support@example.com">support@example.com</a></p>
+            <p>© 2025 Your Organization. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
