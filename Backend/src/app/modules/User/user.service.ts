@@ -146,6 +146,38 @@ const softDeleteUserFromDB = async (id: string) => {
   return null;
 };
 
+const getRecentUsersFromDB = async () => {
+  const recentDate = new Date(new Date().toDateString());
+
+  recentDate.setDate(recentDate.getDate() - 15);
+
+  const users = await User.find(
+    {
+      createdAt: {
+        $gte: recentDate,
+      },
+      status: {
+        $not: {
+          $eq: EUserStatus.Deleted,
+        },
+      },
+    },
+    {
+      _id: true,
+      fullName: true,
+      profilePhotoUrl: true,
+      email: true,
+      provider: true,
+    }
+  )
+    .sort({
+      createdAt: -1,
+    })
+    .limit(5);
+
+  return users;
+};
+
 const getUsersSummaryFromDB = async () => {
   const total = await User.countDocuments({
     status: {
@@ -179,6 +211,7 @@ const UserServices = {
   getUserDetailsFromDB,
   changeUserStatusIntoDB,
   softDeleteUserFromDB,
+  getRecentUsersFromDB,
   getUsersSummaryFromDB,
 };
 

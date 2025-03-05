@@ -6,6 +6,7 @@ import CampaignRouter from '../modules/Campaign/campaign.route';
 import DonationRouter from '../modules/Donation/donation.route';
 import PaymentRouter from '../modules/Payment/payment.route';
 import NotificationRouter from '../modules/Notification/notification.route';
+import OverviewRouter from '../modules/Overview/overview.route';
 
 type TModuleRoutes = { path: string; router: Router }[];
 
@@ -36,9 +37,13 @@ const moduleRoutes: TModuleRoutes = [
     router: PaymentRouter,
   },
   {
-    path:'/notifications',
-    router:NotificationRouter
-  }
+    path: '/notifications',
+    router: NotificationRouter,
+  },
+  {
+    path: '/overview',
+    router: OverviewRouter,
+  },
 ];
 
 const routes = moduleRoutes.map((route) => router.use(route.path, route.router));

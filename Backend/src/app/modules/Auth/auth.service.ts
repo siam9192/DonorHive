@@ -21,6 +21,7 @@ import { ERegistrationRequestStatus } from '../RegistrationRequest/registrationR
 import { JwtPayload } from 'jsonwebtoken';
 import axios from 'axios';
 import { IFbDataResponse } from '../../types';
+import Notification from '../Notification/notification.model';
 
 const register = async (payload: IRegistrationPayload) => {
   const user = await User.findOne({
@@ -138,6 +139,11 @@ const verifyRegistration = async (token: string) => {
     );
 
     if (!updatedRequest.modifiedCount || !createdUser?.length) throw new Error();
+    await Notification.create({
+      userId: createdUser[0]._id,
+      title: 'Welcome to DonorHive',
+      message: 'Your account successfully registered',
+    });
     await session.commitTransaction();
     await session.endSession();
   } catch (error) {
@@ -194,6 +200,11 @@ const changePassword = async (authUser: IAuthUser, payload: IChangePasswordPaylo
   );
 
   if (!updateStatus.modifiedCount) throw new AppError(httpStatus.BAD_REQUEST, 'Bad request');
+  await Notification.create({
+    userId: authUser.id,
+    title: 'Password changed successfully',
+    message: '',
+  });
   return null;
 };
 

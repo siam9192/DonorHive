@@ -72,6 +72,28 @@ const getDonationsSummary = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getCampaignLatestDonations = catchAsync(async (req: Request, res: Response) => {
+  const result = await DonationServices.getCampaignLatestDonationsFromDB(req.params.id);
+  sendSuccessResponse(res, {
+    statusCode: httpStatus.OK,
+    message: 'Campaign latest Donations retrieved successfully',
+    data: result,
+  });
+});
+
+const getCampaignDonations = catchAsync(async (req: Request, res: Response) => {
+  const paginationOptions = Pick(req.query, paginationOptionKeys);
+  const result = await DonationServices.getCampaignDonationsFromDB(
+    req.params.id,
+    paginationOptions
+  );
+  sendSuccessResponse(res, {
+    statusCode: httpStatus.OK,
+    message: 'Campaign donations retrieved successfully',
+    ...result,
+  });
+});
+
 const DonationControllers = {
   initDonation,
   getDonationsForManage,
@@ -79,6 +101,8 @@ const DonationControllers = {
   getMyRecentDonations,
   getDonationDetailsForManage,
   getMyDonationDetails,
+  getCampaignLatestDonations,
+  getCampaignDonations,
   getDonationsSummary,
 };
 

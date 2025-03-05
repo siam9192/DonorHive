@@ -12,7 +12,7 @@ const getUsers = catchAsync(async (req: Request, res: Response) => {
   const result = await UserServices.getUsersFromDB(filter, paginationOptions);
   sendSuccessResponse(res, {
     statusCode: httpStatus.OK,
-    message: 'Please check your email',
+    message: 'Users retrieved successfully',
     ...result,
   });
 });
@@ -44,6 +44,15 @@ const changeUserStatus = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getRecentUsersFromDB = catchAsync(async (req: Request, res: Response) => {
+  const result = await UserServices.getRecentUsersFromDB();
+  sendSuccessResponse(res, {
+    statusCode: httpStatus.OK,
+    message: 'Recent users retrieved successfully',
+    data: result,
+  });
+});
+
 const getUserSummary = catchAsync(async (req: Request, res: Response) => {
   const result = await UserServices.getUsersSummaryFromDB();
   sendSuccessResponse(res, {
@@ -58,6 +67,7 @@ const UserControllers = {
   createMany,
   getUserDetails,
   changeUserStatus,
+  getRecentUsersFromDB,
   getUserSummary,
 };
 

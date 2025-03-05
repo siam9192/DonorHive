@@ -12,22 +12,22 @@ const getMyNotifications = catchAsync(async (req: Request, res: Response) => {
   sendSuccessResponse(res, {
     statusCode: httpStatus.OK,
     message: 'Notification retrieved successfully',
-   ...result
+    ...result,
   });
 });
 
 const setAsReadMyAllNotificationsIntoDB = catchAsync(async (req: Request, res: Response) => {
-    const result = await NotificationServices.setAsReadMyAllNotificationsIntoDB(req.user);
-    sendSuccessResponse(res, {
-      statusCode: httpStatus.OK,
-      message: 'Notification updated successfully',
-      data: result,
-    });
+  const result = await NotificationServices.setAsReadMyAllNotificationsIntoDB(req.user);
+  sendSuccessResponse(res, {
+    statusCode: httpStatus.OK,
+    message: 'Notification updated successfully',
+    data: result,
   });
+});
 
 const NotificationControllers = {
-    getMyNotifications,
-    setAsReadMyAllNotificationsIntoDB
-}
+  getMyNotifications,
+  setAsReadMyAllNotificationsIntoDB,
+};
 
-export default NotificationControllers
+export default NotificationControllers;

@@ -100,8 +100,7 @@ const manageDonationAfterSuccessfulPayment = async (id: string | ObjectId) => {
     let name;
     let transactionId = (donation.paymentId as any as IPayment).transactionId;
     if (donation.userId) {
-     
-      const {_doc:user} = { ...(donation.userId as any) };
+      const { _doc: user } = { ...donation.userId  } as any;
 
       name = user.fullName;
       if (user.email) {
@@ -109,15 +108,14 @@ const manageDonationAfterSuccessfulPayment = async (id: string | ObjectId) => {
       }
 
       const notificationData = {
-        userId:user._id,
+        userId: user._id,
         title: 'Donation Successful',
         message: `Thank you for your generous donation of $${donation.amount}. Your support helps us continue our mission.`,
         href: '/profile/my-donations',
       };
-     
+
       // Create notification of successful donation
-    await Notification.create(notificationData);
-   
+      await Notification.create(notificationData);
     } else {
       const guestDonorInfo = donation.guestDonorInfo;
 
@@ -143,7 +141,7 @@ const manageDonationAfterSuccessfulPayment = async (id: string | ObjectId) => {
           if (err) {
             throw new AppError(400, 'Something went wrong');
           } else {
-           await NodeMailerServices.sendEmail({
+            await NodeMailerServices.sendEmail({
               emailAddress: email,
               subject: 'Donation successful',
               template,
@@ -153,7 +151,7 @@ const manageDonationAfterSuccessfulPayment = async (id: string | ObjectId) => {
       );
     }
   } catch (error) {
-   console.log(error)
+    console.log(error);
   }
 };
 
@@ -453,7 +451,6 @@ const getDonationDetailsForManageFromDB = async (id: string) => {
 
   return result;
 };
-
 const getMyDonationDetailsFromDB = async (authUser: IAuthUser, id: string) => {
   const donation = await Donation.findOne({
     _id: objectId(id),
@@ -487,6 +484,77 @@ const getMyDonationDetailsFromDB = async (authUser: IAuthUser, id: string) => {
   };
   return result;
 };
+
+const getCampaignLatestDonationsFromDB = async (id: string) => {
+  const donations = await Donation.find(
+    {
+      'campaign.id': objectId(id),
+      status: EDonationStatus.Paid,
+    },
+    {
+      paymentId: false,
+    }
+  )
+    .sort({ createdAt: -1 })
+    .populate('userId', '_id fullName profilePhotoUrl address')
+    .limit(5);
+
+  const data = donations.map((donation) => {
+    const {
+      _doc: { paymentId, userId, ...othersData },
+    }: any = { ...donation };
+
+    const result = {
+      ...othersData,
+      user: userId,
+    };
+    return result;
+  });
+  return data;
+};
+
+const getCampaignDonationsFromDB = async (id: string, paginationOptions: IPaginationOptions) => {
+  const { page, skip, limit } = calculatePagination(paginationOptions, 6);
+
+  const whereConditions = {
+    'campaign.id': objectId(id),
+    status: EDonationStatus.Paid,
+  };
+  const donations = await Donation.find(whereConditions, {
+    paymentId: false,
+  })
+    .sort({ createdAt: -1 })
+    .populate('userId', '_id fullName profilePhotoUrl address')
+    .skip(skip)
+    .limit(limit);
+
+  const data = donations.map((donation) => {
+    const {
+      _doc: { paymentId, userId, ...othersData },
+    }: any = { ...donation };
+
+    const result = {
+      ...othersData,
+      user: userId,
+    };
+    return result;
+  });
+
+  const totalResult = await Donation.countDocuments(whereConditions);
+  const total = totalResult;
+
+  const meta = {
+    page,
+    limit,
+    totalResult,
+    total,
+  };
+  return {
+    data,
+    meta,
+  };
+};
+
 const getDonationsSummaryFromDB = async () => {
   const totalDonationsCount = await Donation.countDocuments({
     status: EDonationStatus.Paid,
@@ -554,6 +622,8 @@ const DonationServices = {
   getRecentDonationsFromDB,
   getDonationDetailsForManageFromDB,
   getMyDonationDetailsFromDB,
+  getCampaignLatestDonationsFromDB,
+  getCampaignDonationsFromDB,
   getDonationsSummaryFromDB,
 };
 

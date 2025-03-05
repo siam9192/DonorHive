@@ -15,16 +15,18 @@ router.post(
   DonationControllers.initDonation
 );
 
-router.get('/manage', DonationControllers.getDonationsForManage);
+router.get('/manage', auth(EUserRole.Admin), DonationControllers.getDonationsForManage);
 router.get('/my', auth(EUserRole.Donor), DonationControllers.getMyDonations);
 router.get('/recent/my', auth(EUserRole.Donor), DonationControllers.getMyRecentDonations);
-router.get('/recent/manage', DonationControllers.getDonationsForManage);
+router.get('/recent', auth(EUserRole.Admin), DonationControllers.getDonationsForManage);
 router.get('/my/:id/details', auth(EUserRole.Donor), DonationControllers.getMyDonationDetails);
 router.get(
   '/manage/:id/details',
   auth(EUserRole.Admin),
   DonationControllers.getDonationDetailsForManage
 );
+router.get('/campaign/:id/latest', DonationControllers.getCampaignLatestDonations);
+router.get('/campaign/:id', DonationControllers.getCampaignDonations);
 router.get('/summary', DonationControllers.getDonationsSummary);
 
 const DonationRouter = router;
