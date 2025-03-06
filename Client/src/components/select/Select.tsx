@@ -17,7 +17,6 @@ const Select = ({ options, defaultValue, onChange }: IProps) => {
   const [selected, setSelected] = useState<TOption | null>(
     options.find((op) => op.value === defaultValue) || options[0],
   );
-  
 
   const ref = useRef<HTMLDivElement>(null);
 

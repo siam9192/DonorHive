@@ -18,6 +18,7 @@ export interface IError {
 export interface IMeta {
   limit: number;
   page: number;
+  totalResult: number;
   total: number;
 }
 

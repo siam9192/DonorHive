@@ -6,6 +6,9 @@ import { FiSettings } from "react-icons/fi";
 import { ImProfile } from "react-icons/im";
 import { TbLogout } from "react-icons/tb";
 import { Link, useLocation } from "react-router-dom";
+import { useCurrentUser } from "../../provider/CurrentUserProvider";
+import { EUserRole } from "../../types/user.type";
+
 const donorRoutes = [
   {
     name: "My Profile",
@@ -20,6 +23,19 @@ const donorRoutes = [
   {
     name: "My Donations",
     icon: FaDonate,
+    href: "/profile",
+  },
+  {
+    name: "Setting",
+    icon: FiSettings,
+    href: "/profile",
+  },
+];
+
+const adminRoutes = [
+  {
+    name: "My Profile",
+    icon: ImProfile,
     href: "/profile",
   },
   {
@@ -38,7 +54,8 @@ const NavShortcut = () => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const { pathname } = useLocation();
-  const routes = donorRoutes;
+
+  const { user, isLoading } = useCurrentUser();
 
   useEffect(() => {
     const current = ref.current;
@@ -57,6 +74,8 @@ const NavShortcut = () => {
     };
   }, [isOpen]);
 
+  const routes = isLoading ? [] : user?.role === EUserRole.Donor ? donorRoutes : adminRoutes;
+
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
@@ -65,7 +84,7 @@ const NavShortcut = () => {
     <div className="relative  ">
       <div onMouseEnter={() => setIsOpen(true)} className="flex items-center gap-2">
         <img
-          src="https://cdn-icons-png.flaticon.com/512/3001/3001758.png"
+          src={user?.profilePhotoUrl}
           alt=""
           className="md:size-12 size-9 p-1 bg-white rounded-full"
         />
@@ -84,7 +103,7 @@ const NavShortcut = () => {
                 alt=""
                 className="size-10 p-1 bg-white  rounded-full"
               />
-              <h2 className="text-[1.1rem] font-medium text-gray-950">Siam Hasan</h2>
+              <h2 className="text-[1.1rem] font-medium text-gray-950">{user?.fullName}</h2>
             </div>
             <div className="mt-3 space-y-4 font-secondary">
               {routes.map((item) => (

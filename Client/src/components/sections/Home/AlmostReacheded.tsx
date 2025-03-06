@@ -4,6 +4,9 @@ import Container from "../../container/Container";
 import Heading from "../../ui/Heading";
 import { CSSProperties, useEffect, useState } from "react";
 import UseScreen from "../../../hooks/UseScreen";
+import { useGetAlmostCompletedCampaignsQuery } from "../../../redux/features/campaign/campaign.api";
+import useLoadingBounce from "../../../hooks/useLoadingBounce";
+import CampaignLoadingCard from "../../loading-cards/CampaignLoadingCard";
 
 const headingProps = {
   heading: "Almost Reacheded",
@@ -16,7 +19,10 @@ const AlmostReacheded = () => {
 
   const { screenType } = UseScreen();
 
-  const total = 9;
+  const { data, isLoading } = useGetAlmostCompletedCampaignsQuery(undefined);
+  const campaigns = data?.data;
+  const bouncedLoading = useLoadingBounce(isLoading);
+  const total = bouncedLoading ? 3 : campaigns?.length || 0;
   const limit = screenType === "lg" ? 3 : screenType === "md" ? 2 : 1;
 
   const getCardStyle = (index: number): CSSProperties => {
@@ -41,14 +47,14 @@ const AlmostReacheded = () => {
         <Heading {...headingProps} />
         <div className="mt-5 text-end">
           <button
-            disabled={current === 0}
+            disabled={bouncedLoading || current === 0}
             onClick={() => handelChangeCurrent("p")}
             className="px-6 py-3 text-2xl bg-secondary text-gray-900 hover:bg-gray-900 hover:text-white disabled:bg-gray-100 disabled:text-black"
           >
             <MdOutlineArrowBackIosNew />
           </button>
           <button
-            disabled={current + 1 === total}
+            disabled={bouncedLoading || current + 1 === total}
             onClick={() => handelChangeCurrent("n")}
             className="px-6 py-3 text-2xl bg-secondary text-gray-900 hover:bg-gray-900 hover:text-white disabled:bg-gray-100 disabled:text-black"
           >
@@ -56,14 +62,23 @@ const AlmostReacheded = () => {
           </button>
         </div>
         <div className="mt-10 flex   relative md:h-[60vh] h-[65vh]  overflow-hidden ">
-          {Array.from({ length: total }).map((_, index) => (
-            <div
-              className="absolute  p-2  transition-all duration-500 ease-in-out"
-              style={getCardStyle(index)}
-            >
-              <CampaignCard key={index} />
-            </div>
-          ))}
+          {bouncedLoading
+            ? Array.from({ length: total }).map((_, index) => (
+                <div
+                  className="absolute  p-2  transition-all duration-500 ease-in-out"
+                  style={getCardStyle(index)}
+                >
+                  <CampaignLoadingCard key={index} />
+                </div>
+              ))
+            : campaigns?.map((campaign, index) => (
+                <div
+                  className="absolute  p-2  transition-all duration-500 ease-in-out"
+                  style={getCardStyle(index)}
+                >
+                  <CampaignCard campaign={campaign} key={campaign._id} />
+                </div>
+              ))}
         </div>
       </Container>
     </section>

@@ -8,6 +8,7 @@ const DonorDetailsForm = () => {
       <div className="flex justify-between items-center">
         <h3 className="text-xl font-medium">Your Basic Information</h3>
         <button
+        type="button"
           onClick={() => setIsDetailsFormOpen((prev) => !prev)}
           className={`text-xl font-medium p-2 bg-gray-50 rounded-full ${isDetailsFormOpen ? "rotate-180" : ""} duration-100 `}
         >
@@ -23,31 +24,43 @@ const DonorDetailsForm = () => {
             <input
               type="text"
               placeholder="Full name"
+              name="guestDonorInfo.fullName"
               className="px-2 py-4 w-full bg-gray-100 placeholder:font-secondary placeholder:font-medium    outline-secondary"
             />
             <input
               type="text"
               placeholder="Email Address"
+                 name="guestDonorInfo.email"
               className="px-2 py-4 w-full bg-gray-100 placeholder:font-secondary placeholder:font-medium   outline-secondary"
             />
             <input
               type="text"
               placeholder="Phone"
+              name="guestDonorInfo.phoneNumber"
               className="px-2 py-4 w-full bg-gray-100 placeholder:font-secondary placeholder:font-medium   outline-secondary"
             />
             <input
               type="text"
               placeholder="Country"
+              name="guestDonorInfo.address.country"
               className="px-2 py-4 w-full bg-gray-100 placeholder:font-secondary placeholder:font-medium   outline-secondary"
             />
             <input
               type="text"
               placeholder="State"
+              name="guestDonorInfo.address.state"
+              className="px-2 py-4 w-full bg-gray-100 placeholder:font-secondary placeholder:font-medium   outline-secondary"
+            />
+             <input
+              type="text"
+              placeholder="State"
+              name="guestDonorInfo.address.city"
               className="px-2 py-4 w-full bg-gray-100 placeholder:font-secondary placeholder:font-medium   outline-secondary"
             />
             <input
               type="text"
-              placeholder="Address"
+              placeholder="street"
+              name="guestDonorInfo.address.street"
               className="px-2 py-4 w-full bg-gray-100 placeholder:font-secondary placeholder:font-medium   outline-secondary"
             />
           </div>

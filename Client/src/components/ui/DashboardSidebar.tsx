@@ -61,16 +61,18 @@ const DashboardSidebar = () => {
             </Link>
           ))}
 
-          <div className="p-3  rounded-md  mx-auto">
-            <img
-              src="https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
-              alt=""
-              className="size-12 rounded-md mx-auto"
-            />
-            <h6 className=" font-medium text-gray-800 text-center mt-3">John Doe</h6>
-          </div>
-          <div className="p-3  rounded-md  mx-auto text-center flex flex-col justify-center items-center  ">
-            <p className="text-3xl  text-black p-2  rounded-md">
+          <Link to="/dashboard/personal-information">
+            <div className="p-3  rounded-md  mx-auto">
+              <img
+                src="https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
+                alt=""
+                className="size-12 rounded-md mx-auto"
+              />
+              <h6 className=" font-medium text-gray-800 text-center mt-3">John Doe</h6>
+            </div>
+          </Link>
+          <div className="p-3 hover:cursor-pointer group  rounded-md  mx-auto text-center flex flex-col justify-center items-center  ">
+            <p className="text-3xl  text-black group-hover:text-red-500 p-2  rounded-md">
               <TbLogout2 />
             </p>
             <p className="text-center mt-2 font-medium text-gray-700">Logout</p>

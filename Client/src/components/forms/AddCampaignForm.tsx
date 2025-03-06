@@ -15,60 +15,73 @@ const AddCampaignForm = () => {
       key: "selection",
     },
   ]);
-  const [coverPhoto,setCoverPhoto] = useState<File|null>(null)
-  const [selectedCategory,setSelectedCategory] = useState<string|null>(null);
-  const ref = useRef<HTMLInputElement>(null)
+  const [coverPhoto, setCoverPhoto] = useState<File | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const ref = useRef<HTMLInputElement>(null);
 
-
-  const handelCoverPhotoInputOnChange = (e:ChangeEvent<HTMLInputElement>)=>{
+  const handelCoverPhotoInputOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-   
-    if(files && files.length) setCoverPhoto(files[0])
-  }
 
-  const selectCategoryOptions  = categories.map((category)=>({
-    display:category,
-    value:category
-  }))
+    if (files && files.length) setCoverPhoto(files[0]);
+  };
+
+  const selectCategoryOptions = categories.map((category) => ({
+    display: category,
+    value: category,
+  }));
 
   selectCategoryOptions.unshift({
-    display:"Select Category",
-    value:""
-  })
+    display: "Select Category",
+    value: "",
+  });
 
   return (
     <form action="">
       <h1 className="lg:text-3xl text-2xl font-semibold ">Add New Campaign</h1>
       <div className="mt-10">
-
         {/* Cover photo */}
-     <>
-  {
-    !coverPhoto ?    <div onClick={()=>ref.current && ref.current.click()} className="lg:h-60 h-52  border-2 hover:bg-gray-50 rounded-md text-gray-700/15 flex flex-col gap-2 justify-center items-center">
-    <img
-      src="https://icones.pro/wp-content/uploads/2021/08/icone-photo-bleue.png"
-      alt=""
-      className="size-32 "
-    
-    />
-    <p className="text-gray-800 font-medium">Cover photo</p>
-  </div>
-  :
- <div className="p-2 border-2 w-fit rounded-md border-secondary">
-   <img src={URL.createObjectURL(coverPhoto)} alt=""  className=" h-60 rounded-lg hover:cursor-pointer" onClick={()=>ref.current && ref.current.click()}/> 
- </div>
-  }
-        <input onChange={handelCoverPhotoInputOnChange} type="file" ref={ref} className="hidden" />
-     </>
+        <>
+          {!coverPhoto ? (
+            <div
+              onClick={() => ref.current && ref.current.click()}
+              className="lg:h-60 h-52  border-2 hover:bg-gray-50 rounded-md text-gray-700/15 flex flex-col gap-2 justify-center items-center"
+            >
+              <img
+                src="https://icones.pro/wp-content/uploads/2021/08/icone-photo-bleue.png"
+                alt=""
+                className="size-32 "
+              />
+              <p className="text-gray-800 font-medium">Cover photo</p>
+            </div>
+          ) : (
+            <div className="p-2 border-2 w-fit rounded-md border-secondary">
+              <img
+                src={URL.createObjectURL(coverPhoto)}
+                alt=""
+                className=" h-60 rounded-lg hover:cursor-pointer"
+                onClick={() => ref.current && ref.current.click()}
+              />
+            </div>
+          )}
+          <input
+            onChange={handelCoverPhotoInputOnChange}
+            type="file"
+            ref={ref}
+            className="hidden"
+          />
+        </>
 
-         {/* Others Info  */}
+        {/* Others Info  */}
         <div className="mt-5 space-y-6">
           <input
             type="text"
             placeholder="Campaign Name"
             className="w-full py-3 px-2 border-2 border-gray-700/15 rounded-md placeholder:font-secondary font-medium outline-secondary"
           />
-        <Select options={selectCategoryOptions} onChange={(value)=>setSelectedCategory(value)} />
+          <Select
+            options={selectCategoryOptions}
+            onChange={(value) => setSelectedCategory(value)}
+          />
           <div className="grid grid-cols-2 gap-3">
             <input
               type="number"

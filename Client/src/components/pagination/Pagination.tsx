@@ -4,7 +4,7 @@ import { IMeta } from "../../interfaces/response.interface";
 
 type TProps = IMeta & { delta?: number; onPageChange: (page: number) => void | any };
 
-function Pagination({ total, limit, page, delta = 2, onPageChange }: TProps) {
+function Pagination({ totalResult: total, limit, page, delta = 2, onPageChange }: TProps) {
   const [pages, setPages] = useState<(number | string)[]>([]);
 
   const [currentPage, setCurrentPage] = useState<number>(1);

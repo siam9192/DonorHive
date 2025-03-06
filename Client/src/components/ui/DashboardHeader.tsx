@@ -16,11 +16,11 @@ const DashboardHeader = () => {
             <span className="font-bold text-primary">Welcome</span>,John Doe
           </h2>
           <p className="mt-1 text-sm text-gray-700 font-medium">{new Date().toDateString()}</p>
-          {/* {
-      pathTitle &&      <h3 className=" mt-2 md:text-xl text-lg font-semibold  text-gray-700">
-      {pathTitle.title}
-    </h3>
-     } */}
+          {pathTitle && (
+            <h4 className=" mt-2  md:text-lg text-[0.9rem] font-semibold  text-gray-700">
+              {pathTitle.title}
+            </h4>
+          )}
         </div>
         <ResponsiveDashboardSidebar />
       </div>

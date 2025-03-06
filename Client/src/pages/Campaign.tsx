@@ -5,15 +5,33 @@ import CampaignHeader from "../components/sections/Campaign/CampaignHeader";
 import Donation from "../components/sections/Campaign/Donation";
 import DonationPopup from "../components/ui/DonationPopup";
 import RelatedCampaigns from "../components/sections/Campaign/RelatedCampaigns";
+import { useParams } from "react-router-dom";
+import { useGetCampaignForVisitQuery } from "../redux/features/campaign/campaign.api";
+import useLoadingBounce from "../hooks/useLoadingBounce";
+import { useEffect } from "react";
 
 const Campaign = () => {
+  const { slug } = useParams();
+  const { data, isLoading, isError } = useGetCampaignForVisitQuery(slug as string);
+  const campaign = data?.data;
+
+  const bouncedLoading = useLoadingBounce(isLoading, 1000);
+
+  useEffect(()=>{
+    window.scrollTo(0,0)
+  },[slug])
+
+  if (!isLoading && (isError || !campaign)) {
+    throw new Error("Something went wrong");
+  }
+  if (bouncedLoading) return <div className="h-screen">Loading...</div>;
   return (
     <div>
       <CampaignHeader />
       <Container>
         <div className=" py-10 lg:grid grid-cols-6 gap-10">
           <div className="col-span-4">
-            <CampaignDetails />
+            <CampaignDetails campaign={campaign!} />
           </div>
           <div className="col-span-2 lg:block hidden">
             <Donation />

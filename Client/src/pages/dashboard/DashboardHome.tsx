@@ -10,7 +10,7 @@ const DashboardHome = () => {
       <DashboardSummary />
       <div className=" mt-10 grid lg:grid-cols-2 grid-cols-1 gap-10">
         <DonationStates />
-        <TopDonors/>
+        <TopDonors />
       </div>
       <div className=" mt-10 grid lg:grid-cols-2 grid-cols-1 gap-10">
         <RecentDonations />

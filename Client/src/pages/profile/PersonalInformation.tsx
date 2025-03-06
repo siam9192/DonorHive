@@ -1,6 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const PersonalInformation = () => {
+const PersonalInformation = ({ editUrl }: { editUrl?: string }) => {
   return (
     <div>
       <div className="md:w-10/12 w-full mx-auto">
@@ -41,7 +42,9 @@ const PersonalInformation = () => {
           </div>
         </div>
         <div className=" mt-5 text-center">
-          <button className="px-6 py-3 bg-primary text-white rounded-lg">Edit Profile</button>
+          <Link to={editUrl || "/profile/edit-personal-information"}>
+            <button className="px-6 py-3 bg-primary text-white rounded-lg">Edit Profile</button>
+          </Link>
         </div>
       </div>
     </div>

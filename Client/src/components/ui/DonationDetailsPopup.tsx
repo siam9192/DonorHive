@@ -6,9 +6,10 @@ import { BiHide } from "react-icons/bi";
 
 interface IProps {
   children: ReactNode;
+  enableManageButtons?: boolean;
 }
 
-const DonationDetailsPopup = ({ children }: IProps) => {
+const DonationDetailsPopup = ({ children, enableManageButtons }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -154,22 +155,24 @@ const DonationDetailsPopup = ({ children }: IProps) => {
                 </div>
               </div>
             </div>
-            <div className="mt-5 flex justify-end items-center gap-2">
-              <button className=" bg-gray-100   flex items-center gap-1 p-2 font-medium text-black rounded-md">
-                <span className="text-3xl text-red-700">
-                  <BiHide />
-                </span>
+            {enableManageButtons && (
+              <div className="mt-5 flex justify-end items-center gap-2">
+                <button className=" bg-gray-100   flex items-center gap-1 p-2 font-medium text-black rounded-md">
+                  <span className="text-3xl text-red-700">
+                    <BiHide />
+                  </span>
 
-                <span>Hide From viewers</span>
-              </button>
-              <button className=" bg-gray-100   flex items-center gap-1 p-2 font-medium text-black rounded-md">
-                <span className="text-3xl text-red-700">
-                  <IoReturnUpBack />
-                </span>
+                  <span>Hide From viewers</span>
+                </button>
+                <button className=" bg-gray-100   flex items-center gap-1 p-2 font-medium text-black rounded-md">
+                  <span className="text-3xl text-red-700">
+                    <IoReturnUpBack />
+                  </span>
 
-                <span>Refund</span>
-              </button>
-            </div>
+                  <span>Refund</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       ) : null}

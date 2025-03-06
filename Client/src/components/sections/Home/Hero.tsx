@@ -12,10 +12,10 @@ const Hero = () => {
               Habitat for <span className="text-primary font-bold">Humanity</span> Donations
             </h1>
             <p className="text-gray-200 text-[0.9rem] font-secondary md:block hidden">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam suscipit doloribus
-              rerum reprehenderit, eaque dolorem illo! Odit consequatur pariatur maxime nulla
-              magnam? Nesciunt atque ipsam fugit tempore debitis qui nisi aperiam. Soluta ea
-              doloribus ullam reiciendis facilis exercitationem explicabo. Rem!
+              Habitat for Humanity accepts donations to help build affordable housing for families
+              in need. Contributions can be monetary, building materials, or gently used household
+              items through Habitat ReStores. Donations support local and global housing projects,
+              creating safe and stable homes.
             </p>
             <div className="flex items-center gap-3">
               <button className=" text-primary lg:text-[70px] md:text-[60px] text-[40px] animate-pulse border-4 border-secondary rounded-full p-2">

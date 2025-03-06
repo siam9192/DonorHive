@@ -47,7 +47,11 @@ const LoginPopup = ({ children }: IProps) => {
               </div>
             </div>
             <div className="mt-6 min-h-[40vh]">
-              {active === "login" ? <LoginForm /> : <RegisterForm />}
+              {active === "login" ? (
+                <LoginForm onSuccess={() => setIsOpen(false)} />
+              ) : (
+                <RegisterForm />
+              )}
             </div>
           </div>
         </div>

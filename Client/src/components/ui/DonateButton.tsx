@@ -34,6 +34,7 @@ const DonateButton = ({ selectedAmount }: IProps) => {
     <>
       <button
         disabled={!selectedAmount}
+        type="submit"
         onClick={() => setIsOpen(true)}
         className="py-3 disabled:bg-gray-100 disabled:text-gray-600 bg-primary text-white font-semibold w-full rounded-lg font-secondary"
       >

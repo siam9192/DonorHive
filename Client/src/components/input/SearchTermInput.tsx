@@ -4,9 +4,10 @@ import useBounce from "../../hooks/useBounce";
 
 interface IProps {
   onChange?(value: string): void;
+  placeholder?: string;
 }
 
-const SearchTermInput = ({ onChange }: IProps) => {
+const SearchTermInput = ({ onChange, placeholder }: IProps) => {
   const [value, setValue] = useState("");
   const bouncedValue = useBounce(value, 400);
 
@@ -21,7 +22,7 @@ const SearchTermInput = ({ onChange }: IProps) => {
       <input
         onChange={(e) => setValue(e.target.value)}
         type="text"
-        placeholder="Search campaign by keyword.."
+        placeholder={placeholder}
         className=" outline-none w-full  px-2 py-4 placeholder:font-secondary"
       />
     </div>

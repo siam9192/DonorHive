@@ -7,44 +7,47 @@ import ResponsiveNavbar from "../ui/ResponsiveNavbar";
 import { CiUser } from "react-icons/ci";
 import LoginPopup from "../ui/LoginPopup";
 import NavShortcut from "../ui/NavShortcut";
+import { useCurrentUser } from "../../provider/CurrentUserProvider";
+const socialLinks = [
+  {
+    icon: FaFacebook,
+    href: "",
+  },
+  {
+    icon: FaX,
+    href: "",
+  },
+  {
+    icon: FaInstagram,
+    href: "",
+  },
+];
+const navLinks = [
+  {
+    name: "Home",
+    href: "/",
+  },
+  {
+    name: "Campaigns",
+    href: "/campaigns",
+  },
+  {
+    name: "News",
+    href: "/",
+  },
+  {
+    name: "About Us",
+    href: "/about-us",
+  },
+  {
+    name: "Contact Us",
+    href: "/contact-us",
+  },
+];
 
 const Header = () => {
-  const socialLinks = [
-    {
-      icon: FaFacebook,
-      href: "",
-    },
-    {
-      icon: FaX,
-      href: "",
-    },
-    {
-      icon: FaInstagram,
-      href: "",
-    },
-  ];
-  const navLinks = [
-    {
-      name: "Home",
-      href: "/",
-    },
-    {
-      name: "Campaigns",
-      href: "/campaigns",
-    },
-    {
-      name: "News",
-      href: "/",
-    },
-    {
-      name: "About Us",
-      href: "/about-us",
-    },
-    {
-      name: "Contact Us",
-      href: "/",
-    },
-  ];
+  const { user, isLoading } = useCurrentUser();
+
   return (
     <header className="">
       <div className="bg-gray-900 py-2">
@@ -93,12 +96,18 @@ const Header = () => {
               <button className=" md:block hidden uppercase px-6 py-3 text-gray-900 hover:bg-gray-900 hover:text-white bg-secondary  font-medium">
                 Donate Now
               </button>
-              <LoginPopup>
-                <span className="md:text-3xl text-2xl text-white">
-                  <FaUser />
-                </span>
-              </LoginPopup>
-              <NavShortcut />
+
+              {!isLoading ? (
+                user ? (
+                  <NavShortcut />
+                ) : (
+                  <LoginPopup>
+                    <span className="md:text-3xl text-2xl text-white">
+                      <FaUser />
+                    </span>
+                  </LoginPopup>
+                )
+              ) : null}
               <ResponsiveNavbar />
             </div>
           </div>

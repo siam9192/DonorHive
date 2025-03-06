@@ -1,4 +1,6 @@
 import React from "react";
+import DonationDetailsPopup from "../ui/DonationDetailsPopup";
+import MyDonationDetailsPopup from "../ui/MyDonationDetailsPopup";
 
 const MyDonationCard = () => {
   return (
@@ -16,7 +18,9 @@ const MyDonationCard = () => {
           {new Date().toDateString()} . 2 minutes ago
         </p>
         <div className="flex  items-center gap-2 justify-end md:text-sm text-[0.7rem]">
-          <button className="text-primary font-medium">Details</button>
+          <MyDonationDetailsPopup>
+            <div className="text-primary font-medium">Details</div>
+          </MyDonationDetailsPopup>
           <button className="text-amber-500 font-medium">Download Reciept</button>
         </div>
       </div>
