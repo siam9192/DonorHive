@@ -3,36 +3,39 @@ import { BsEye } from "react-icons/bs";
 import { GoBell } from "react-icons/go";
 import { GiTakeMyMoney } from "react-icons/gi";
 import useLoadingBounce from "../../../hooks/useLoadingBounce";
+import { useGetMySummaryQuery } from "../../../redux/features/overview/overview.api";
 const ProfileSummary = () => {
+  const { data: resData, isLoading } = useGetMySummaryQuery(undefined);
+  const summaries = resData?.data;
   const data = [
     {
-      title: "Donate",
+      title: "Donations",
       icon: <BiDonateHeart />,
-      value: 30,
+      value: summaries?.donationsCount,
       color: "#B3D8A8",
     },
     {
       title: "$Total Donated ",
       icon: <GiTakeMyMoney />,
-      value: 3874,
+      value: summaries?.totalDonatedAmount,
       color: "#2D336B",
       iconColor: "#FFF",
     },
     {
       title: "Watch Listed",
       icon: <BsEye />,
-      value: 3,
+      value: summaries?.watchListedCount,
       color: "#F8E7F6",
     },
     {
       title: "Notifications ",
       icon: <GoBell />,
-      value: 8,
+      value: summaries?.unReadNotificationsCount,
       color: "#9ACBD0",
     },
   ];
 
-  const bouncedLoading = useLoadingBounce(true, 5000);
+  const bouncedLoading = useLoadingBounce(isLoading, 1000);
 
   return (
     <section className="grid md:grid-cols-4 grid-cols-2 md:gap-5 gap-3">

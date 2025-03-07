@@ -42,7 +42,7 @@ const CampaignDetails = ({ campaign }: IProps) => {
             <p className="text-sm text-gray-600 font-semibold">${campaign.targetAmount}</p>
           </div>
         </div>
-        <img src="/images/banner.jpg" alt="" className="rounded-lg" />
+        <img src={campaign.coverImageUrl} alt="" className="rounded-lg w-full" />
         <p className="text-gray-800 font-secondary md:text-[1rem] text-[0.9rem]">
           {campaign.description}
         </p>

@@ -1,12 +1,14 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import Donation from "../sections/Campaign/Donation";
 import { RxCross1 } from "react-icons/rx";
+import { ICampaign } from "../../types/campaign.type";
 
 interface IProps {
   children: ReactNode;
+  campaign: ICampaign;
 }
 
-const DonationPopup = ({ children }: IProps) => {
+const DonationPopup = ({ children, campaign }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -26,7 +28,7 @@ const DonationPopup = ({ children }: IProps) => {
             className="w-full  h-full overflow-y-auto customize-scrollbar   bg-white md:p-10 p-5 z-[1000] relative "
           >
             <div className="donation-popup-form">
-              <Donation />
+              <Donation campaign={campaign} />
             </div>
             <button
               onClick={() => setIsOpen(false)}

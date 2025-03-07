@@ -17,9 +17,9 @@ const Campaign = () => {
 
   const bouncedLoading = useLoadingBounce(isLoading, 1000);
 
-  useEffect(()=>{
-    window.scrollTo(0,0)
-  },[slug])
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [slug]);
 
   if (!isLoading && (isError || !campaign)) {
     throw new Error("Something went wrong");
@@ -34,14 +34,14 @@ const Campaign = () => {
             <CampaignDetails campaign={campaign!} />
           </div>
           <div className="col-span-2 lg:block hidden">
-            <Donation />
+            <Donation campaign={campaign!} />
           </div>
         </div>
       </Container>
       <RelatedCampaigns />
       {/* Donation form pop up only for md and sm screen  */}
       <div className="  fixed bottom-10 right-4 lg:hidden">
-        <DonationPopup>
+        <DonationPopup campaign={campaign!}>
           <div className="text-2xl lg:hidden p-3  rounded-full  bg-primary text-white">
             <BiSolidDonateHeart />
           </div>

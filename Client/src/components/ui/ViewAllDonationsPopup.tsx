@@ -14,43 +14,41 @@ interface IProps {
 const ViewAllDonationsPopup = ({ children, id }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [allDonations, setAllDonations] = useState<IDonation[]>([]);
-  const [page,setPage] = useState(1);
+  const [page, setPage] = useState(1);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
   }, [isOpen]);
 
-  const params:IParam[] = [
-  {
-    name:'page',
-    value:page
-  }
-  ]
+  const params: IParam[] = [
+    {
+      name: "page",
+      value: page,
+    },
+  ];
 
-  const { data, isLoading,isFetching,refetch} = useGetCampaignDonationsQuery({id,params});
+  const { data, isLoading, isFetching, refetch } = useGetCampaignDonationsQuery({ id, params });
   const donations = data?.data;
   const meta = data?.meta;
   const bouncedLoading = useLoadingBounce(isLoading);
-  
-  const totalPage = meta ?  Math.ceil(meta?.totalResult/meta?.limit) :0
+
+  const totalPage = meta ? Math.ceil(meta?.totalResult / meta?.limit) : 0;
   const handelOnScroll = (e: UIEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement;
 
     if (target.scrollTop + target.clientHeight >= target.scrollHeight) {
-      if((!bouncedLoading &&!isLoading&&!isFetching) && page < totalPage){
-         setPage(p=>p+1)
-         refetch()
+      if (!bouncedLoading && !isLoading && !isFetching && page < totalPage) {
+        setPage((p) => p + 1);
+        refetch();
       }
     }
   };
 
-  useEffect(()=>{
-    if(!isLoading && !isFetching && donations?.length){
-      setAllDonations(prev=>[...prev,...donations])
+  useEffect(() => {
+    if (!isLoading && !isFetching && donations?.length) {
+      setAllDonations((prev) => [...prev, ...donations]);
     }
-  },[
-    isFetching
-  ])
+  }, [isFetching]);
 
   return (
     <>
@@ -77,7 +75,7 @@ const ViewAllDonationsPopup = ({ children, id }: IProps) => {
                 {bouncedLoading ? (
                   Array.from({ length: 6 }).map((_, index) => <DonationLoadingCard key={index} />)
                 ) : donations?.length ? (
-                 allDonations?.map((donation) => (
+                  allDonations?.map((donation) => (
                     <DonationCard donation={donation} key={donation._id} />
                   ))
                 ) : (
@@ -89,9 +87,7 @@ const ViewAllDonationsPopup = ({ children, id }: IProps) => {
                   </div>
                 )}
               </div>
-              {
-                isFetching ? <p className="mt-2">Loading...</p>:null
-              }
+              {isFetching ? <p className="mt-2">Loading...</p> : null}
             </div>
           </div>
         </div>

@@ -71,6 +71,7 @@ const ShowCampaigns = () => {
   const handelSorting = (e: ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     const [sortBy, sortOrder] = value.split("-");
+
     handelSearch(
       [
         { name: "sortBy", value: sortBy },
@@ -105,7 +106,9 @@ const ShowCampaigns = () => {
           >
             <option value="">Sort By(Default)</option>
             {sortOptions.map((_, index) => (
-              <option key={_.value}>{_.display}</option>
+              <option value={_.value} key={_.value}>
+                {_.display}
+              </option>
             ))}
           </select>
         </div>

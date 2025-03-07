@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { BiSolidDonateHeart } from "react-icons/bi";
 import { CiLogout } from "react-icons/ci";
@@ -6,6 +6,7 @@ import { FaCog, FaHistory, FaUserCircle } from "react-icons/fa";
 import { LuEye } from "react-icons/lu";
 import { RiDashboardHorizontalLine } from "react-icons/ri";
 import { Link, useLocation } from "react-router-dom";
+import { useCurrentUser } from "../../provider/CurrentUserProvider";
 
 const ProfileSidebar = () => {
   const profileRoutes = [
@@ -40,6 +41,12 @@ const ProfileSidebar = () => {
   const { pathname } = useLocation();
 
   const [isOpen, setIsOpen] = useState(false);
+
+  const { user, isLoading } = useCurrentUser();
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
   return (
     <div className="relative">
       <div className="flex items-center justify-between p-2 lg:hidden">
@@ -58,14 +65,14 @@ const ProfileSidebar = () => {
           <div className="flex  gap-2">
             <div className="border-2 border-gray-700/10 rounded-full h-fit ">
               <img
-                src="https://cdn-icons-png.flaticon.com/512/3001/3001758.png"
+                src={user?.profilePhotoUrl}
                 alt=""
                 className=" md:size-24 size-20 rounded-full p-2"
               />
             </div>
             <div className="py-3">
-              <h1 className="md:text-2xl text-xl text-black font-medium">John Doe</h1>
-              <p className="mt-1 text-gray-700 font-medium text-sm">doe78@gmail.com</p>
+              <h1 className="md:text-2xl text-xl text-black font-medium">{user?.fullName}</h1>
+              <p className="mt-1 text-gray-700 font-medium text-sm">{user?.email || "N/A"}</p>
               <Link to={"/profile/edit-personal-information"}>
                 <button className=" mt-3 px-6 py-2 text-gray-50 bg-primary  rounded-xl">
                   Edit Profile
@@ -89,7 +96,7 @@ const ProfileSidebar = () => {
             ))}
           </div>
         </div>
-        <button className="flex items-center gap-2 px-3 py-5 ">
+        <button  className="flex items-center gap-2 px-3 py-5 ">
           <span className="text-2xl bg-gray-100 p-2 rounded-md">
             <CiLogout />
           </span>

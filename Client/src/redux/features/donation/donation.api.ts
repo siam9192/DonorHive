@@ -1,10 +1,10 @@
 import { IParam, IResponse } from "../../../interfaces/response.interface";
-import { IDonation } from "../../../types/donation.type";
+import { IDonation, TMyDonation } from "../../../types/donation.type";
 import { TProfile } from "../../../types/profile.type";
 import { paramsToString } from "../../../utils/function";
 import { baseApi } from "../../api/baseApi";
 
-const profileApi = baseApi.injectEndpoints({
+const donationApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getCampaignLatestDonations: builder.query({
       query: (id: string) => ({
@@ -17,7 +17,7 @@ const profileApi = baseApi.injectEndpoints({
       providesTags: ["campaign-latest-donations"],
     }),
     getCampaignDonations: builder.query({
-      query: ({id,params}:{id: string,params:IParam[]}) => ({
+      query: ({ id, params }: { id: string; params: IParam[] }) => ({
         url: `/donations/campaign/${id}?${paramsToString(params)}`,
         method: "GET",
       }),
@@ -26,7 +26,41 @@ const profileApi = baseApi.injectEndpoints({
       },
       providesTags: ["campaign-donations"],
     }),
+    requestDonation: builder.mutation({
+      query: (body) => ({
+        url: `/donations/init`,
+        method: "POST",
+        body,
+      }),
+      transformResponse: (response: IResponse<{ paymentUrl: string }>) => {
+        return response;
+      },
+    }),
+    getMyRecentDonations: builder.query({
+      query: () => ({
+        url: `/donations/recent/my`,
+        method: "GET",
+      }),
+      transformResponse: (response: IResponse<TMyDonation[]>) => {
+        return response;
+      },
+    }),
+    getMyDonations: builder.query({
+      query: (params: IParam[]) => ({
+        url: `/donations/my?${paramsToString(params)}`,
+        method: "GET",
+      }),
+      transformResponse: (response: IResponse<TMyDonation[]>) => {
+        return response;
+      },
+    }),
   }),
 });
 
-export const { useGetCampaignLatestDonationsQuery, useGetCampaignDonationsQuery } = profileApi;
+export const {
+  useGetCampaignLatestDonationsQuery,
+  useGetCampaignDonationsQuery,
+  useRequestDonationMutation,
+  useGetMyRecentDonationsQuery,
+  useGetMyDonationsQuery,
+} = donationApi;

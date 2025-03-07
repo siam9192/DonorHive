@@ -1,41 +1,72 @@
-import React, { useEffect, useState } from "react";
+import React, { Ref, useEffect, useState } from "react";
 import { FaDollarSign } from "react-icons/fa";
+import { IInitDonationPayload } from "../../types/donation.type";
+import { useCurrentUser } from "../../provider/CurrentUserProvider";
+import { object } from "zod";
+import { useRequestDonationMutation } from "../../redux/features/donation/donation.api";
 
 interface IProps {
   selectedAmount?: number | null;
+  goNext(): boolean;
+  disabled?: boolean;
+  values: Record<string, any>;
 }
 
-const DonateButton = ({ selectedAmount }: IProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string | null>(null);
+const paymentMethods = [
+  // {
+  //   name: "Paypal",
+  //   logoUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a4/Paypal_2014_logo.png",
+  //   value: "Paypal",
+  // },
+  {
+    name: "Stripe",
+    logoUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/2560px-Stripe_Logo%2C_revised_2016.svg.png",
+    value: "Stripe",
+  },
+  {
+    name: "SSLCommerze",
+    logoUrl: "https://avatars.githubusercontent.com/u/19384040?v=4",
+    value: "SSLCommerze",
+  },
+];
 
+const DonateButton = ({ selectedAmount, goNext, disabled, values }: IProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const { user } = useCurrentUser();
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
   }, [isOpen]);
-  const paymentMethods = [
-    {
-      name: "Paypal",
-      logoUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a4/Paypal_2014_logo.png",
-      value: "Paypal",
-    },
-    {
-      name: "Stripe",
-      logoUrl:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/2560px-Stripe_Logo%2C_revised_2016.svg.png",
-      value: "Stripe",
-    },
-    {
-      name: "SSLCommerze",
-      logoUrl: "https://avatars.githubusercontent.com/u/19384040?v=4",
-      value: "SSLCommerze",
-    },
-  ];
+
+  const guestDonorInfo = values.guestDonorInfo;
+
+  const [gotoPay, { isLoading }] = useRequestDonationMutation();
+  const handelGotoPay = async () => {
+    try {
+      const payload = {
+        campaignId: values.campaign._id,
+        paymentMethod: selectedPaymentMethod,
+        ...values,
+      };
+      const res = await gotoPay(payload);
+      if (res.data?.success) {
+        window.open(res.data.data.paymentUrl);
+        setIsOpen(false);
+      } else throw new Error();
+    } catch (error) {
+      console.log(error);
+      setErrorMessage("Something went wrong");
+    }
+  };
   return (
     <>
       <button
-        disabled={!selectedAmount}
+        disabled={!selectedAmount || disabled}
         type="submit"
-        onClick={() => setIsOpen(true)}
+        onClick={() => goNext() && setIsOpen(true)}
         className="py-3 disabled:bg-gray-100 disabled:text-gray-600 bg-primary text-white font-semibold w-full rounded-lg font-secondary"
       >
         Donate {selectedAmount ? "$" + selectedAmount : ""}
@@ -57,41 +88,40 @@ const DonateButton = ({ selectedAmount }: IProps) => {
                     <FaDollarSign />
                   </span>
                   <h1 className="md:text-4xl text-3xl font-semibold text-primary text-center">
-                    230
+                    {selectedAmount}
                   </h1>
                 </div>
                 <div>
                   <h3 className=" md:text-xl text-lg font-medium">Campaign:</h3>
-                  <p className="mt-3 md:text-lg text-sm font-secondary">
-                    Education is for everyone
-                  </p>
+                  <p className="mt-3 md:text-lg text-sm font-secondary">{values.campaign.title}</p>
                 </div>
-                <div>
-                  <h3 className=" md:text-xl text-lg font-medium">Personal Information:</h3>
-                  <div className="mt-3 space-y-3 font-secondary">
-                    <p className=" font-medium space-x-2 md:text-[1rem] text-sm">
-                      <span className="text-gray-950 font-semibold">Full Name:</span>
-                      <span>John Doe</span>
-                    </p>
-                    <p className=" font-medium space-x-2 md:text-[1rem] text-sm">
-                      <span className="text-gray-950 font-semibold">Email Address:</span>
-                      <span>johndoe@mail.com</span>
-                    </p>
-                    <p className=" font-medium space-x-2 md:text-[1rem] text-sm">
-                      <span className="text-gray-950 font-semibold">Phone Number:</span>
-                      <span>+98785655</span>
-                    </p>
-                    <p className=" font-medium space-x-2 md:text-[1rem] text-sm">
-                      <span className="text-gray-950 font-semibold">Address:</span>
-                      <span>123 Belicon,New York,Bangladesh</span>
-                    </p>
+                {guestDonorInfo && Object.values(guestDonorInfo).length && (
+                  <div>
+                    <h3 className=" md:text-xl text-lg font-medium">Personal Information:</h3>
+                    <div className="mt-3 space-y-3 font-secondary">
+                      <p className=" font-medium space-x-2 md:text-[1rem] text-sm">
+                        <span className="text-gray-950 font-semibold">Full Name:</span>
+                        <span>{guestDonorInfo.fullName}</span>
+                      </p>
+                      <p className=" font-medium space-x-2 md:text-[1rem] text-sm">
+                        <span className="text-gray-950 font-semibold">Email Address:</span>
+                        <span>{guestDonorInfo.email || "N/A"}</span>
+                      </p>
+                      <p className=" font-medium space-x-2 md:text-[1rem] text-sm">
+                        <span className="text-gray-950 font-semibold">Phone Number:</span>
+                        <span>{guestDonorInfo.phoneNumber || "N/A"}</span>
+                      </p>
+                      <p className=" font-medium space-x-2 md:text-[1rem] text-sm">
+                        <span className="text-gray-950 font-semibold">Address:</span>
+                        <span>{Object.values(guestDonorInfo.address).join(",")}</span>
+                      </p>
+                    </div>
                   </div>
-                </div>
+                )}
                 <div className="mt-5">
                   <h3 className=" md:text-xl text-lg font-medium">Comment:</h3>
                   <p className="mt-3  font-secondary text-sm text-gray-600">
-                    " Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae exercitationem
-                    molestiae delectus rem assumenda optio."
+                    {values.comment ? `"${values.comment}"` : "N/A"}
                   </p>
                 </div>
                 <div>
@@ -110,12 +140,14 @@ const DonateButton = ({ selectedAmount }: IProps) => {
               </div>
               <div className="mt-5">
                 <button
-                  disabled={!selectedPaymentMethod}
+                  disabled={!selectedPaymentMethod || isLoading}
+                  onClick={handelGotoPay}
                   className="w-full py-3 bg-primary text-white disabled:bg-gray-100 disabled:text-gray-600 font-medium hover:bg-secondary hover:text-gray-900 duration-100  rounded-lg"
                 >
                   Go to Pay
                 </button>
               </div>
+              {errorMessage && <p className="mt-1 text-red-500">{errorMessage}</p>}
             </div>
           </div>
         </div>

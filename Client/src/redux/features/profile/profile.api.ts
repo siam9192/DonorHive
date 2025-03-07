@@ -15,7 +15,18 @@ const profileApi = baseApi.injectEndpoints({
       },
       providesTags: ["my-profile"],
     }),
+    updateMyProfile: builder.mutation({
+      query: (body) => ({
+        url: "/profile",
+        method: "PUT",
+        body,
+      }),
+      transformResponse: (response: IResponse<null>) => {
+        return response;
+      },
+      invalidatesTags: ["current-user"],
+    }),
   }),
 });
 
-export const { useGetMyProfileQuery } = profileApi;
+export const { useGetMyProfileQuery, useUpdateMyProfileMutation } = profileApi;

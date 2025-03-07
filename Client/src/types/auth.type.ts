@@ -1,4 +1,4 @@
-import { TAuthProvider, TUserRole } from "./user.type";
+import { IUser, TAuthProvider, TUserRole } from "./user.type";
 
 export interface IME {
   _id: string;
@@ -9,11 +9,17 @@ export interface IME {
   provider: TAuthProvider;
 }
 
-export interface ICurrentUser {
-  _id: string;
-  fullName: string;
-  profilePhotoUrl: string;
-  role: TUserRole;
-  email?: string;
-  provider: TAuthProvider;
-}
+export type ICurrentUser = Pick<
+  IUser,
+  | "_id"
+  | "fullName"
+  | "email"
+  | "profilePhotoUrl"
+  | "phoneNumber"
+  | "provider"
+  | "address"
+  | "role"
+  | "createdAt"
+  | "status"
+  | "updatedAt"
+>;

@@ -33,6 +33,18 @@ export interface IDonation {
   updatedAt: Date;
 }
 
+export type TMyDonation = Pick<
+  IDonation,
+  | "_id"
+  | "amount"
+  | "campaign"
+  | "comment"
+  | "guestDonorInfo"
+  | "isAnonymously"
+  | "status"
+  | "createdAt"
+>;
+
 export interface IInitDonationPayload {
   campaignId: string;
   amount: number;
