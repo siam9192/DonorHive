@@ -13,6 +13,7 @@ router.post(
   AuthControllers.register
 );
 router.post('/register/verify/:token', AuthControllers.verifyRegistration);
+router.post('/callback/google', AuthControllers.googleCallback);
 router.post(
   '/login',
   validateRequest(AuthValidations.LoginValidationSchema),
@@ -25,7 +26,7 @@ router.post(
   AuthControllers.changePassword
 );
 router.get('/access-token', AuthControllers.getAccessToken);
-
+router.get('/current-user', auth(...Object.values(EUserRole)), AuthControllers.getMe);
 const AuthRouter = router;
 
 export default AuthRouter;

@@ -5,7 +5,7 @@ import ProfileControllers from './profile.controller';
 
 const router = Router();
 
-router.get('/', auth(...Object.values(EUserRole)), ProfileControllers.getMyProfileFromDB);
+router.get('/my', auth(...Object.values(EUserRole)), ProfileControllers.getMyProfileFromDB);
 router.put('/', auth(...Object.values(EUserRole)), ProfileControllers.updateMyProfile);
 
 const ProfileRouter = router;

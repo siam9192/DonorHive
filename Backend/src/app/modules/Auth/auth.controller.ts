@@ -20,6 +20,14 @@ const verifyRegistration = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const googleCallback = catchAsync(async (req: Request, res: Response) => {
+  const result = await AuthServices.googleCallback(req.body);
+  sendSuccessResponse(res, {
+    statusCode: httpStatus.OK,
+    message: 'Login successful',
+    data: result,
+  });
+});
 
 const login = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthServices.login(req.body);
@@ -49,12 +57,23 @@ const getAccessToken = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getMe = catchAsync(async (req: Request, res: Response) => {
+  const result = await AuthServices.getMeFromDB(req.user);
+  sendSuccessResponse(res, {
+    statusCode: httpStatus.OK,
+    message: 'Retrieved successfully',
+    data: result,
+  });
+});
+
 const AuthControllers = {
   register,
   verifyRegistration,
+  googleCallback,
   login,
   changePassword,
   getAccessToken,
+  getMe,
 };
 
 export default AuthControllers;

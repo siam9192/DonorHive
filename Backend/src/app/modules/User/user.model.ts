@@ -60,7 +60,6 @@ const UserModelSchema = new Schema<IUser>(
       type: String,
       minlength: 5,
       maxlength: 50,
-
       required: true,
     },
     googleId: {
@@ -81,7 +80,7 @@ const UserModelSchema = new Schema<IUser>(
     password: {
       type: String,
       index: false,
-      required: true,
+      default: null,
     },
     status: {
       type: String,

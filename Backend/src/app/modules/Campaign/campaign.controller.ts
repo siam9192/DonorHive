@@ -55,6 +55,16 @@ const getCampaignBySlug = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getRelatedCampaignsFromDB = catchAsync(async (req: Request, res: Response) => {
+  const result = await CampaignServices.getRelatedCampaignsFromDB(req.params.slug);
+  sendSuccessResponse(res, {
+    statusCode: httpStatus.OK,
+    message: 'Related campaigns retrieved successfully',
+    data: result,
+  });
+});
+
+
 const getRecentCampaigns = catchAsync(async (req: Request, res: Response) => {
   const result = await CampaignServices.getRecentCampaignsFromDB();
   sendSuccessResponse(res, {
@@ -63,6 +73,7 @@ const getRecentCampaigns = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
 
 const getAlmostCompletedCampaigns = catchAsync(async (req: Request, res: Response) => {
   const result = await CampaignServices.getAlmostCompletedCampaignsFromDB();
@@ -96,6 +107,7 @@ const CampaignControllers = {
   createManyCampaign,
   getCampaigns,
   getRecentCampaigns,
+  getRelatedCampaignsFromDB,
   getAlmostCompletedCampaigns,
   getCampaignsForManage,
   getCampaignBySlug,

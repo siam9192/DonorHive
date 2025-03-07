@@ -60,7 +60,7 @@ const register = async (payload: IRegistrationPayload) => {
       '10m'
     );
 
-    const verificationLink = `${envConfig.url.baseUrlClient}/registration/verify/${token}`;
+    const verificationLink = `${envConfig.url.baseUrlClient}/registration-verify/${token}`;
     console.log(token);
     const emailSendStatus = await ejs.renderFile(
       path.join(process.cwd(), '/src/app/email-templates/registration-verification.html'),
@@ -152,6 +152,80 @@ const verifyRegistration = async (token: string) => {
     throw new AppError(httpStatus.BAD_REQUEST, 'Something went wrong');
   }
   return null;
+};
+
+const googleCallback = async ({ accessToken: googleAccessToken }: { accessToken: string }) => {
+  const { data } = await axios.get('https://www.googleapis.com/oauth2/v2/userinfo', {
+    headers: {
+      Authorization: `Bearer ${googleAccessToken}`,
+    },
+  });
+  let tokenPayload = {
+    id: '',
+    role: '',
+    provider: EAuthProvider.Google,
+  };
+
+  const user = await User.findOne({
+    googleId: data.id,
+    provider: EAuthProvider.Google,
+  });
+
+  if (user) {
+    if (user.status === EUserStatus.Deleted)
+      throw new AppError(httpStatus.NOT_FOUND, 'Use not found');
+    if (user.status === EUserStatus.Blocked)
+      throw new AppError(httpStatus.NOT_ACCEPTABLE, 'Account is Blocked');
+    const updateData = {
+      fullName: data.name,
+      profilePhotoUrl: data.picture,
+    };
+
+    await User.updateOne(
+      {
+        _id: user._id,
+      },
+      updateData
+    );
+    tokenPayload.id = user._id.toString();
+    tokenPayload.role = user.role;
+  } else {
+    const isEmailUserExist = await User.exists({
+      email: data.email,
+    });
+
+    if (isEmailUserExist)
+      throw new AppError(httpStatus.NOT_ACCEPTABLE, 'This email already in use');
+
+    const userData = await User.create({
+      fullName: data.name,
+      profilePhotoUrl: data.picture,
+      email: data.email,
+      provider: EAuthProvider.Facebook,
+    });
+
+    const createdUser = await User.create(userData);
+    tokenPayload.id = createdUser._id.toString();
+    tokenPayload.role = createdUser.role;
+  }
+
+  // Generating access token
+  const accessToken = jwtHelpers.generateToken(
+    tokenPayload,
+    envConfig.jwt.accessTokenSecret as string,
+    '7d'
+  );
+  // Generating refresh token
+  const refreshToken = jwtHelpers.generateToken(
+    tokenPayload,
+    envConfig.jwt.refreshTokenSecret as string,
+    envConfig.jwt.refreshTokenExpireTime as string
+  );
+
+  return {
+    accessToken,
+    refreshToken,
+  };
 };
 
 const facebookCallback = async (accessToken: string) => {
@@ -287,12 +361,28 @@ const getAccessToken = async (refreshToken: string) => {
   }
 };
 
+const getMeFromDB = async (authUser: IAuthUser) => {
+  const selectStr = '_id fullName profilePhotoUrl email role provider address phoneNumber createdAt updatedAt status';
+  const user = await User.findOne({
+    _id: objectId(authUser.id),
+    status: {
+      $not: {
+        $eq: EUserStatus.Deleted,
+      },
+    },
+  }).select(selectStr);
+  if (!user) throw new AppError(httpStatus.BAD_GATEWAY, 'Bad Gateway!');
+  return user;
+};
+
 const AuthServices = {
   register,
   verifyRegistration,
+  googleCallback,
   login,
   changePassword,
   getAccessToken,
+  getMeFromDB,
 };
 
 export default AuthServices;

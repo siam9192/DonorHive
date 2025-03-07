@@ -7,7 +7,7 @@ import User from '../User/user.model';
 
 const getMyProfileFromDB = async (authUser: IAuthUser) => {
   const selectStr =
-    '_id fullName profilePhoto email phoneNumber address role provider status createdAt updatedAt';
+    '_id fullName profilePhotoUrl email phoneNumber address role provider status createdAt updatedAt';
   const user = await User.findOne({
     _id: objectId(authUser.id),
     status: {

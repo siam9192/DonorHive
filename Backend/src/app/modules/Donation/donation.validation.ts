@@ -2,14 +2,14 @@ import { z } from 'zod';
 import { EPaymentMethod } from '../Payment/payment.interface';
 
 const GuestDonorInfoValidationSchema = z.object({
-  fullName: z.string(),
+  fullName: z.string().min(2).max(30),
   email: z.string().email(),
   phoneNumber: z.string().optional(),
   address: z.object({
-    street: z.string().optional(),
-    city: z.string(),
+    street: z.string().min(2).max(30).optional(),
+    city: z.string().min(2).max(30),
     state: z.string().optional(),
-    country: z.string(),
+    country: z.string().min(2).max(30),
   }),
 });
 

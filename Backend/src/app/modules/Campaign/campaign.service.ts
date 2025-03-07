@@ -98,8 +98,9 @@ const getCampaignsFromDB = async (
     page,
     limit,
     total,
-    totalResult,
+    totalResult
   };
+
   return {
     data,
     meta,
@@ -234,6 +235,36 @@ const getCampaignBySlugFromDB = async (slug: string) => {
   return campaign;
 };
 
+const getRelatedCampaignsFromDB = async (slug: string) => {
+  const campaign = await Campaign.findOne({ slug });
+  if (!campaign) throw new AppError(httpStatus.NOT_FOUND, "Campaign not found");
+  const category = campaign.category;
+  const campaigns = await Campaign.aggregate([
+    {
+      $match: {
+        category,
+        status:ECampaignStatus.Active,
+        isDeleted:false,
+        _id:{
+          $not:{
+            $eq:campaign._id
+          }
+        }
+      },
+    },
+    { $sample: { size: 5 } }, 
+    {
+      $project:{
+        isDeleted:false
+      }
+    }
+  ]);
+
+  return campaigns
+};
+
+
+
 const getRecentCampaignsFromDB = async () => {
   const recentDate = new Date(new Date().toDateString());
   recentDate.setDate(recentDate.getDate() - 30);
@@ -303,6 +334,7 @@ const CampaignServices = {
   getCampaignsFromDB,
   getCampaignsFromDBForManage,
   getCampaignBySlugFromDB,
+  getRelatedCampaignsFromDB,
   getRecentCampaignsFromDB,
   getAlmostCompletedCampaignsFromDB,
   updateCampaignIntoDB,

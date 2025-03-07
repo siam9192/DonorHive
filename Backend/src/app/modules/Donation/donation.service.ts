@@ -100,7 +100,7 @@ const manageDonationAfterSuccessfulPayment = async (id: string | ObjectId) => {
     let name;
     let transactionId = (donation.paymentId as any as IPayment).transactionId;
     if (donation.userId) {
-      const { _doc: user } = { ...donation.userId  } as any;
+      const { _doc: user } = { ...donation.userId } as any;
 
       name = user.fullName;
       if (user.email) {
