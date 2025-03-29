@@ -1,28 +1,23 @@
 import React from "react";
 import ChartBar from "../../../ui/ChartBar";
 import DonorCard from "../../../cards/DonorCard";
+import { useGetTopDonorsQuery } from "../../../../redux/features/overview/overview.api";
+import useLoadingBounce from "../../../../hooks/useLoadingBounce";
 
 const TopDonors = () => {
-  const data = [];
-  const currentDate = new Date();
+  const { data, isLoading } = useGetTopDonorsQuery(undefined);
+  const donors = data?.data;
+  const bouncedLoading = useLoadingBounce(isLoading);
 
-  for (let i = 0; i < 12; i++) {
-    data.unshift({
-      total: Math.floor(Math.random() * (3000000 - 1000000) + 1000000),
-      month: currentDate.getMonth() + 1,
-      year: currentDate.getFullYear(),
-    });
-    currentDate.setMonth(currentDate.getMonth() - 1);
-  }
-  const maxTotal = Math.max(...data.map((item) => item.total));
-  const max = maxTotal + (5 / 100) * maxTotal;
   return (
     <section className=" md:p-5 p-3  border-2 border-gray-600/10 rounded-lg ">
       <h1 className="md:text-2xl text-xl font-semibold ">Top Donors</h1>
-      <div className="mt-10 grid grid-cols-1 gap-5   h-[35vh] overflow-y-auto  customize-scrollbar">
-        {Array.from({ length: 5 }).map(() => (
-          <DonorCard />
-        ))}
+      <div className="mt-8 space-y-2   h-[35vh] overflow-y-auto  customize-scrollbar">
+        {bouncedLoading
+          ? Array.from({ length: 5 }).map(() => (
+              <div className="h-32 bg-gray-200 animate-pulse"></div>
+            ))
+          : donors?.map((donor) => <DonorCard donor={donor} key={donor._id} />)}
       </div>
     </section>
   );

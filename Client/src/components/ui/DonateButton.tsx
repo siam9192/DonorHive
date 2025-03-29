@@ -95,7 +95,7 @@ const DonateButton = ({ selectedAmount, goNext, disabled, values }: IProps) => {
                   <h3 className=" md:text-xl text-lg font-medium">Campaign:</h3>
                   <p className="mt-3 md:text-lg text-sm font-secondary">{values.campaign.title}</p>
                 </div>
-                {guestDonorInfo && Object.values(guestDonorInfo).length && (
+                {values.isAnonymously && guestDonorInfo && Object.values(guestDonorInfo).length && (
                   <div>
                     <h3 className=" md:text-xl text-lg font-medium">Personal Information:</h3>
                     <div className="mt-3 space-y-3 font-secondary">

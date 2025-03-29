@@ -54,6 +54,35 @@ const donationApi = baseApi.injectEndpoints({
         return response;
       },
     }),
+    getMyDonationDetails: builder.query({
+      query: (id) => ({
+        url: `/donations/my/${id}/details`,
+        method: "GET",
+      }),
+      transformResponse: (response: IResponse<IDonation>) => {
+        return response;
+      },
+    }),
+
+    getRecentDonations: builder.query({
+      query: () => ({
+        url: `/donations/recent`,
+        method: "GET",
+      }),
+      transformResponse: (response: IResponse<IDonation[]>) => {
+        return response;
+      },
+    }),
+    getDonationsForManage: builder.query({
+      query: (params:IParam[]) => ({
+        url: `/donations/manage?${paramsToString(params)}`,
+        method: "GET",
+      }),
+      transformResponse: (response: IResponse<IDonation[]>) => {
+        return response;
+      },
+      providesTags:["manage-donations"]
+    })
   }),
 });
 
@@ -63,4 +92,7 @@ export const {
   useRequestDonationMutation,
   useGetMyRecentDonationsQuery,
   useGetMyDonationsQuery,
+  useGetMyDonationDetailsQuery,
+  useGetRecentDonationsQuery,
+ useGetDonationsForManageQuery,
 } = donationApi;

@@ -4,7 +4,6 @@ import { FaDonate, FaFacebook, FaFacebookSquare, FaInstagram, FaUser } from "rea
 import { FaX } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import ResponsiveNavbar from "../ui/ResponsiveNavbar";
-import { CiUser } from "react-icons/ci";
 import LoginPopup from "../ui/LoginPopup";
 import NavShortcut from "../ui/NavShortcut";
 import { useCurrentUser } from "../../provider/CurrentUserProvider";

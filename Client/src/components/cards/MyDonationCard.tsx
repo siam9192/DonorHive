@@ -1,5 +1,3 @@
-import React from "react";
-import DonationDetailsPopup from "../ui/DonationDetailsPopup";
 import MyDonationDetailsPopup from "../ui/MyDonationDetailsPopup";
 import { TMyDonation } from "../../types/donation.type";
 
@@ -23,13 +21,15 @@ const MyDonationCard = ({ donation }: IProps) => {
           {new Date(donation.createdAt).toLocaleTimeString()}
         </p>
         <div className="flex  items-center gap-2 justify-end md:text-sm text-[0.7rem]">
-          <MyDonationDetailsPopup>
+          <MyDonationDetailsPopup id={donation._id}>
             <div className="text-primary font-medium">Details</div>
           </MyDonationDetailsPopup>
           <button className="text-amber-500 font-medium">Download Reciept</button>
         </div>
       </div>
-      <h4 className="absolute top-2 right-2 font-semibold text-sm text-primary">$20.00</h4>
+      <h4 className="absolute top-2 right-2 font-semibold text-sm text-primary">
+        ${parseFloat(donation.amount.toString()).toFixed(2)}
+      </h4>
     </div>
   );
 };

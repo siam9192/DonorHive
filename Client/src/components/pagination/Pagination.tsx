@@ -7,7 +7,7 @@ type TProps = IMeta & { delta?: number; onPageChange: (page: number) => void | a
 function Pagination({ totalResult: total, limit, page, delta = 2, onPageChange }: TProps) {
   const [pages, setPages] = useState<(number | string)[]>([]);
 
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(page||1);
 
   const totalPages = Math.ceil(total / limit);
 

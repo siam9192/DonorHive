@@ -25,5 +25,9 @@ export const baseApi = createApi({
     "campaign-visit",
     "campaign-latest-donations",
     "campaign-donations",
+    "manage-campaigns",
+    "manage-users",
+    "user-details",
+    "manage-donations"
   ],
 });

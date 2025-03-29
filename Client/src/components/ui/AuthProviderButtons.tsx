@@ -14,7 +14,7 @@ const AuthProviderButtons = ({ onSuccess }: IProps) => {
         const res = await googleCallback({
           accessToken: response.access_token,
         });
-        console.log(res);
+       
         const resData = res.data;
         if (resData?.success) {
           onSuccess && onSuccess();

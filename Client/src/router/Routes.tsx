@@ -5,6 +5,7 @@ import Campaign from "../pages/Campaign";
 import Campaigns from "../pages/Campaigns";
 import ContactUs from "../pages/ContactUs";
 import DashboardLayout from "../pages/dashboard/DashboardLayout";
+import DonationFailed from "../pages/DonationFailed";
 import DonationSuccessful from "../pages/DonationSuccessful";
 import Home from "../pages/Home";
 import ProfileLayout from "../pages/profile/ProfileLayout";
@@ -46,7 +47,10 @@ const routes = [
             path: "donation-success",
             element: <DonationSuccessful />,
           },
-
+          {
+            path: "donation-failed",
+            element: <DonationFailed />,
+          },
           {
             path: "profile",
             element: <ProfileLayout />,

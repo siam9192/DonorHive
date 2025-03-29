@@ -3,6 +3,7 @@ import { IParam } from "../interfaces/response.interface";
 import { NavigateFunction } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
+import envConfig from "../config/env.config";
 export const getFormValues = (target: HTMLFormElement, names: string[]) => {
   const obj: Record<string, string> = {};
   names.forEach((name) => {
@@ -62,7 +63,7 @@ export const getTimeAgo = (date: string): string => {
 
 export const uploadImageToImgBB = async (file: File) => {
   const response = await axios.post(
-    `${process.env.IMG_BB_UPLOAD_URL}?key=${process.env.IMG_BB_API_KEY}` as string,
+    `${envConfig.imgBB.uploadUrl}?key=${envConfig.imgBB.apiKey}` as string,
     { image: file },
     {
       headers: { "Content-Type": "multipart/form-data" },
@@ -74,12 +75,9 @@ export const uploadImageToImgBB = async (file: File) => {
   return url;
 };
 
-
-const logout =()=>{
- try {
-  Cookies.remove('accessToken')
-  Cookies.remove('refreshToken')
- } catch (error) {
-  
- }
-}
+const logout = () => {
+  try {
+    Cookies.remove("accessToken");
+    Cookies.remove("refreshToken");
+  } catch (error) {}
+};

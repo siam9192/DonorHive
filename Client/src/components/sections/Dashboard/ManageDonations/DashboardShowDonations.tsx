@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import ManageCampaignCard from "../../../cards/ManageCampaignCard";
 import Pagination from "../../../pagination/Pagination";
 import { IoChevronDownOutline, IoSearchOutline } from "react-icons/io5";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import ManageDonationTableCard from "../../../cards/ManageDonationTableCard";
+import SearchTermInput from "../../../input/SearchTermInput";
+import Select from "../../../select/Select";
+import { EDonationStatus, EDonorType } from "../../../../types/donation.type";
+import { useGetDonationsForManageQuery } from "../../../../redux/features/donation/donation.api";
 
 type THead = {
   name: string;
@@ -22,7 +26,7 @@ const heads: THead[] = [
   {
     name: "Campaign Name",
     value: "campaignName",
-    isSortable: true,
+    isSortable: false,
   },
 
   {
@@ -57,33 +61,84 @@ type TSort = {
   order: TOrder;
 };
 
+const statusSelectOptions = [{display:'All Status',value:''},...Object.values(EDonationStatus).map(st=>({
+  display:st,
+  value:st
+}))
+]
+
+const donorTypeSelectOptions = [
+{
+  display:"All Donor",
+  value:''
+}
+,
+...Object.entries(EDonorType).map(([key,value])=>({
+  display:key,
+  value
+}))
+]
+
+
 const DashboardShowDonations = () => {
   const [sort, setSort] = useState<TSort>({
     by: "createdAt",
     order: "asc",
   });
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+   const [status, setStatus] = useState("");
+   const [donorType,setDonorType] = useState('')
+   const [page, setPage] = useState(1);
   const handelSetSort = (value: string, order: TOrder) => setSort({ by: value, order });
+ 
+  
+
+ const params = [
+    {
+      name: "searchTerm",
+      value: searchTerm,
+    },
+    {
+      name: "status",
+      value: status,
+    },
+    {
+      name: "orderBy",
+      value: sort.by,
+    },
+    {
+      name: "sortOrder",
+      value: sort.order,
+    },
+    {
+      name: "page",
+      value: page,
+    },
+  ];
+
+  const { data } = useGetDonationsForManageQuery(params);
+  const donations = data?.data;
+  const meta =  data?.meta
+
 
   return (
     <section className="mt-10 ">
       {/* Filter */}
       <div className=" flex  md:flex-row flex-col justify-between md:items-center lg:gap-0 gap-2  ">
-        <div className="lg:w-1/3 md:w-1/2 flex items-center bg-gray-100">
-          <span className=" p-4 flex justify-center items-center bg-primary text-3xl text-white">
-            <IoSearchOutline />
-          </span>
-          <input
-            type="text"
-            placeholder="Search campaign by keyword.."
-            className=" outline-none w-full  px-2 py-4 placeholder:font-secondary"
+        <div className="lg:w-1/3 md:w-1/2">
+          <SearchTermInput
+            placeholder="ID,Name,Email.. search"
+            onChange={(v) => {
+              setSearchTerm(v);
+              setPage(1);
+            }}
           />
         </div>
-        <div className=" lg:w-1/4 md:w-1/2 flex  items-center justify-between  p-4 border-2 border-gray-400/40 rounded-md">
-          <p className=" font-semibold text-primary">All Category</p>
-          <button className="text-2xl">
-            <IoChevronDownOutline />
-          </button>
+        <div className="lg:w-1/3 md:w-1/2 grid  grid-cols-2 gap-2">
+          <Select options={statusSelectOptions} onChange={(value) => setStatus(value)} />
+          <Select options={donorTypeSelectOptions} onChange={(value) => setDonorType(value)} />
         </div>
       </div>
       <h4 className=" mt-5 text-xl font-semibold  text-primary">20 Donations Found</h4>
@@ -91,8 +146,8 @@ const DashboardShowDonations = () => {
       {/* Table */}
       <div className="  py-5 relative overflow-x-auto ">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
+            <tr>   
               {heads.map((head) => (
                 <th scope="col" key={head.name} className="px-6 py-3 text-[1rem] font-semibold ">
                   <div className="flex items-center gap-2">
@@ -119,18 +174,26 @@ const DashboardShowDonations = () => {
             </tr>
           </thead>
           <tbody>
-            {Array.from({
-              length: 20,
-            }).map((_, index) => (
-              <ManageDonationTableCard key={index} />
-            ))}
+          {
+         meta?.totalResult ?
+        donations?.map((_, index) => <ManageDonationTableCard donation={_} key={index} />)
+         :
+        <div className="h-52 p-10 ">
+           <h1 className="text-xl font-medium"> No donations found</h1>
+        </div>
+        }
           </tbody>
         </table>
       </div>
       {/* Pagination */}
-      <div className="py-5 ">
-        <Pagination total={30} limit={5} page={3} onPageChange={() => {}} />
-      </div>
+      {
+      meta &&  <div className="py-5 ">
+      <Pagination {...meta}  onPageChange={(p) => {
+              setPage(p);
+              containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }} />
+    </div>
+     }
     </section>
   );
 };

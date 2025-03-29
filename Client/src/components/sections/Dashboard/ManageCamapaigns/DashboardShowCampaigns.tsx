@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import ManageCampaignCard from "../../../cards/ManageCampaignCard";
 import Pagination from "../../../pagination/Pagination";
 import { IoChevronDownOutline, IoSearchOutline } from "react-icons/io5";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
+import { useGetCampaignsForManageQuery } from "../../../../redux/features/campaign/campaign.api";
+import categories from "../../../../data/categories";
+import Select from "../../../select/Select";
+import SearchTermInput from "../../../input/SearchTermInput";
+
 
 type THead = {
   name: string;
@@ -14,8 +19,8 @@ type TOrder = "asc" | "desc";
 
 const heads: THead[] = [
   {
-    name: "name",
-    value: "fullName",
+    name: "title",
+    value: "title",
     isSortable: true,
   },
   {
@@ -23,9 +28,15 @@ const heads: THead[] = [
     value: "category",
     isSortable: true,
   },
+
   {
-    name: "total collection",
-    value: "raised",
+    name: "Raised Amount",
+    value: "raisedAmount",
+    isSortable: true,
+  },
+  {
+    name: "Target Amount",
+    value: "targetAmount",
     isSortable: true,
   },
   {
@@ -63,38 +74,76 @@ type TSort = {
 const DashboardShowCampaigns = () => {
   const [sort, setSort] = useState<TSort>({
     by: "createdAt",
-    order: "asc",
+    order: "desc",
   });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [category, setCategory] = useState("");
+  const [page, setPage] = useState(1);
 
+  const params = [
+    {
+      name: "searchTerm",
+      value: searchTerm,
+    },
+    {
+      name: "category",
+      value: category,
+    },
+    {
+      name: "orderBy",
+      value: sort.by,
+    },
+    {
+      name: "sortOrder",
+      value: sort.order,
+    },
+    {
+      name: "page",
+      value: page,
+    },
+  ];
+
+  const { data } = useGetCampaignsForManageQuery(params);
+  const campaigns = data?.data;
+  const meta = data?.meta;
   const handelSetSort = (value: string, order: TOrder) => setSort({ by: value, order });
+
+  const selectCategoryOptions = categories.map((category) => ({
+    display: category,
+    value: category,
+  }));
+
+  selectCategoryOptions.unshift({
+    display: "All Categories",
+    value: "",
+  });
 
   return (
     <section className="mt-10 ">
       {/* Filter */}
       <div className=" flex  md:flex-row flex-col justify-between md:items-center lg:gap-0 gap-2  ">
-        <div className="lg:w-1/3 md:w-1/2 flex items-center bg-gray-100">
-          <span className=" p-4 flex justify-center items-center bg-primary text-3xl text-white">
-            <IoSearchOutline />
-          </span>
-          <input
-            type="text"
-            placeholder="Search campaign by keyword.."
-            className=" outline-none w-full  px-2 py-4 placeholder:font-secondary"
+        <div className="lg:w-1/3 md:w-1/2">
+          <SearchTermInput
+            placeholder="ID or Search keyword.."
+            onChange={(v) => {
+              setSearchTerm(v);
+              setPage(1);
+            }}
           />
         </div>
-        <div className=" lg:w-1/4 md:w-1/2 flex  items-center justify-between  p-4 border-2 border-gray-400/40 rounded-md">
-          <p className=" font-semibold text-primary">All Category</p>
-          <button className="text-2xl">
-            <IoChevronDownOutline />
-          </button>
+        <div className="lg:w-1/3 md:w-1/2">
+          <Select options={selectCategoryOptions} onChange={(value) => setCategory(value)} />
         </div>
       </div>
-      <h4 className=" mt-5 text-xl font-semibold  text-primary">20 Campaigns Found</h4>
+      <h4 className=" mt-5 text-xl font-semibold  text-primary">
+        {meta?.totalResult} Campaigns Found
+      </h4>
 
       {/* Table */}
-      <div className="  py-5 relative overflow-x-auto ">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <div ref={containerRef} className="  py-5 relative overflow-x-auto ">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50  ">
             <tr>
               {heads.map((head) => (
                 <th scope="col" key={head.name} className="px-6 py-3 text-[1rem] font-semibold ">
@@ -122,18 +171,29 @@ const DashboardShowCampaigns = () => {
             </tr>
           </thead>
           <tbody>
-            {Array.from({
-              length: 20,
-            }).map((_, index) => (
-              <ManageCampaignCard key={index} />
-            ))}
+        {
+         meta?.totalResult ?
+         campaigns?.map((_, index) => <ManageCampaignCard campaign={_} key={index} />)
+         :
+        <div className="h-52 p-10 ">
+           <h1 className="text-xl font-medium"> No campaigns found</h1>
+        </div>
+        }
           </tbody>
         </table>
       </div>
       {/* Pagination */}
-      <div className="py-5 ">
-        <Pagination total={30} limit={5} page={3} onPageChange={() => {}} />
-      </div>
+      { meta && meta.totalResult>0 && (
+        <div className="py-5 ">
+          <Pagination
+            {...meta}
+            onPageChange={(p) => {
+              setPage(p);
+              containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }}
+          />
+        </div>
+      )}
     </section>
   );
 };

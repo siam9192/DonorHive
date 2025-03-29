@@ -1,4 +1,4 @@
-import React, { FormEvent, useRef, useState } from "react";
+import React, { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import { FiDollarSign } from "react-icons/fi";
 import DonorDetailsForm from "../../ui/DonorDetailsForm";
@@ -7,6 +7,8 @@ import { getFormValues } from "../../../utils/function";
 import { useCurrentUser } from "../../../provider/CurrentUserProvider";
 import { IInitDonationPayload } from "../../../types/donation.type";
 import { ICampaign } from "../../../types/campaign.type";
+import DonationSubmitFormDetails from "../../ui/DonationSubmitFormDetails";
+import { EUserRole } from "../../../types/user.type";
 interface IProps {
   campaign: ICampaign;
 }
@@ -16,48 +18,23 @@ const Donation = ({ campaign }: IProps) => {
   const [isAnonymously, setIsAnonymously] = useState(false);
   const [isAddComment, setIsAddComment] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLFormElement>(null);
   const [values, setValues] = useState<Record<string, any>>({});
 
   const [error, setError] = useState<Record<string, any>>({});
   const { user: currentUser } = useCurrentUser();
-  const handelOnSubmit = (e: FormEvent) => {
+  const handelOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError({});
-    const fieldNames = [
-      "amount",
-      "comment",
-      "guestDonorInfo.fullName",
-      "guestDonorInfo.email",
-      "guestDonorInfo.phoneNumber",
-      "guestDonorInfo.address.country",
-      "guestDonorInfo.address.state",
-      "guestDonorInfo.address.city",
-      "guestDonorInfo.address.street",
-    ];
-
-    const values = getFormValues(e.target as HTMLFormElement, fieldNames);
-
-    const data = {
-      amount: parseFloat(values.amount),
-      comment: values.comment,
-      guestDonorInfo: {
-        fullName: values["guestDonorInfo.fullName"],
-        email: values["guestDonorInfo.email"],
-        phoneNumber: values["guestDonorInfo.phoneNumber"],
-        address: {
-          street: values["guestDonorInfo.address.street"],
-          city: values["guestDonorInfo.address.city"],
-          state: values["guestDonorInfo.address.state"],
-          country: values["guestDonorInfo.address.country"],
-        },
-      },
-      isAnonymously,
-    };
+    validate(e.target as HTMLFormElement);
+    setIsOpen(true);
   };
 
-  const handelFormOnChange = () => {
-    const e = ref.current;
+  const handelFormOnChange = (e: ChangeEvent<HTMLFormElement>) => {
+    validate(e.target);
+  };
+
+  const validate = (e: HTMLFormElement) => {
     if (!e) return;
 
     // e.preventDefault();
@@ -76,12 +53,12 @@ const Donation = ({ campaign }: IProps) => {
 
     const values = getFormValues(e, fieldNames);
 
-    const data: any = {
-      amount: parseFloat(values.amount),
+    let data: any = {
+      amount: selectedAmount,
       comment: values.comment,
-
       isAnonymously,
     };
+
     if (!isAnonymously) {
       data.guestDonorInfo = {
         fullName: values["guestDonorInfo.fullName"],
@@ -143,11 +120,8 @@ const Donation = ({ campaign }: IProps) => {
     }
   };
 
-  const handelGoNext = () => {
-    if (error && Object.values(error).length) {
-      ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-      return false;
-    } else return true;
+  const closeDetails = () => {
+    setIsOpen(false);
   };
 
   return (
@@ -164,7 +138,7 @@ const Donation = ({ campaign }: IProps) => {
                   setSelectedAmount(amount);
                 }}
                 key={amount}
-                className={`w-full py-2   border-gray-600/15 rounded-md font-medium ${selectedAmount === amount ? "border-primary border-2" : "border"}`}
+                className={`w-full py-2    border-gray-600/15 rounded-md font-medium ${selectedAmount === amount ? "border-primary border-2" : "border"}`}
               >
                 ${amount}
               </button>
@@ -224,14 +198,22 @@ const Donation = ({ campaign }: IProps) => {
           ) : null}
         </div>
         <div className="mt-14">
-          <DonateButton
-            selectedAmount={selectedAmount}
-            goNext={handelGoNext}
-            disabled={Object.values(error).length ? true : false}
-            values={{ ...values, campaign } as any}
-          />
+          <button
+            disabled={!selectedAmount || !(currentUser?.role === EUserRole.Donor)}
+            type="submit"
+            className="py-3 disabled:bg-gray-100 disabled:text-gray-600 bg-primary text-white font-semibold w-full rounded-lg font-secondary"
+          >
+            Donate {selectedAmount ? "$" + selectedAmount : ""}
+          </button>
         </div>
       </form>
+      {isOpen && values && (
+        <DonationSubmitFormDetails
+          onSuccess={closeDetails}
+          close={closeDetails}
+          values={{ ...values, campaign } as any}
+        />
+      )}
       <div className=" mt-10 pt-4 border-t border-gray-700/20">
         <button className="text-sm font-medium text-gray-900 border-b ">
           Our Refund Policies:

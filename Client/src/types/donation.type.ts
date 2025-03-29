@@ -1,4 +1,4 @@
-import { TPaymentMethod } from "./payment.type";
+import { IPayment, TPaymentMethod } from "./payment.type";
 import { IUser } from "./user.type";
 
 export interface IGuestDonorPersonalInfo {
@@ -29,6 +29,7 @@ export interface IDonation {
   isAnonymously: boolean;
   status: TDonationStatus;
   paymentId?: string;
+  payment: IPayment;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -67,4 +68,11 @@ export enum EDonationStatus {
   Paid = "Paid",
   Unpaid = "Unpaid",
   Refunded = "Refunded",
+}
+
+
+export enum EDonorType {
+  Guest = "guest",
+  Anonymous = "anonymous",
+  Registered ='registered'
 }

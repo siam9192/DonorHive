@@ -1,5 +1,5 @@
 import { IParam, IResponse } from "../../../interfaces/response.interface";
-import { IMySummary } from "../../../types/overview.type";
+import { IAdminOverviewSummary, IMySummary, ITopDonor } from "../../../types/overview.type";
 import { baseApi } from "../../api/baseApi";
 
 const overviewApi = baseApi.injectEndpoints({
@@ -13,7 +13,25 @@ const overviewApi = baseApi.injectEndpoints({
         return response;
       },
     }),
+    getAdminSummary: builder.query({
+      query: () => ({
+        url: `overview/summary`,
+        method: "GET",
+      }),
+      transformResponse: (response: IResponse<IAdminOverviewSummary>) => {
+        return response;
+      },
+    }),
+    getTopDonors: builder.query({
+      query: () => ({
+        url: `/overview/top-donors`,
+        method: "GET",
+      }),
+      transformResponse: (response: IResponse<ITopDonor[]>) => {
+        return response;
+      },
+    }),
   }),
 });
 
-export const { useGetMySummaryQuery } = overviewApi;
+export const { useGetMySummaryQuery, useGetAdminSummaryQuery, useGetTopDonorsQuery } = overviewApi;

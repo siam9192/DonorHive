@@ -5,14 +5,13 @@ import { useEffect, useRef } from "react";
 import { boolean } from "zod";
 
 const ProfileLayout = () => {
-  const {pathname} = useLocation()
+  const { pathname } = useLocation();
   const ref = useRef<HTMLDivElement>(null);
   const renderRef = useRef<boolean>(false);
 
   useEffect(() => {
-  
     if (renderRef.current) {
-      ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     } else {
       renderRef.current = true;
     }
@@ -24,7 +23,7 @@ const ProfileLayout = () => {
         <div className="col-span-2 h-full shadow ">
           <ProfileSidebar />
         </div>
-        <div  className="col-span-4 lg:overflow-y-auto no-scrollbar  py-10">
+        <div className="col-span-4 lg:overflow-y-auto no-scrollbar  py-10">
           <Outlet />
         </div>
       </div>

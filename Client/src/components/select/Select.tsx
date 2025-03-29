@@ -54,14 +54,14 @@ const Select = ({ options, defaultValue, onChange }: IProps) => {
         className="flex  items-center justify-between group hover:cursor-pointer  p-4 border-2 border-gray-400/40 rounded-md relative"
       >
         <p className=" font-semibold text-primary">{selected?.display}</p>
-        <button className={`text-2xl ${isOpen ? "rotate-180" : ""} duration-200`}>
+        <button type="button" className={`text-2xl ${isOpen ? "rotate-180" : ""} duration-200`}>
           <IoChevronDownOutline />
         </button>
       </div>
       {isOpen && (
         <div
           ref={ref}
-          className="absolute  bottom-20 left-2 md:h-60 h-52   overflow-y-auto w-full  rounded-lg no-scrollbar .customize-scrollbar bg-white shadow-2xl border-2 border-primary py-2"
+          className="absolute top-20 left-2 md:h-60 h-52  z-40  overflow-y-auto w-full  rounded-lg no-scrollbar .customize-scrollbar bg-white shadow-2xl border-2 border-primary py-2"
         >
           {options.map((option, index) => (
             <div

@@ -96,7 +96,7 @@ const ProfileSidebar = () => {
             ))}
           </div>
         </div>
-        <button  className="flex items-center gap-2 px-3 py-5 ">
+        <button className="flex items-center gap-2 px-3 py-5 ">
           <span className="text-2xl bg-gray-100 p-2 rounded-md">
             <CiLogout />
           </span>

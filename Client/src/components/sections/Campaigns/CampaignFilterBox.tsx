@@ -2,7 +2,6 @@ import Container from "../../container/Container";
 import Select from "../../select/Select";
 import categories from "../../../data/categories";
 import SearchTermInput from "../../input/SearchTermInput";
-import { IParam } from "../../../interfaces/response.interface";
 import { useNavigate } from "react-router-dom";
 import { handelSearch } from "../../../utils/function";
 

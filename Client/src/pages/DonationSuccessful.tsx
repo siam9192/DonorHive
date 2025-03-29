@@ -1,6 +1,11 @@
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
+import { Link, useSearchParams } from "react-router-dom";
 
 const DonationSuccessful = () => {
+  const searchParams = new URLSearchParams(window.location.search);
+
+  const slug = searchParams.get("campaign");
+
   return (
     <div className="h-[85vh] flex flex-col gap-2 justify-center items-center">
       <img src="/images/donation-success.jpg" alt="" className="h-1/2 mx-auto" />
@@ -12,7 +17,9 @@ const DonationSuccessful = () => {
       </div>
       <p>Thanks for your love</p>
       <div className="flex items-center gap-2">
-        <button className="px-6 py-3  border-2 rounded-md hover:bg-secondary">Back Home</button>
+        <Link to={`/campaigns/${slug?.toString()}`}>
+          <button className="px-6 py-3  border-2 rounded-md hover:bg-secondary">Back</button>
+        </Link>
         <button className="px-6 py-3  border-2 rounded-md hover:bg-secondary">My Donations</button>
       </div>
     </div>

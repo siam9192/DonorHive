@@ -52,6 +52,48 @@ const campaignApi = baseApi.injectEndpoints({
         return response;
       },
     }),
+    getCampaignsForManage: builder.query({
+      query: (params: IParam[]) => ({
+        url: `/campaigns/manage?${paramsToString(params)}`,
+        method: "GET",
+      }),
+      transformResponse: (response: IResponse<ICampaign[]>) => {
+        return response;
+      },
+      providesTags: ["manage-campaigns"],
+    }),
+    getCampaignByIdForManage: builder.query({
+      query: (id) => ({
+        url: `/campaigns/manage/${id}`,
+        method: "GET",
+      }),
+      transformResponse: (response: IResponse<ICampaign>) => {
+        return response;
+      }
+    }),
+    deleteCampaign: builder.mutation({
+      query: (id: string) => ({
+        url: `/campaigns/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["manage-campaigns"],
+    }),
+    addCampaign: builder.mutation({
+      query: (payload: any) => ({
+        url: `/campaigns`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["manage-campaigns"],
+    }),
+   updateCampaign: builder.mutation({
+      query: ({id,payload}) => ({
+        url: `/campaigns/${id}`,
+        method: "PUT",
+        body: payload,
+      }),
+      invalidatesTags: ["manage-campaigns"],
+    }),
   }),
 });
 
@@ -61,4 +103,9 @@ export const {
   useGetRelatedCampaignsQuery,
   useGetRecentCampaignsQuery,
   useGetAlmostCompletedCampaignsQuery,
+  useGetCampaignsForManageQuery,
+  useGetCampaignByIdForManageQuery,
+  useDeleteCampaignMutation,
+  useAddCampaignMutation,
+  useUpdateCampaignMutation
 } = campaignApi;

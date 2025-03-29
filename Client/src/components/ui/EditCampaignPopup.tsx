@@ -1,12 +1,14 @@
 import React, { ReactNode, useState } from "react";
 import AddCampaignForm from "../forms/AddCampaignForm";
 import { RxCross1 } from "react-icons/rx";
+import EditCampaignForm from "../forms/EditCampaignForm";
 
 interface IProps {
   children: ReactNode;
+  id:string
 }
 
-const AddCampaignPopup = ({ children }: IProps) => {
+const EditCampaignPopup = ({ children,id }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -21,7 +23,7 @@ const AddCampaignPopup = ({ children }: IProps) => {
             onClick={(e) => e.stopPropagation()}
             className=" lg:w-1/2 w-full h-full  bg-white lg:rounded-md md:p-10 p-5 overflow-y-auto no-scrollbar relative"
           >
-            <AddCampaignForm onAdd={() => setIsOpen(false)} />
+            <EditCampaignForm onAdd={() => setIsOpen(false)} id={id}  />
             <button
               onClick={() => setIsOpen(false)}
               className="p-2 bg-red-50 rounded-md text-2xl absolute right-2 top-2"
@@ -35,4 +37,4 @@ const AddCampaignPopup = ({ children }: IProps) => {
   );
 };
 
-export default AddCampaignPopup;
+export default EditCampaignPopup;

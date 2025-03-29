@@ -4,6 +4,7 @@ import { store } from "../redux/store";
 import CurrentUserProvider from "./CurrentUserProvider";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import envConfig from "../config/env.config";
+import { Toaster } from "sonner";
 type TProvider = {
   children: React.ReactNode;
 };
@@ -14,6 +15,7 @@ export default function Provider({ children }: TProvider) {
       <GoogleOAuthProvider clientId={envConfig.google.clientId}>
         <CurrentUserProvider>{children}</CurrentUserProvider>
       </GoogleOAuthProvider>
+      <Toaster />
     </ReactRedux.Provider>
   );
 }

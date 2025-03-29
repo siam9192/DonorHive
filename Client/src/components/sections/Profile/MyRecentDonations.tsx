@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import useLoadingBounce from "../../../hooks/useLoadingBounce";
 import { useGetMyRecentDonationsQuery } from "../../../redux/features/donation/donation.api";
 import DonationCard from "../../cards/DonationCard";
@@ -15,7 +16,9 @@ const MyRecentDonations = () => {
         <h1 className="md:text-2xl text-xl font-semibold">
           Recent <span className="text-primary">Donations</span>
         </h1>
-        <button className="font-medium border-b">View All</button>
+        <Link to="/profile/my-donations">
+          <button className="font-medium border-b">View All</button>
+        </Link>
       </div>
       <div className="mt-5 my-4 ">
         {bouncedLoading ? (
