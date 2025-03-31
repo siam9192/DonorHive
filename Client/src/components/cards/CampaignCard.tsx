@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import UseScreen from "../../hooks/UseScreen";
 import { ICampaign } from "../../types/campaign.type";
+import { getTimeLeft } from "../../utils/function";
 
 interface IProps {
   campaign: ICampaign;
@@ -18,7 +19,7 @@ const CampaignCard = ({ campaign }: IProps) => {
     <Link to={`/campaigns/${campaign.slug}`}>
       <div className="bg-white">
         <div className="relative">
-          <img src={campaign.coverImageUrl} alt="" className="rounded-md" />
+          <img src={campaign.coverImageUrl} alt="" className="rounded-md h-72 w-full" />
           {/* <div className="absolute w-full bottom-1  flex items-center justify-end gap-1  px-1">
           <div className=" p-2 bg-secondary text-gray-900 font-medium text-sm">2H</div>
           <div className=" p-2 bg-secondary text-gray-900 font-medium text-sm">12M</div>
@@ -27,7 +28,9 @@ const CampaignCard = ({ campaign }: IProps) => {
         </div>
         <div className="md:mt-4 mt-3 space-y-1">
           <div className=" font-medium text-end md:text-[1rem] md:text-sm text-[0.5rem]">
-            20 days left
+        {
+          getTimeLeft(campaign.endAt)
+        }
           </div>
           <p className="text-yellow-600 font-medium text-[0.8rem]">{campaign.category}</p>
           <h2 className="md:text-xl text-[1rem] text-gray-950 font-medium">{campaign.title}</h2>

@@ -72,7 +72,14 @@ const getCampaignsFromDB = async (
   };
 
   if (searchTerm) {
-    whereConditions.$text = { $search: searchTerm };
+    whereConditions.$or = [
+      {
+        title: { $regex: searchTerm, $options: 'i' },
+      },
+      {
+        description: { $regex: searchTerm, $options: 'i' },
+      },
+    ];
   }
 
   ['category'].forEach((item) => {
@@ -98,7 +105,7 @@ const getCampaignsFromDB = async (
     page,
     limit,
     total,
-    totalResult
+    totalResult,
   };
 
   return {
@@ -126,8 +133,16 @@ const getCampaignsFromDBForManage = async (
       whereConditions._id = objectId(searchTerm);
       filterOthers = false;
     } else {
-      whereConditions.$text = { $search: searchTerm };
+      whereConditions.$or = [
+        {
+          title: { $regex: searchTerm, $options: 'i' },
+        },
+        {
+          description: { $regex: searchTerm, $options: 'i' },
+        },
+      ];
     }
+    
   }
 
   if (filterOthers) {
@@ -163,6 +178,17 @@ const getCampaignsFromDBForManage = async (
   };
 };
 
+const getCampaignByIdForManage = async (id: string) => {
+  const campaign = await Campaign.findOne(
+    {
+      _id: objectId(id),
+    },
+    { isDeleted: false }
+  );
+  if (!campaign) throw new AppError(httpStatus.NOT_FOUND, 'Campaign not found');
+  return campaign;
+};
+
 const updateCampaignIntoDB = async (id: string, payload: IUpdateCampaignPayload) => {
   const campaign = await Campaign.findById(id);
 
@@ -180,8 +206,11 @@ const updateCampaignIntoDB = async (id: string, payload: IUpdateCampaignPayload)
   ) {
     throw new AppError(httpStatus.NOT_ACCEPTABLE, 'Campaign is already started');
   }
-  if (startAt.getTime() < today.getTime())
-    throw new AppError(httpStatus.NOT_ACCEPTABLE, 'invalid startAt');
+  const isScheduled = new Date(payload.startAt).getTime() > new Date().getTime();
+  if (isScheduled) {
+    if (startAt.getTime() < today.getTime())
+      throw new AppError(httpStatus.NOT_ACCEPTABLE, 'invalid startAt');
+  }
   if (endAt.getTime() > startAt.getTime()) {
     throw new AppError(httpStatus.NOT_ACCEPTABLE, 'invalid endAt');
   }
@@ -214,9 +243,12 @@ const softDeleteCampaignFromDB = async (id: string) => {
     isDeleted: false,
   });
   if (!campaign) throw new AppError(httpStatus.NOT_FOUND, 'Campaign not found');
-  const updateStatus = await Campaign.updateOne({
-    isDeleted: false,
-  });
+  const updateStatus = await Campaign.updateOne(
+    { _id: objectId(id) },
+    {
+      isDeleted: true,
+    }
+  );
   if (!updateStatus.modifiedCount) throw new AppError(500, 'Campaign could not be delete!');
 };
 
@@ -237,33 +269,31 @@ const getCampaignBySlugFromDB = async (slug: string) => {
 
 const getRelatedCampaignsFromDB = async (slug: string) => {
   const campaign = await Campaign.findOne({ slug });
-  if (!campaign) throw new AppError(httpStatus.NOT_FOUND, "Campaign not found");
+  if (!campaign) throw new AppError(httpStatus.NOT_FOUND, 'Campaign not found');
   const category = campaign.category;
   const campaigns = await Campaign.aggregate([
     {
       $match: {
         category,
-        status:ECampaignStatus.Active,
-        isDeleted:false,
-        _id:{
-          $not:{
-            $eq:campaign._id
-          }
-        }
+        status: ECampaignStatus.Active,
+        isDeleted: false,
+        _id: {
+          $not: {
+            $eq: campaign._id,
+          },
+        },
       },
     },
-    { $sample: { size: 5 } }, 
+    { $sample: { size: 5 } },
     {
-      $project:{
-        isDeleted:false
-      }
-    }
+      $project: {
+        isDeleted: false,
+      },
+    },
   ]);
 
-  return campaigns
+  return campaigns;
 };
-
-
 
 const getRecentCampaignsFromDB = async () => {
   const recentDate = new Date(new Date().toDateString());
@@ -328,6 +358,16 @@ const getAlmostCompletedCampaignsFromDB = async () => {
   return campaigns;
 };
 
+const getCampaignsSummaryFromDB = async () => {
+  const group = await Campaign.aggregate([
+    {
+      $group: {
+        _id: 'status',
+      },
+    },
+  ]);
+};
+
 const CampaignServices = {
   createCampaignIntoDB,
   createManyCampaignIntoDB,
@@ -337,8 +377,10 @@ const CampaignServices = {
   getRelatedCampaignsFromDB,
   getRecentCampaignsFromDB,
   getAlmostCompletedCampaignsFromDB,
+  getCampaignsSummaryFromDB,
   updateCampaignIntoDB,
   softDeleteCampaignFromDB,
+  getCampaignByIdForManage,
 };
 
 export default CampaignServices;

@@ -11,8 +11,10 @@ import Home from "../pages/Home";
 import ProfileLayout from "../pages/profile/ProfileLayout";
 import ResetPassword from "../pages/ResetPassword";
 import VerifyAccount from "../pages/VerifyAccount";
+import PrivateRouteProvider from "../provider/PrivateRouteProvider";
 import dashboardRoutes from "../routes/dashboardRoutes";
 import profileRoutes from "../routes/profileRoutes";
+import { EUserRole } from "../types/user.type";
 
 const routes = [
   {
@@ -53,7 +55,9 @@ const routes = [
           },
           {
             path: "profile",
-            element: <ProfileLayout />,
+            element: <PrivateRouteProvider roles={[EUserRole.Donor]}>
+              <ProfileLayout />
+            </PrivateRouteProvider>,
             children: profileRoutes,
           },
         ],

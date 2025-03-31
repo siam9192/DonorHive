@@ -43,6 +43,8 @@ const InitPaymentIntoDB = async (payload: IInitPaymentPayload) => {
 
   const tokenPayload = {
     transactionId: payment.transactionId,
+    paymentId: payment._id,
+    donationId: payload.donationId,
     method: payment.method,
   };
   const token = jwtHelpers.generateToken(
@@ -80,12 +82,16 @@ const InitPaymentIntoDB = async (payload: IInitPaymentPayload) => {
 };
 
 const validatePayment = async (res: Response, status: string, token: string) => {
+  let campaign;
+  let redirectUrl;
   try {
     const decode = (await jwtHelpers.verifyToken(
       token,
       envConfig.payment.token_secret as string
     )) as {
       transactionId: string;
+      paymentId: string;
+      donationId: string;
       method: TPaymentMethod;
     };
 
@@ -98,6 +104,7 @@ const validatePayment = async (res: Response, status: string, token: string) => 
     if (!statusObj[status]) throw new Error();
     const session = await startSession();
     session.startTransaction();
+
     try {
       const payment = await Payment.findOneAndUpdate(
         {
@@ -125,32 +132,58 @@ const validatePayment = async (res: Response, status: string, token: string) => 
       );
 
       if (!donationUpdateStatus.modifiedCount) throw new Error();
-
       const donation = await Donation.findOne({
         paymentId: payment!._id,
       });
-      const campaignUpdateStatus = await Campaign.updateOne(
-        {
-          _id: donation?.campaign.id,
-        },
-        {
-          $inc: {
-            raisedAmount: donation!.amount,
+      if (status === 'success') {
+        const campaignUpdateStatus = await Campaign.updateOne(
+          {
+            _id: donation?.campaign.id,
           },
-        },
-        { session }
-      );
+          {
+            $inc: {
+              raisedAmount: donation!.amount,
+            },
+          },
+          { session }
+        );
 
-      if (!campaignUpdateStatus.modifiedCount) throw new Error();
-      await DonationServices.manageDonationAfterSuccessfulPayment(donation!._id);
+        if (!campaignUpdateStatus.modifiedCount) throw new Error();
+        await DonationServices.manageDonationAfterSuccessfulPayment(donation!._id);
+        campaign = await Campaign.findById(donation?.campaign.id).select('slug');
+        redirectUrl = `${envConfig.payment.success_url as string}?campaign=${campaign?.slug}`;
+      } else if (status === 'fail') {
+        campaign = await Campaign.findById(donation?.campaign.id).select('slug');
+        await Payment.updateOne(
+          {
+            _id: payment?._id,
+          },
+          {
+            status: EPaymentStatus.Failed,
+          }
+        );
+        redirectUrl = `${envConfig.payment.cancel_url as string}?campaign=${campaign?.slug}`;
+      } else {
+        campaign = await Campaign.findById(donation?.campaign.id).select('slug');
+        await Payment.updateOne(
+          {
+            _id: payment?._id,
+          },
+          {
+            status: EPaymentStatus.Canceled,
+          }
+        );
+        redirectUrl = `${envConfig.url.baseUrlClient as string}/campaigns/${campaign?.slug}`;
+      }
+
       await session.commitTransaction();
       await session.endSession();
-      res.redirect(envConfig.payment.success_url as string);
     } catch (error) {
       await session.abortTransaction();
       await session.endSession();
-      res.redirect(envConfig.payment.cancel_url as string);
     }
+
+    res.redirect(`${redirectUrl}`);
   } catch (error) {
     throw new AppError(httpStatus.BAD_GATEWAY, 'Bad gateway');
   }

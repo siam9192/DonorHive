@@ -44,6 +44,15 @@ const changeUserStatus = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const userSoftDelete = catchAsync(async (req: Request, res: Response) => {
+  const result = await UserServices.softDeleteUserFromDB(req.params.id);
+  sendSuccessResponse(res, {
+    statusCode: httpStatus.OK,
+    message: 'User deleted successfully',
+    data: result,
+  });
+});
+
 const getRecentUsersFromDB = catchAsync(async (req: Request, res: Response) => {
   const result = await UserServices.getRecentUsersFromDB();
   sendSuccessResponse(res, {
@@ -69,6 +78,7 @@ const UserControllers = {
   changeUserStatus,
   getRecentUsersFromDB,
   getUserSummary,
+  userSoftDelete,
 };
 
 export default UserControllers;

@@ -6,7 +6,7 @@ const MyWatchList = () => {
     <div>
       <h1 className="md:text-3xl text-2xl font-semibold">My WatchList</h1>
       <div className="mt-5 flex justify-between">
-        <p className="text-primary font-medium font-secondary text-xl">20 Campaigns</p>
+        <p className="text-primary font-medium font-secondary text-xl">0 Campaigns</p>
         <select
           name=""
           id=""
@@ -19,9 +19,12 @@ const MyWatchList = () => {
         </select>
       </div>
       <div className="mt-10 grid  grid-cols-1 md:gap-5 gap-3">
-        {Array.from({ length: 4 }).map((_, index) => (
+        {/* {Array.from({ length: 4 }).map((_, index) => (
           <WatchListCard key={index} />
-        ))}
+        ))} */}
+        <h1>
+          Not Available Now
+        </h1>
       </div>
     </div>
   );

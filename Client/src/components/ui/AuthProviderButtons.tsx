@@ -1,6 +1,7 @@
 import { useGoogleLogin } from "@react-oauth/google";
 import React from "react";
 import { useGoogleCallbackMutation } from "../../redux/features/auth/auth.api";
+import { toast } from "sonner";
 
 interface IProps {
   onSuccess?(): void;
@@ -18,8 +19,12 @@ const AuthProviderButtons = ({ onSuccess }: IProps) => {
         const resData = res.data;
         if (resData?.success) {
           onSuccess && onSuccess();
-          window.location.replace("/");
+          window.location.reload();
         }
+        else {
+          toast.error((res.error as any).data.message||"Something went wrong")
+        }
+        
       } catch (error) {
         console.log(error);
       }

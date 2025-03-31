@@ -25,6 +25,7 @@ router.delete('/:id', auth(EUserRole.Admin), CampaignControllers.softDeleteCampa
 
 router.get('/', CampaignControllers.getCampaigns);
 router.get('/manage', auth(EUserRole.Admin), CampaignControllers.getCampaignsForManage);
+router.get('/manage/:id', auth(EUserRole.Admin), CampaignControllers.getCampaignByIdForManage);
 router.get('/:slug/visit', CampaignControllers.getCampaignBySlug);
 router.get('/related/:slug', CampaignControllers.getRelatedCampaignsFromDB);
 router.get('/recent', CampaignControllers.getRecentCampaigns);

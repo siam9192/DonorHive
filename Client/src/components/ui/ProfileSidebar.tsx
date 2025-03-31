@@ -7,6 +7,7 @@ import { LuEye } from "react-icons/lu";
 import { RiDashboardHorizontalLine } from "react-icons/ri";
 import { Link, useLocation } from "react-router-dom";
 import { useCurrentUser } from "../../provider/CurrentUserProvider";
+import { logout } from "../../utils/function";
 
 const ProfileSidebar = () => {
   const profileRoutes = [
@@ -71,7 +72,7 @@ const ProfileSidebar = () => {
               />
             </div>
             <div className="py-3">
-              <h1 className="md:text-2xl text-xl text-black font-medium">{user?.fullName}</h1>
+              <h1 className="text-xl text-black font-medium">{user?.fullName}</h1>
               <p className="mt-1 text-gray-700 font-medium text-sm">{user?.email || "N/A"}</p>
               <Link to={"/profile/edit-personal-information"}>
                 <button className=" mt-3 px-6 py-2 text-gray-50 bg-primary  rounded-xl">
@@ -96,7 +97,7 @@ const ProfileSidebar = () => {
             ))}
           </div>
         </div>
-        <button className="flex items-center gap-2 px-3 py-5 ">
+        <button onClick={logout} className="flex items-center gap-2 px-3 py-5 ">
           <span className="text-2xl bg-gray-100 p-2 rounded-md">
             <CiLogout />
           </span>

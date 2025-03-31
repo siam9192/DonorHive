@@ -8,6 +8,7 @@ import { TbLogout } from "react-icons/tb";
 import { Link, useLocation } from "react-router-dom";
 import { useCurrentUser } from "../../provider/CurrentUserProvider";
 import { EUserRole } from "../../types/user.type";
+import { logout } from "../../utils/function";
 
 const donorRoutes = [
   {
@@ -23,12 +24,12 @@ const donorRoutes = [
   {
     name: "My Donations",
     icon: FaDonate,
-    href: "/profile",
+    href: "/profile/my-donations",
   },
   {
     name: "Setting",
     icon: FiSettings,
-    href: "/profile",
+    href: "/profile/setting",
   },
 ];
 
@@ -36,7 +37,7 @@ const adminRoutes = [
   {
     name: "My Profile",
     icon: ImProfile,
-    href: "/profile",
+    href: "/dashboard/profile",
   },
   {
     name: "Dashboard",
@@ -99,7 +100,7 @@ const NavShortcut = () => {
           >
             <div className="pb-3 border-b border-gray-200/55 flex items-center gap-1 ">
               <img
-                src="https://cdn-icons-png.flaticon.com/512/3001/3001758.png"
+                src={user?.profilePhotoUrl}
                 alt=""
                 className="size-10 p-1 bg-white  rounded-full"
               />
@@ -118,7 +119,7 @@ const NavShortcut = () => {
                   <span>{item.name}</span>
                 </Link>
               ))}
-              <button className="  hover:text-primary text-red-500 w-full  font-medium  flex items-center gap-1">
+              <button onClick={logout} className="  hover:text-primary text-red-500 w-full  font-medium  flex items-center gap-1">
                 <span className="p-2 bg-gray-50 rounded-md ">
                   <TbLogout />
                 </span>

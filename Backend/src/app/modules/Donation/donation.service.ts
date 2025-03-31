@@ -9,7 +9,6 @@ import PaymentServices from '../Payment/payment.service';
 import { objectId } from '../../utils/function';
 import { IPaginationOptions } from '../../types';
 import { calculatePagination } from '../../helpers/paginationHelper';
-import { IUser } from '../User/user.interface';
 import path from 'path';
 import ejs from 'ejs';
 import NodeMailerServices from '../NodeMailer/node-mailer.service';
@@ -77,7 +76,6 @@ const initDonationIntoDB = async (
       paymentUrl,
     };
   } catch (error) {
-    console.log(error);
     await session.abortTransaction();
     await session.endSession();
     throw new Error();
@@ -150,9 +148,7 @@ const manageDonationAfterSuccessfulPayment = async (id: string | ObjectId) => {
         }
       );
     }
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 const getDonationsForManageFromDB = async (
@@ -169,22 +165,36 @@ const getDonationsForManageFromDB = async (
 
   if (searchTerm) {
     if (isValidObjectId(searchTerm)) {
-      whereConditions._id = objectId(searchTerm);
+      whereConditions.$or = [
+        {
+          _id: objectId(searchTerm),
+        },
+        {
+          userId: objectId(searchTerm),
+        },
+        {
+          campaignId: objectId(searchTerm),
+        },
+      ];
       filterOthers = false;
     } else {
-      whereConditions.$text = { $search: searchTerm };
+      whereConditions.$or = [
+        { 'campaign.title': { $regex: searchTerm, $options: 'i' } },
+        { 'guestDonorInfo.fullName': { $regex: searchTerm, $options: 'i' } },
+      ];
     }
   }
   if (filterOthers) {
     if (status) {
       whereConditions.status = status;
-    } else {
-      whereConditions.status = {
-        $not: {
-          $in: ['Pending', 'Unpaid'],
-        },
-      };
     }
+    //  else {
+    //   whereConditions.status = {
+    //     $not: {
+    //       $in: ['Pending', 'Unpaid'],
+    //     },
+    //   };
+    // }
 
     if (donorType) {
       switch (donorType) {
@@ -451,6 +461,7 @@ const getDonationDetailsForManageFromDB = async (id: string) => {
 
   return result;
 };
+
 const getMyDonationDetailsFromDB = async (authUser: IAuthUser, id: string) => {
   const donation = await Donation.findOne({
     _id: objectId(id),

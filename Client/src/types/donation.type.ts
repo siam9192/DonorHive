@@ -20,7 +20,7 @@ export interface IDonation {
   campaign: {
     id: string;
     title: string;
-    coverPhotoUrl: string;
+    coverImageUrl: string;
     category: string;
   };
   amount: number;

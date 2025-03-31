@@ -83,7 +83,7 @@ const donorTypeSelectOptions = [
 const DashboardShowDonations = () => {
   const [sort, setSort] = useState<TSort>({
     by: "createdAt",
-    order: "asc",
+    order: "desc",
   });
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -105,9 +105,14 @@ const DashboardShowDonations = () => {
       value: status,
     },
     {
+      name: "donorType",
+      value: donorType,
+    },
+    {
       name: "orderBy",
       value: sort.by,
     },
+
     {
       name: "sortOrder",
       value: sort.order,
@@ -124,12 +129,12 @@ const DashboardShowDonations = () => {
 
 
   return (
-    <section className="mt-10 ">
+    <section className="my-10 ">
       {/* Filter */}
       <div className=" flex  md:flex-row flex-col justify-between md:items-center lg:gap-0 gap-2  ">
         <div className="lg:w-1/3 md:w-1/2">
           <SearchTermInput
-            placeholder="ID,Name,Email.. search"
+            placeholder="Enter.. ID(user,campaign) Name(campaign,donor)"
             onChange={(v) => {
               setSearchTerm(v);
               setPage(1);
@@ -141,7 +146,7 @@ const DashboardShowDonations = () => {
           <Select options={donorTypeSelectOptions} onChange={(value) => setDonorType(value)} />
         </div>
       </div>
-      <h4 className=" mt-5 text-xl font-semibold  text-primary">20 Donations Found</h4>
+      <h4 className=" mt-5 text-xl font-semibold  text-primary">{meta?.totalResult} Donations Found</h4>
 
       {/* Table */}
       <div className="  py-5 relative overflow-x-auto ">

@@ -28,6 +28,8 @@ export const baseApi = createApi({
     "manage-campaigns",
     "manage-users",
     "user-details",
-    "manage-donations"
+    "manage-donations",
+    "my-notifications",
+    "my-utils-count"
   ],
 });

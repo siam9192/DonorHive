@@ -2,7 +2,6 @@ import { Router } from 'express';
 import NotificationControllers from './notification.controller';
 import auth from '../../middlewares/auth';
 import { EUserRole } from '../User/user.interface';
-import { object } from 'zod';
 
 const router = Router();
 

@@ -59,6 +59,7 @@ const envConfig = {
   payment: {
     success_url: process.env.PAYMENT_SUCCESS_URL,
     cancel_url: process.env.PAYMENT_CANCEL_URL,
+    fail_url: process.env.PAYMENT_FAIL_URL,
     success_redirect_url: process.env.PAYMENT_SUCCESS_REDIRECT_URL,
     token_secret: process.env.PAYMENT_TOKEN_SECRET,
   },

@@ -55,6 +55,15 @@ const getCampaignBySlug = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getCampaignByIdForManage = catchAsync(async (req: Request, res: Response) => {
+  const result = await CampaignServices.getCampaignByIdForManage(req.params.id);
+  sendSuccessResponse(res, {
+    statusCode: httpStatus.OK,
+    message: 'Campaign retrieved successfully',
+    data: result,
+  });
+});
+
 const getRelatedCampaignsFromDB = catchAsync(async (req: Request, res: Response) => {
   const result = await CampaignServices.getRelatedCampaignsFromDB(req.params.slug);
   sendSuccessResponse(res, {
@@ -64,7 +73,6 @@ const getRelatedCampaignsFromDB = catchAsync(async (req: Request, res: Response)
   });
 });
 
-
 const getRecentCampaigns = catchAsync(async (req: Request, res: Response) => {
   const result = await CampaignServices.getRecentCampaignsFromDB();
   sendSuccessResponse(res, {
@@ -73,7 +81,6 @@ const getRecentCampaigns = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-
 
 const getAlmostCompletedCampaigns = catchAsync(async (req: Request, res: Response) => {
   const result = await CampaignServices.getAlmostCompletedCampaignsFromDB();
@@ -113,6 +120,7 @@ const CampaignControllers = {
   getCampaignBySlug,
   updateCampaign,
   softDeleteCampaign,
+  getCampaignByIdForManage,
 };
 
 export default CampaignControllers;

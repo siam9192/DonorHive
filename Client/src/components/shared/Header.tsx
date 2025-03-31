@@ -7,6 +7,7 @@ import ResponsiveNavbar from "../ui/ResponsiveNavbar";
 import LoginPopup from "../ui/LoginPopup";
 import NavShortcut from "../ui/NavShortcut";
 import { useCurrentUser } from "../../provider/CurrentUserProvider";
+import NotificationBar from "../ui/NotificationBar";
 const socialLinks = [
   {
     icon: FaFacebook,
@@ -68,9 +69,9 @@ const Header = () => {
                   </a>
                 ))}
               </div>
-              <Link to="/login" className="text-gray-200 md:block hidden">
+              {/* <Link to="/login" className="text-gray-200 md:block hidden">
                 Login
-              </Link>
+              </Link> */}
             </div>
           </div>
         </Container>
@@ -92,13 +93,18 @@ const Header = () => {
               ))}
             </nav>
             <div className="flex items-center gap-3">
-              <button className=" md:block hidden uppercase px-6 py-3 text-gray-900 hover:bg-gray-900 hover:text-white bg-secondary  font-medium">
+            <Link to={'/campaigns'}>
+            <button className=" md:block hidden uppercase px-6 py-3 text-gray-900 hover:bg-gray-900 hover:text-white bg-secondary  font-medium">
                 Donate Now
               </button>
 
+            </Link>
               {!isLoading ? (
                 user ? (
+              <>
                   <NavShortcut />
+                  <NotificationBar/>
+              </>
                 ) : (
                   <LoginPopup>
                     <span className="md:text-3xl text-2xl text-white">
@@ -107,6 +113,7 @@ const Header = () => {
                   </LoginPopup>
                 )
               ) : null}
+             
               <ResponsiveNavbar />
             </div>
           </div>

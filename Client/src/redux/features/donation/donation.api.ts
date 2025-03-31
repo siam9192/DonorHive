@@ -82,7 +82,17 @@ const donationApi = baseApi.injectEndpoints({
         return response;
       },
       providesTags:["manage-donations"]
-    })
+    }),
+    getDonationDetailsForManage: builder.query({
+      query: (id) => ({
+        url: `/donations/manage/${id}/details`,
+        method: "GET",
+      }),
+      transformResponse: (response: IResponse<IDonation>) => {
+        return response;
+      },
+      // providesTags:["manage-donations"]
+    }),
   }),
 });
 
@@ -95,4 +105,5 @@ export const {
   useGetMyDonationDetailsQuery,
   useGetRecentDonationsQuery,
  useGetDonationsForManageQuery,
+ useGetDonationDetailsForManageQuery
 } = donationApi;

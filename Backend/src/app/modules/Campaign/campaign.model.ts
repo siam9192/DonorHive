@@ -5,7 +5,7 @@ const CampaignModelSchema = new Schema<ICampaign>(
   {
     title: {
       type: String,
-      minlength: 5,
+      minlength: 3,
       maxlength: 150,
       required: true,
     },
@@ -13,7 +13,7 @@ const CampaignModelSchema = new Schema<ICampaign>(
       type: String,
       required: true,
     },
-    description: { type: String, minlength: 150, maxlength: 10000, required: true },
+    description: { type: String, minlength: 20, maxlength: 10000, required: true },
     category: { type: String, minlength: 3, maxlength: 32, required: true },
     slug: { type: String, minlength: 3, maxlength: 1000, unique: true, required: true },
     startAt: { type: Date, required: true },

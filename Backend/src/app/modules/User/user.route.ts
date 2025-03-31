@@ -12,12 +12,13 @@ router.get('/:id/details', auth(EUserRole.Admin), UserControllers.getUserDetails
 router.get('/summary', UserControllers.getUserSummary);
 router.get('/recent', auth(EUserRole.Admin), UserControllers.getRecentUsersFromDB);
 router.post('/createMany', UserControllers.createMany);
-router.put(
+router.patch(
   '/:id/change-status',
   auth(EUserRole.Admin),
   validateRequest(UserValidations.ChangeUserStatusValidationSchema),
   UserControllers.changeUserStatus
 );
+router.delete('/:id', auth(EUserRole.Admin), UserControllers.userSoftDelete);
 
 const UserRouter = router;
 

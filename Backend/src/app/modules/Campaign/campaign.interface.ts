@@ -50,5 +50,5 @@ export enum ECampaignStatus {
   Active = 'Active',
   Paused = 'Paused',
   Completed = 'Completed',
-  Expired = 'Expired',
+  Incomplete = 'Incomplete',
 }

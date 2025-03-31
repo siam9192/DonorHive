@@ -362,7 +362,8 @@ const getAccessToken = async (refreshToken: string) => {
 };
 
 const getMeFromDB = async (authUser: IAuthUser) => {
-  const selectStr = '_id fullName profilePhotoUrl email role provider address phoneNumber createdAt updatedAt status';
+  const selectStr =
+    '_id fullName profilePhotoUrl email role provider address phoneNumber createdAt updatedAt status';
   const user = await User.findOne({
     _id: objectId(authUser.id),
     status: {

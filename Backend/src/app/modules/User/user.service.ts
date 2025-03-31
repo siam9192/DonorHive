@@ -25,7 +25,14 @@ const getUsersFromDB = async (filter: IFilterUser, paginationOptions: IPaginatio
     if (isValidObjectId(searchTerm)) {
       whereConditions._id = objectId(searchTerm);
     } else {
-      whereConditions.$text = { $search: searchTerm };
+      whereConditions.$or = [
+        {
+          email: { $regex: searchTerm, $options: 'i' },
+        },
+        {
+          fullName: { $regex: searchTerm, $options: 'i' },
+        },
+      ];
     }
   }
 
@@ -82,6 +89,7 @@ const getUserDetailsFromDB = async (id: string) => {
     _id: user._id,
     fullName: user.fullName,
     email: user.email,
+    profilePhotoUrl: user.profilePhotoUrl,
     phoneNumber: user.phoneNumber,
     address: user.address,
     role: user.role,
@@ -131,7 +139,9 @@ const softDeleteUserFromDB = async (id: string) => {
   const user = await User.findOne({
     _id: objectId(id),
     status: {
-      $not: EUserStatus.Deleted,
+      $not: {
+        $eq: EUserStatus.Deleted,
+      },
     },
   });
   if (!user) throw new AppError(httpStatus.NOT_FOUND, 'User not found');

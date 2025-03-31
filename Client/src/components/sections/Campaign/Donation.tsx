@@ -27,6 +27,9 @@ const Donation = ({ campaign }: IProps) => {
   const handelOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     validate(e.target as HTMLFormElement);
+    if(Object.values(error).length){
+      return 
+    }
     setIsOpen(true);
   };
 
@@ -199,7 +202,7 @@ const Donation = ({ campaign }: IProps) => {
         </div>
         <div className="mt-14">
           <button
-            disabled={!selectedAmount || !(currentUser?.role === EUserRole.Donor)}
+            disabled={!selectedAmount || (currentUser &&  (currentUser?.role !== EUserRole.Donor) ?true : false)}
             type="submit"
             className="py-3 disabled:bg-gray-100 disabled:text-gray-600 bg-primary text-white font-semibold w-full rounded-lg font-secondary"
           >
