@@ -35,7 +35,7 @@ const ProfileSidebar = () => {
     {
       name: "Settings",
       icon: <FaCog />,
-      href: "/profile/settings",
+      href: "/profile/setting",
     },
   ];
 

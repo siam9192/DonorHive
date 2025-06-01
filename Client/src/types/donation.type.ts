@@ -1,17 +1,6 @@
 import { IPayment, TPaymentMethod } from "./payment.type";
 import { IUser } from "./user.type";
 
-export interface IGuestDonorPersonalInfo {
-  fullName: string;
-  email: string;
-  phoneNumber?: string;
-  address: {
-    street?: string;
-    city: string;
-    state?: string;
-    country: string;
-  };
-}
 
 export interface IDonation {
   _id: string;
@@ -24,8 +13,8 @@ export interface IDonation {
     category: string;
   };
   amount: number;
-  comment?: string;
-  guestDonorInfo?: IGuestDonorPersonalInfo;
+  comment: string;
+  donorPersonalInfo:IDonorPersonalInfo
   isAnonymously: boolean;
   status: TDonationStatus;
   paymentId?: string;
@@ -34,13 +23,30 @@ export interface IDonation {
   updatedAt: Date;
 }
 
+
+
+
+export interface IDonorPersonalInfo {
+  fullName: string;
+  email: string;
+  phoneNumber?: string;
+  address: {
+    street?: string;
+    city: string;
+    state?: string;
+    country: string;
+  };
+}
+
+
+
 export type TMyDonation = Pick<
   IDonation,
   | "_id"
   | "amount"
   | "campaign"
   | "comment"
-  | "guestDonorInfo"
+  | "donorPersonalInfo"
   | "isAnonymously"
   | "status"
   | "createdAt"
@@ -50,8 +56,8 @@ export interface IInitDonationPayload {
   campaignId: string;
   amount: number;
   isAnonymously: boolean;
-  guestDonorInfo: IGuestDonorPersonalInfo;
-  comment?: string;
+  guestDonorInfo:IDonorPersonalInfo
+  comment: string;
   paymentMethod: TPaymentMethod;
 }
 
@@ -63,11 +69,13 @@ export interface IFilterDonation {
 
 type TDonationStatus = `${EDonationStatus}`;
 
+
+
 export enum EDonationStatus {
-  Pending = "Pending",
-  Paid = "Paid",
-  Unpaid = "Unpaid",
-  Refunded = "Refunded",
+  Pending = 'Pending',
+  Success = 'Success',
+  Failed = 'failed',
+  Refunded = 'Refunded',
 }
 
 export enum EDonorType {

@@ -33,6 +33,8 @@ const MyDonationDetailsPopup = ({ children, id }: IProps) => {
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       let heightLeft = imgHeight;
       let position = 0;
+   
+    
 
       pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
@@ -52,7 +54,9 @@ const MyDonationDetailsPopup = ({ children, id }: IProps) => {
 
   const bouncedLoading = useLoadingBounce(isLoading, 300);
   const donation = data?.data;
-  useEffect(() => {}, [isOpen]);
+  const isAnonymously = donation?.isAnonymously
+ const donorPersonalInfo =  donation?.donorPersonalInfo
+  
 
   return (
     <>
@@ -123,7 +127,29 @@ const MyDonationDetailsPopup = ({ children, id }: IProps) => {
                       </p>
                     </div>
                   </div>
-
+    {!isAnonymously && donorPersonalInfo && Object.values(donorPersonalInfo).length && (
+              <div className="mt-4">
+                <h3 className=" md:text-xl text-lg font-medium">Personal Information:</h3>
+                <div className="mt-3 space-y-3 font-secondary">
+                  <p className=" font-medium space-x-2 md:text-[1rem] text-sm">
+                    <span className="text-gray-950 font-semibold">Full Name:</span>
+                    <span>{donorPersonalInfo.fullName}</span>
+                  </p>
+                  <p className=" font-medium space-x-2 md:text-[1rem] text-sm">
+                    <span className="text-gray-950 font-semibold">Email Address:</span>
+                    <span>{donorPersonalInfo.email || "N/A"}</span>
+                  </p>
+                  <p className=" font-medium space-x-2 md:text-[1rem] text-sm">
+                    <span className="text-gray-950 font-semibold">Phone Number:</span>
+                    <span>{donorPersonalInfo.phoneNumber || "N/A"}</span>
+                  </p>
+                  <p className=" font-medium space-x-2 md:text-[1rem] text-sm">
+                    <span className="text-gray-950 font-semibold">Address:</span>
+                    <span>{Object.values(donorPersonalInfo.address).slice(0,-1).join(",")}</span>
+                  </p>
+                </div>
+              </div>
+            )}
                   <div className="mt-4">
                     <h2 className="text-gray-900 font-medium text-xl">Payment Information:</h2>
                     <div className="mt-3 space-y-3 font-secondary">

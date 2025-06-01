@@ -8,7 +8,7 @@ import {
   useGetMyNotificationsQuery,
   useSetAsReadMyAllNotificationsMutation,
 } from "../../redux/features/notification/notification.api";
-import { INotification } from "../../types/notification.type";
+import { ENotificationType, INotification } from "../../types/notification.type";
 
 const NotificationBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -79,11 +79,12 @@ const NotificationBar = () => {
   }, [notificationsIsLoading, notificationsIsRefetching]);
 
   const handelOnClick = (notification: INotification) => {
-    if (notification.href) {
-      navigate(notification.href);
-      setIsOpen(false);
-    }
+    // if (notification.href) {
+    //   navigate(notification.href);
+    //   setIsOpen(false);
+    // }
   };
+
 
   const [setReadAll] = useSetAsReadMyAllNotificationsMutation();
 
@@ -92,6 +93,20 @@ const NotificationBar = () => {
       setReadAll(undefined);
     }
   }, [isOpen]);
+
+  function getTypeColor (type:ENotificationType){
+    let color;
+  switch (type){
+    case ENotificationType.Info:
+      color = 'text-blue-500'
+      break
+    case ENotificationType.Warning:
+      color =  'text-red-500'
+  }
+  return  color
+  }
+
+
   return (
     <div className="relative">
       <button
@@ -117,8 +132,9 @@ const NotificationBar = () => {
         >
           <h3 className="text-xl font-semibold font-jost">Notifications</h3>
           <div className=" mt-2">
-            {allNotifications.map((notification, index) => (
-              <div
+            {allNotifications.map((notification, index) => {
+              const typeColor =  getTypeColor(notification.type)
+           return   <div
                 key={index}
                 onClick={() => handelOnClick(notification)}
                 className="p-2 flex  gap-1 hover:bg-gray-50 hover:cursor-pointer z-50"
@@ -130,13 +146,15 @@ const NotificationBar = () => {
                 </div>
                 <div>
                   <p className="text-gray-600 text-[0.8rem]">
-                    {getTimeAgo(notification.createdAt)}
+                    {getTimeAgo(notification.createdAt)} {notification.type ? <span className= {`${typeColor} font-medium`}>({notification.type})</span>
+                    :
+                    null}
                   </p>
                   <h2 className="text-[1rem] font-medium">{notification.title}</h2>
                   <p>{notification.message}</p>
                 </div>
               </div>
-            ))}
+})}
           </div>
           {(notificationsIsLoading || notificationsIsRefetching) && (
             <p className="mt-1 text-gray-700 font-medium">Loading..</p>

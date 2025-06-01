@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useRef, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { FiDollarSign } from "react-icons/fi";
 import DonorDetailsForm from "../../ui/DonorDetailsForm";
 import { getFormValues } from "../../../utils/function";
@@ -6,6 +6,7 @@ import { useCurrentUser } from "../../../provider/CurrentUserProvider";
 import { ICampaign } from "../../../types/campaign.type";
 import DonationSubmitFormDetails from "../../ui/DonationSubmitFormDetails";
 import { EUserRole } from "../../../types/user.type";
+import useScreen from "../../../hooks/UseScreen";
 interface IProps {
   campaign: ICampaign;
 }
@@ -20,6 +21,13 @@ const Donation = ({ campaign }: IProps) => {
   const [error, setError] = useState<Record<string, any>>({});
   const { user: currentUser } = useCurrentUser();
   const amountInputRef = useRef<HTMLInputElement>(null);
+  const [isValidForm,setIsValidForm] =  useState(false)
+  const {screenType} =  useScreen()
+  
+
+  useEffect(()=>{
+     
+  },[screenType])
 
   const handelOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,6 +40,7 @@ const Donation = ({ campaign }: IProps) => {
       field?.focus();
       return;
     }
+    setIsOpen(true)
   };
 
   const handelFormOnChange = (e: ChangeEvent<HTMLFormElement>) => {
@@ -60,7 +69,7 @@ const Donation = ({ campaign }: IProps) => {
     const values = getFormValues(e, fieldNames);
 
     let data: any = {
-      amount: values.amount,
+      amount: parseInt(values.amount),
       comment: values.comment,
       isAnonymously,
     };
@@ -133,20 +142,29 @@ const Donation = ({ campaign }: IProps) => {
       fieldError.comment = "Comment must be minimum 3 character";
     }
 
-    if (Object.values(fieldError).length) {
+    if (Object.values(fieldError).length) 
+      {
+       
+      setIsValidForm(false)
       return setError(fieldError);
     } else {
+     
       setValues(data);
+       setError({})
+      setIsValidForm(true)
     }
+   
   };
 
   const closeDetails = () => {
     setIsOpen(false);
   };
+  
 
-  const isValid =
-    (currentUser && currentUser?.role !== EUserRole.Donor ? true : false) ||
-    !Object.keys(error).length;
+const isDonor =  currentUser ? currentUser?.role === EUserRole.Donor:true
+const isValid = isDonor && isValidForm
+
+
 
   return (
     <section className="p-5  min-h-[700px] ">

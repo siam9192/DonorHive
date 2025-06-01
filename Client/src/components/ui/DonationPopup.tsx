@@ -20,7 +20,9 @@ const DonationPopup = ({ children, campaign }: IProps) => {
 
   useEffect(() => {
     if ([EScreenType.MD, EScreenType.SM].includes(screenType)) {
-      setIsOpen(true);
+      if(isOpen){
+         setIsOpen(true);
+      }
     } else {
       setIsOpen(false);
     }

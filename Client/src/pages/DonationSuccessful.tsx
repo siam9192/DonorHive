@@ -20,7 +20,10 @@ const DonationSuccessful = () => {
         <Link to={`/campaigns/${slug?.toString()}`}>
           <button className="px-6 py-3  border-2 rounded-md hover:bg-secondary">Back</button>
         </Link>
+    <Link to={'/profile/my-donations'}>
         <button className="px-6 py-3  border-2 rounded-md hover:bg-secondary">My Donations</button>
+    </Link>
+
       </div>
     </div>
   );

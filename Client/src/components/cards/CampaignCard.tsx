@@ -19,12 +19,12 @@ const CampaignCard = ({ campaign }: IProps) => {
     <Link to={`/campaigns/${campaign.slug}`}>
       <div className="bg-white">
         <div className="relative">
-          <img src={campaign.coverImageUrl} alt="" className="rounded-md h-72 w-full" />
-          {/* <div className="absolute w-full bottom-1  flex items-center justify-end gap-1  px-1">
+          <img src={campaign.coverImageUrl} alt="" className="rounded-md h-40 lg:h-72 w-full" />
+          <div className="absolute w-full bottom-1  flex items-center justify-end gap-1  px-1">
           <div className=" p-2 bg-secondary text-gray-900 font-medium text-sm">2H</div>
           <div className=" p-2 bg-secondary text-gray-900 font-medium text-sm">12M</div>
           <div className="p-2 bg-secondary text-gray-900 font-medium text-sm">43S</div>
-        </div> */}
+        </div>
         </div>
         <div className="md:mt-4 mt-3 space-y-1">
           <div className=" font-medium text-end md:text-[1rem] md:text-sm text-[0.5rem]">

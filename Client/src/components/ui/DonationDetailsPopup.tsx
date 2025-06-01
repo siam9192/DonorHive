@@ -15,15 +15,6 @@ const DonationDetailsPopup = ({ children, enableManageButtons, id }: IProps) => 
     document.body.style.overflow = isOpen ? "hidden" : "";
   }, [isOpen]);
 
-  useEffect(() => {
-    const handler = () => {
-      setIsOpen(false);
-    };
-
-    window.addEventListener("resize", () => {
-      handler();
-    });
-  }, [isOpen]);
 
   return (
     <>

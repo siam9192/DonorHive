@@ -41,16 +41,16 @@ const DonationSubmitFormDetails = ({ values, close, onSuccess }: IProps) => {
         paymentMethod: selectedPaymentMethod,
         amount: values.amount,
         isAnonymously: values.isAnonymously,
+        comment:values.comment
       };
 
       if (
-        values.guestDonorInfo &&
-        Object.values(values.guestDonorInfo).length &&
         !values.isAnonymously
       ) {
-        payload.guestDonorInfo = values.guestDonorInfo;
+        payload.donorPersonalInfo = values.guestDonorInfo;
       }
-      if (values.comment) payload.comment = values.comment;
+
+    
       const cleanObject = (obj: any): any => {
         if (Array.isArray(obj)) {
           return obj.map(cleanObject).filter((item) => item && Object.keys(item).length > 0);
@@ -72,7 +72,7 @@ const DonationSubmitFormDetails = ({ values, close, onSuccess }: IProps) => {
       payload = cleanObject(payload);
       const res = await gotoPay(payload);
       if (res.data?.success) {
-        window.open(res.data.data.paymentUrl);
+        window.location.href = res.data.data.paymentUrl
         onSuccess();
       } else throw new Error();
     } catch (error) {
@@ -106,7 +106,7 @@ const DonationSubmitFormDetails = ({ values, close, onSuccess }: IProps) => {
               <h3 className=" md:text-xl text-lg font-medium">Campaign:</h3>
               <p className="mt-3 md:text-lg text-sm font-secondary">{values.campaign.title}</p>
             </div>
-            {values.isAnonymously && guestDonorInfo && Object.values(guestDonorInfo).length && (
+            {!values.isAnonymously && guestDonorInfo && Object.values(guestDonorInfo).length && (
               <div>
                 <h3 className=" md:text-xl text-lg font-medium">Personal Information:</h3>
                 <div className="mt-3 space-y-3 font-secondary">
@@ -138,8 +138,9 @@ const DonationSubmitFormDetails = ({ values, close, onSuccess }: IProps) => {
             <div>
               <h3 className=" md:text-xl text-lg font-medium">Select Method:</h3>
               <div className="mt-3 grid grid-cols-3 gap-3 ">
-                {paymentMethods.map((method) => (
+                {paymentMethods.map((method,index) => (
                   <div
+                    key={index}
                     onClick={() => setSelectedPaymentMethod(method.value)}
                     className={`p-5 border-2 ${selectedPaymentMethod === method.value ? "border-secondary" : "border-gray-500/20"} hover:cursor-pointer hover:bg-green-50 rounded-md  flex justify-center items-center `}
                   >
@@ -151,9 +152,9 @@ const DonationSubmitFormDetails = ({ values, close, onSuccess }: IProps) => {
           </div>
           <div className="mt-5">
             <button
-              disabled={isLoading}
+              disabled={isLoading|| selectedPaymentMethod == null}
               onClick={handelGotoPay}
-              className="w-full py-3 bg-primary text-white disabled:bg-gray-100 disabled:text-gray-600 font-medium hover:bg-secondary hover:text-gray-900 duration-100  rounded-lg"
+              className="w-full py-3 bg-primary text-white disabled:bg-gray-100 disabled:text-gray-600 font-medium hover:bg-secondary hover:text-gray-900 duration-100  rounded-lg disabled:bg-gray-100"
             >
               Go to Pay
             </button>

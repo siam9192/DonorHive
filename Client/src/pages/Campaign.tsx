@@ -15,7 +15,7 @@ const Campaign = () => {
   const { data, isLoading, isError } = useGetCampaignForVisitQuery(slug as string);
   const campaign = data?.data;
 
-  const bouncedLoading = useLoadingBounce(isLoading, 1000);
+  const bouncedLoading = useLoadingBounce(isLoading, 500);
 
   useEffect(() => {
     window.scrollTo(0, 0);
