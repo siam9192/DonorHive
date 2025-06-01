@@ -15,16 +15,14 @@ const AuthProviderButtons = ({ onSuccess }: IProps) => {
         const res = await googleCallback({
           accessToken: response.access_token,
         });
-       
+
         const resData = res.data;
         if (resData?.success) {
           onSuccess && onSuccess();
           window.location.reload();
+        } else {
+          toast.error((res.error as any).data.message || "Something went wrong");
         }
-        else {
-          toast.error((res.error as any).data.message||"Something went wrong")
-        }
-        
       } catch (error) {
         console.log(error);
       }

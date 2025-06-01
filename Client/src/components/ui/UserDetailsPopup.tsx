@@ -4,11 +4,11 @@ import "../../styles/Animation.style.css";
 import UserDetails from "./UserDetails";
 
 interface IProps {
-  id:string
+  id: string;
   children: ReactNode;
 }
 
-const UserDetailsPopup = ({ children,id }: IProps) => {
+const UserDetailsPopup = ({ children, id }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const UserDetailsPopup = ({ children,id }: IProps) => {
             onClick={(e) => e.stopPropagation()}
             className="lg:w-1/3 md:w-10/12 w-full min-h-[70vh] bg-white rounded-md md:p-10 p-5 "
           >
-       <UserDetails id={id} closePopup={()=>setIsOpen(false)}/>
+            <UserDetails id={id} closePopup={() => setIsOpen(false)} />
           </div>
         </div>
       ) : null}

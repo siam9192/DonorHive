@@ -61,19 +61,19 @@ type TSort = {
 };
 
 const selectStatusOptions = [
-{
-  display:"All Status",
-  value:''
-},
   {
-    display:EUserStatus.Active,
-    value:EUserStatus.Active
+    display: "All Status",
+    value: "",
   },
   {
-    display:EUserStatus.Blocked,
-    value:EUserStatus.Blocked
-  }
-]
+    display: EUserStatus.Active,
+    value: EUserStatus.Active,
+  },
+  {
+    display: EUserStatus.Blocked,
+    value: EUserStatus.Blocked,
+  },
+];
 
 const DashboardShowUsers = () => {
   const [sort, setSort] = useState<TSort>({
@@ -82,8 +82,8 @@ const DashboardShowUsers = () => {
   });
 
   const handelSetSort = (value: string, order: TOrder) => setSort({ by: value, order });
-   const containerRef = useRef<HTMLDivElement>(null);
- const [searchTerm, setSearchTerm] = useState("");
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [status, setStatus] = useState("");
   const [page, setPage] = useState(1);
 
@@ -112,9 +112,8 @@ const DashboardShowUsers = () => {
 
   const { data } = useGetUsersForManageQuery(params);
   const users = data?.data;
-  const meta =  data?.meta
+  const meta = data?.meta;
 
-  
   return (
     <section className="my-10 ">
       {/* Filter */}
@@ -165,26 +164,28 @@ const DashboardShowUsers = () => {
             </tr>
           </thead>
           <tbody>
-          {
-         meta?.totalResult ?
-        users?.map((_, index) => <ManageUserTableCard user={_} key={index} />)
-         :
-        <div className="h-52 p-10 ">
-           <h1 className="text-xl font-medium"> No users found</h1>
-        </div>
-        }
+            {meta?.totalResult ? (
+              users?.map((_, index) => <ManageUserTableCard user={_} key={index} />)
+            ) : (
+              <div className="h-52 p-10 ">
+                <h1 className="text-xl font-medium"> No users found</h1>
+              </div>
+            )}
           </tbody>
         </table>
       </div>
       {/* Pagination */}
-     {
-      meta &&  <div className="py-5 ">
-      <Pagination {...meta}  onPageChange={(p) => {
+      {meta && (
+        <div className="py-5 ">
+          <Pagination
+            {...meta}
+            onPageChange={(p) => {
               setPage(p);
               containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-            }} />
-    </div>
-     }
+            }}
+          />
+        </div>
+      )}
     </section>
   );
 };

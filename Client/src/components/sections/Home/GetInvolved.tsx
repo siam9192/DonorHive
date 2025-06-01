@@ -8,7 +8,10 @@ const GetInvolved = () => {
           Helping Today Helping <br /> Tomorrow charity
         </h1>
         <p className="text-center text-gray-50">
-        "Helping Today, Helping Tomorrow" embodies the spirit of charity, ensuring support for those in need both now and in the future. Through generosity, kindness, and sustainable efforts, we create lasting positive change, empowering individuals and communities for a better tomorrow.
+          "Helping Today, Helping Tomorrow" embodies the spirit of charity, ensuring support for
+          those in need both now and in the future. Through generosity, kindness, and sustainable
+          efforts, we create lasting positive change, empowering individuals and communities for a
+          better tomorrow.
         </p>
         <div className="flex md:flex-row flex-col items-center gap-2">
           <button className="px-8 py-3 hover:bg-gray-900 hover:border-none text-white border-2">

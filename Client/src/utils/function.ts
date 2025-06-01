@@ -4,15 +4,18 @@ import { NavigateFunction } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import envConfig from "../config/env.config";
-import { el } from "date-fns/locale";
+
 export const getFormValues = (target: HTMLFormElement, names: string[]) => {
   const obj: Record<string, string> = {};
+
   names.forEach((name) => {
-    const input = target.elements.namedItem(name) as HTMLInputElement | null;
+    const input = target.elements?.namedItem(name) as HTMLInputElement | null;
+
     if (input) {
       obj[name] = input.value;
     }
   });
+
   return obj;
 };
 
@@ -38,7 +41,6 @@ export const handelSearch = (params: IParam[], navigate: NavigateFunction, searc
   });
   const paramsStr = urlSearchParams.toString();
   navigate(window.location.pathname + paramsStr ? `?${paramsStr}` : "");
-  
 };
 
 export const getTimeAgo = (date: string): string => {
@@ -70,7 +72,7 @@ export const getTimeLeft = (date: string | Date): string => {
   const diff = date.getTime() - today.getTime();
 
   if (diff < 0) {
-      return 'Ended';
+    return "Ended";
   }
 
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -78,14 +80,13 @@ export const getTimeLeft = (date: string | Date): string => {
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
   if (days > 0) {
-      return `${days} day${days > 1 ? 's' : ''} left`;
+    return `${days} day${days > 1 ? "s" : ""} left`;
   } else if (hours > 0) {
-      return `${hours} hour${hours > 1 ? 's' : ''} left`;
+    return `${hours} hour${hours > 1 ? "s" : ""} left`;
   } else {
-      return `${minutes} minute${minutes > 1 ? 's' : ''} left`;
+    return `${minutes} minute${minutes > 1 ? "s" : ""} left`;
   }
 };
-
 
 export const uploadImageToImgBB = async (file: File) => {
   const response = await axios.post(
@@ -102,15 +103,13 @@ export const uploadImageToImgBB = async (file: File) => {
 };
 
 export const logout = () => {
-  const privateRoutes = ["/profile","/dashboard"]
+  const privateRoutes = ["/profile", "/dashboard"];
   try {
     Cookies.remove("accessToken");
     Cookies.remove("refreshToken");
-    const pathname = window.location.pathname
-    if(privateRoutes.some(ele=>pathname.includes(ele))){
-      window.location.pathname = "/"
-    }
-    else window.location.reload()
-  
+    const pathname = window.location.pathname;
+    if (privateRoutes.some((ele) => pathname.includes(ele))) {
+      window.location.pathname = "/";
+    } else window.location.reload();
   } catch (error) {}
 };

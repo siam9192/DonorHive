@@ -5,10 +5,10 @@ import EditCampaignForm from "../forms/EditCampaignForm";
 
 interface IProps {
   children: ReactNode;
-  id:string
+  id: string;
 }
 
-const EditCampaignPopup = ({ children,id }: IProps) => {
+const EditCampaignPopup = ({ children, id }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -23,7 +23,7 @@ const EditCampaignPopup = ({ children,id }: IProps) => {
             onClick={(e) => e.stopPropagation()}
             className=" lg:w-1/2 w-full h-full  bg-white lg:rounded-md md:p-10 p-5 overflow-y-auto no-scrollbar relative"
           >
-            <EditCampaignForm onAdd={() => setIsOpen(false)} id={id}  />
+            <EditCampaignForm onAdd={() => setIsOpen(false)} id={id} />
             <button
               onClick={() => setIsOpen(false)}
               className="p-2 bg-red-50 rounded-md text-2xl absolute right-2 top-2"

@@ -6,21 +6,19 @@ import { el } from "date-fns/locale";
 interface IProps {
   onChange?(value: string): void;
   placeholder?: string;
-  defaultValue?:string
+  defaultValue?: string;
 }
 
-const SearchTermInput = ({ onChange, placeholder,defaultValue }: IProps) => {
-  const [value, setValue] = useState(defaultValue||'');
+const SearchTermInput = ({ onChange, placeholder, defaultValue }: IProps) => {
+  const [value, setValue] = useState(defaultValue || "");
   const bouncedValue = useBounce(value, 400);
-  const renderRef =  useRef<boolean>(false)
+  const renderRef = useRef<boolean>(false);
   useEffect(() => {
-
-   if(renderRef.current){
-    onChange && onChange(bouncedValue);
-   }
-   else {
-    renderRef.current = true
-   }
+    if (renderRef.current) {
+      onChange && onChange(bouncedValue);
+    } else {
+      renderRef.current = true;
+    }
   }, [bouncedValue]);
 
   return (

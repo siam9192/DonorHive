@@ -7,8 +7,6 @@ import { baseApi } from "../../api/baseApi";
 
 const notificationApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-  
-   
     getMyNotifications: builder.query({
       query: () => ({
         url: `/notifications/my`,
@@ -17,9 +15,9 @@ const notificationApi = baseApi.injectEndpoints({
       transformResponse: (response: IResponse<INotification[]>) => {
         return response;
       },
-      providesTags:["my-notifications"]
+      providesTags: ["my-notifications"],
     }),
-    setAsReadMyAllNotifications:builder.mutation({
+    setAsReadMyAllNotifications: builder.mutation({
       query: () => ({
         url: `/notifications/my/read-all`,
         method: "PATCH",
@@ -27,12 +25,10 @@ const notificationApi = baseApi.injectEndpoints({
       transformResponse: (response: IResponse<INotification[]>) => {
         return response;
       },
-      invalidatesTags:["my-utils-count"]
+      invalidatesTags: ["my-utils-count"],
     }),
   }),
 });
 
-export const {
- useGetMyNotificationsQuery,
- useSetAsReadMyAllNotificationsMutation
-} = notificationApi;
+export const { useGetMyNotificationsQuery, useSetAsReadMyAllNotificationsMutation } =
+  notificationApi;

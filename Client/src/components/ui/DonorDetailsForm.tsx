@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
+import { useCurrentUser } from "../../provider/CurrentUserProvider";
 
 interface IProps {
   error: Record<string, any>;
@@ -7,6 +8,7 @@ interface IProps {
 
 const DonorDetailsForm = ({ error }: IProps) => {
   const [isDetailsFormOpen, setIsDetailsFormOpen] = useState(true);
+  const { user } = useCurrentUser();
 
   return (
     <div className="mt-8 ">
@@ -31,6 +33,7 @@ const DonorDetailsForm = ({ error }: IProps) => {
               placeholder="Full name"
               name="guestDonorInfo.fullName"
               className="px-2 py-4 w-full bg-gray-100 placeholder:font-secondary placeholder:font-medium    outline-secondary"
+              defaultValue={user?.fullName}
             />
             {error["guestDonorInfo.fullName"] && (
               <p className="mt-1 text-red-500">{error["guestDonorInfo.fullName"]}</p>
@@ -40,15 +43,17 @@ const DonorDetailsForm = ({ error }: IProps) => {
               placeholder="Email Address"
               name="guestDonorInfo.email"
               className="px-2 py-4 w-full bg-gray-100 placeholder:font-secondary placeholder:font-medium   outline-secondary"
+              defaultValue={user?.email}
             />
             {error["guestDonorInfo.email"] && (
               <p className="mt-1 text-red-500">{error["guestDonorInfo.email"]}</p>
             )}
             <input
               type="text"
-              placeholder="Phone"
+              placeholder="Phone (optional)"
               name="guestDonorInfo.phoneNumber"
               className="px-2 py-4 w-full bg-gray-100 placeholder:font-secondary placeholder:font-medium   outline-secondary"
+              defaultValue={user?.phoneNumber}
             />
             {error["guestDonorInfo.phoneNumber"] && (
               <p className="mt-1 text-red-500">{error["guestDonorInfo.phoneNumber"]}</p>
@@ -58,15 +63,17 @@ const DonorDetailsForm = ({ error }: IProps) => {
               placeholder="Country"
               name="guestDonorInfo.address.country"
               className="px-2 py-4 w-full bg-gray-100 placeholder:font-secondary placeholder:font-medium   outline-secondary"
+              defaultValue={user?.address?.country}
             />
             {error["guestDonorInfo.address.country"] && (
               <p className="mt-1 text-red-500">{error["guestDonorInfo.address.country"]}</p>
             )}
             <input
               type="text"
-              placeholder="State"
+              placeholder="State (optional)"
               name="guestDonorInfo.address.state"
               className="px-2 py-4 w-full bg-gray-100 placeholder:font-secondary placeholder:font-medium   outline-secondary"
+              defaultValue={user?.address?.state}
             />
             {error["guestDonorInfo.address.state"] && (
               <p className="mt-1 text-red-500">{error["guestDonorInfo.address.state"]}</p>
@@ -76,6 +83,7 @@ const DonorDetailsForm = ({ error }: IProps) => {
               placeholder="City"
               name="guestDonorInfo.address.city"
               className="px-2 py-4 w-full bg-gray-100 placeholder:font-secondary placeholder:font-medium   outline-secondary"
+              defaultValue={user?.address?.city}
             />
             {error["guestDonorInfo.address.city"] && (
               <p className="mt-1 text-red-500">{error["guestDonorInfo.address.city"]}</p>
@@ -85,6 +93,7 @@ const DonorDetailsForm = ({ error }: IProps) => {
               placeholder="street"
               name="guestDonorInfo.address.street"
               className="px-2 py-4 w-full bg-gray-100 placeholder:font-secondary placeholder:font-medium   outline-secondary"
+              defaultValue={user?.address?.street}
             />
             {error["guestDonorInfo.address.street"] && (
               <p className="mt-1 text-red-500">{error["guestDonorInfo.address.street"]}</p>

@@ -22,9 +22,7 @@ const MyWatchList = () => {
         {/* {Array.from({ length: 4 }).map((_, index) => (
           <WatchListCard key={index} />
         ))} */}
-        <h1>
-          Not Available Now
-        </h1>
+        <h1>Not Available Now</h1>
       </div>
     </div>
   );

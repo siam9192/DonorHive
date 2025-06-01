@@ -22,13 +22,13 @@ const Activities = () => {
               className="h-full w-full"
             />
             <div className="absolute inset-0 flex justify-center items-center bg-transparent">
-       <VideoPopup>
-       <div className="size-fit p-2 animate-pulse rounded-full bg-gray-50/30 backdrop-blur-sm ">
-                <button className="p-4 rounded-full flex justify-center items-center bg-white text-primary    text-center text-4xl">
-                  <IoPlay />
-                </button>
-              </div>
-       </VideoPopup>
+              <VideoPopup>
+                <div className="size-fit p-2 animate-pulse rounded-full bg-gray-50/30 backdrop-blur-sm ">
+                  <button className="p-4 rounded-full flex justify-center items-center bg-white text-primary    text-center text-4xl">
+                    <IoPlay />
+                  </button>
+                </div>
+              </VideoPopup>
             </div>
           </div>
           <div ref={ref} className="md:px-10 p-5 py-5 space-y-8">
@@ -36,7 +36,14 @@ const Activities = () => {
               When people <span className="text-primary">help people</span> <br /> change happens
             </h1>
             <p className="text-gray-700">
-            When people come together to support and uplift one another, real change happens. Whether through simple acts of kindness, mentorship, or community-driven initiatives, helping others creates a ripple effect that fosters growth, resilience, and transformation. Every effort, no matter how small, has the potential to inspire and empower someone in need. By offering a helping hand, we not only improve individual lives but also strengthen communities and build a more compassionate world. True change begins when people choose to care, connect, and contribute, proving that together, we can make a lasting difference in the lives of others.
+              When people come together to support and uplift one another, real change happens.
+              Whether through simple acts of kindness, mentorship, or community-driven initiatives,
+              helping others creates a ripple effect that fosters growth, resilience, and
+              transformation. Every effort, no matter how small, has the potential to inspire and
+              empower someone in need. By offering a helping hand, we not only improve individual
+              lives but also strengthen communities and build a more compassionate world. True
+              change begins when people choose to care, connect, and contribute, proving that
+              together, we can make a lasting difference in the lives of others.
             </p>
             {inView ? (
               <div className="flex md:flex-row flex-col md:gap-0 gap-3 md:items-center    md:justify-between">

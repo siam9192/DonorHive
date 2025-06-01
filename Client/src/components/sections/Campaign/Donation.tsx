@@ -1,11 +1,8 @@
 import React, { ChangeEvent, FormEvent, useRef, useState } from "react";
-import { FaChevronDown } from "react-icons/fa";
 import { FiDollarSign } from "react-icons/fi";
 import DonorDetailsForm from "../../ui/DonorDetailsForm";
-import DonateButton from "../../ui/DonateButton";
 import { getFormValues } from "../../../utils/function";
 import { useCurrentUser } from "../../../provider/CurrentUserProvider";
-import { IInitDonationPayload } from "../../../types/donation.type";
 import { ICampaign } from "../../../types/campaign.type";
 import DonationSubmitFormDetails from "../../ui/DonationSubmitFormDetails";
 import { EUserRole } from "../../../types/user.type";
@@ -13,28 +10,32 @@ interface IProps {
   campaign: ICampaign;
 }
 const Donation = ({ campaign }: IProps) => {
-  const [selectedAmount, setSelectedAmount] = useState<number | null>();
   const featuredAmounts = [20, 50, 80, 100, 150, 200, 250, 300, 350, 500];
   const [isAnonymously, setIsAnonymously] = useState(false);
-  const [isAddComment, setIsAddComment] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [isAddComment, setIsAddComment] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLFormElement>(null);
   const [values, setValues] = useState<Record<string, any>>({});
-
+  const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [error, setError] = useState<Record<string, any>>({});
   const { user: currentUser } = useCurrentUser();
+  const amountInputRef = useRef<HTMLInputElement>(null);
+
   const handelOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     validate(e.target as HTMLFormElement);
-    if(Object.values(error).length){
-      return 
+
+    const errorFields = Object.keys(error);
+    if (errorFields.length) {
+      const field = e.currentTarget.elements.namedItem(errorFields[0]) as HTMLElement | null;
+      field?.focus();
+      field?.focus();
+      return;
     }
-    setIsOpen(true);
   };
 
   const handelFormOnChange = (e: ChangeEvent<HTMLFormElement>) => {
-    validate(e.target);
+    validate(e.currentTarget);
   };
 
   const validate = (e: HTMLFormElement) => {
@@ -45,6 +46,8 @@ const Donation = ({ campaign }: IProps) => {
     const fieldNames = [
       "amount",
       "comment",
+      "guestDonorInfo.email",
+      "guestDonorInfo.phoneNumber",
       "guestDonorInfo.fullName",
       "guestDonorInfo.email",
       "guestDonorInfo.phoneNumber",
@@ -57,10 +60,17 @@ const Donation = ({ campaign }: IProps) => {
     const values = getFormValues(e, fieldNames);
 
     let data: any = {
-      amount: selectedAmount,
+      amount: values.amount,
       comment: values.comment,
       isAnonymously,
     };
+    const fieldError: Record<string, any> = {};
+
+    if (isNaN(data.amount)) {
+      fieldError.amount = "Enter a valid amount";
+    } else if (data.amount < 1) {
+      fieldError.amount = "Amount must be minimum $1";
+    }
 
     if (!isAnonymously) {
       data.guestDonorInfo = {
@@ -74,47 +84,54 @@ const Donation = ({ campaign }: IProps) => {
           country: values["guestDonorInfo.address.country"],
         },
       };
-    }
 
-    const fieldError: Record<string, any> = {};
-
-    if (isNaN(data.amount)) {
-      fieldError.amount = "Enter a valid amount";
-    } else if (data.amount < 1) {
-      fieldError.amount = "Amount must be minimum $1";
-    }
-
-    if (!isAnonymously && !currentUser) {
       const { guestDonorInfo } = data;
 
-      if (
-        !guestDonorInfo.fullName ||
-        guestDonorInfo.fullName.length < 2 ||
-        guestDonorInfo.fullName.length > 20
-      ) {
-        fieldError["guestDonorInfo.fullName"] =
-          "Full name must be minimum 2 and maximum 20 character ";
+      // Email
+      if (!guestDonorInfo.email) {
+        fieldError["guestDonorInfo.email"] = "Email is required";
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestDonorInfo.email)) {
+        fieldError["guestDonorInfo.email"] = "Invalid email address";
       }
-      if (
-        !guestDonorInfo.address.city ||
-        guestDonorInfo.address.city.length < 2 ||
-        guestDonorInfo.address.city.length > 20
-      ) {
-        fieldError["guestDonorInfo.address.city"] =
-          "City must be minimum 2 and maximum 20 character";
+
+      // Full name
+      if (!guestDonorInfo.fullName) {
+        fieldError["guestDonorInfo.fullName"] = "Full name is required";
+      } else if (guestDonorInfo.fullName.length < 2) {
+        fieldError["guestDonorInfo.fullName"] = "Full name must be at least 2 characters";
+      } else if (guestDonorInfo.fullName.length > 20) {
+        fieldError["guestDonorInfo.fullName"] = "Full name must be at most 20 characters";
       }
-      if (
-        !guestDonorInfo.address.country ||
-        guestDonorInfo.address.country.length < 2 ||
-        guestDonorInfo.address.country.length > 20
-      ) {
-        fieldError["guestDonorInfo.address.country"] =
-          "Country must be minimum 2 and maximum 20 character";
+
+      const address = guestDonorInfo.address;
+
+      if (!address.street) {
+        fieldError["guestDonorInfo.address.street"] = "Street is required";
+      } else if (address.street.length < 2) {
+        fieldError["guestDonorInfo.address.street"] = "Street must be at least 2 characters";
+      } else if (address.street.length > 20) {
+        fieldError["guestDonorInfo.address.street"] = "Street must be at most 20 characters";
+      }
+
+      if (!address.city) {
+        fieldError["guestDonorInfo.address.city"] = "City is required";
+      } else if (address.city.length < 2) {
+        fieldError["guestDonorInfo.address.city"] = "City must be at least 2 characters";
+      } else if (address.city.length > 20) {
+        fieldError["guestDonorInfo.address.city"] = "City must be at most 20 characters";
+      }
+
+      if (!address.country) {
+        fieldError["guestDonorInfo.address.country"] = "Country is required";
+      } else if (address.country.length < 2) {
+        fieldError["guestDonorInfo.address.country"] = "Country must be at least 2 characters";
+      } else if (address.country.length > 20) {
+        fieldError["guestDonorInfo.address.country"] = "Country must be at most 20 characters";
       }
     }
-    // if (!data.comment || Comment.length > 3) {
-    //   fieldError.comment = "Comment must be minimum 3 character";
-    // }
+    if (!data.comment || Comment.length > 3) {
+      fieldError.comment = "Comment must be minimum 3 character";
+    }
 
     if (Object.values(fieldError).length) {
       return setError(fieldError);
@@ -127,6 +144,10 @@ const Donation = ({ campaign }: IProps) => {
     setIsOpen(false);
   };
 
+  const isValid =
+    (currentUser && currentUser?.role !== EUserRole.Donor ? true : false) ||
+    !Object.keys(error).length;
+
   return (
     <section className="p-5  min-h-[700px] ">
       <form ref={ref} action="" onSubmit={handelOnSubmit} onChange={handelFormOnChange}>
@@ -134,18 +155,19 @@ const Donation = ({ campaign }: IProps) => {
 
         <div className="mt-5 grid grid-cols-3 gap-3 font-secondary">
           {featuredAmounts.map((amount) => (
-            <>
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedAmount(amount);
-                }}
-                key={amount}
-                className={`w-full py-2    border-gray-600/15 rounded-md font-medium ${selectedAmount === amount ? "border-primary border-2" : "border"}`}
-              >
-                ${amount}
-              </button>
-            </>
+            <button
+              type="button"
+              onClick={() => {
+                const current = amountInputRef.current;
+                if (!current) return;
+                setSelectedAmount(amount);
+                current.value = amount.toFixed(2);
+              }}
+              key={amount}
+              className={`w-full py-2    border-gray-600/15 rounded-md font-medium ${selectedAmount === amount ? "border-primary border-2" : "border"}`}
+            >
+              ${amount}
+            </button>
           ))}
         </div>
 
@@ -155,13 +177,12 @@ const Donation = ({ campaign }: IProps) => {
               <FiDollarSign />
             </span>
             <input
-              onChange={(e) =>
-                !isNaN(Number(e.target.value)) &&
-                setSelectedAmount(Number(parseFloat(e.target.value).toFixed(2)))
-              }
               type="number"
               name="amount"
-              value={selectedAmount || ""}
+              ref={amountInputRef}
+              onChange={(e) => {
+                setSelectedAmount(parseInt(e.target.value));
+              }}
               readOnly={false}
               className="w-full py-3 outline-none text-xl text-primary font-medium"
             />
@@ -181,28 +202,29 @@ const Donation = ({ campaign }: IProps) => {
           </label>
         </div>
 
-        {!isAnonymously && error && !currentUser ? <DonorDetailsForm error={error} /> : null}
+        {!isAnonymously && error ? <DonorDetailsForm error={error} /> : null}
 
         <div className="mt-10 space-y-2">
           <button
             type="button"
             className=" text-gray-900 border-b font-medium block"
-            onClick={() => setIsAddComment((p) => !p)}
+            // onClick={() => setIsAddComment((p) => !p)}
           >
-            {!isAddComment ? "Add comment" : "Remove comment"}
+            {/* {!isAddComment ? "Add comment" : "Remove comment"} */}
+            Your comment
           </button>
-          {isAddComment ? (
-            <textarea
-              name="comment"
-              id=""
-              placeholder="Your comment"
-              className=" w-full h-40 bg-gray-50  border-2 border-gray-600/10 rounded-lg resize-none p-2 outline-secondary "
-            />
-          ) : null}
+
+          <textarea
+            name="comment"
+            id=""
+            placeholder="Your comment"
+            className=" w-full h-40 bg-gray-50  border-2 border-gray-600/10 rounded-lg resize-none p-2 outline-secondary "
+          />
+          {error["comment"] && <p className="mt-1 text-red-500">{error["comment"]}</p>}
         </div>
         <div className="mt-14">
           <button
-            disabled={!selectedAmount || (currentUser &&  (currentUser?.role !== EUserRole.Donor) ?true : false)}
+            disabled={!isValid}
             type="submit"
             className="py-3 disabled:bg-gray-100 disabled:text-gray-600 bg-primary text-white font-semibold w-full rounded-lg font-secondary"
           >

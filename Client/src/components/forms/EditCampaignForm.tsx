@@ -5,18 +5,21 @@ import categories from "../../data/categories";
 import Select from "../select/Select";
 import { getFormValues, uploadImageToImgBB } from "../../utils/function";
 import { ICampaign } from "../../types/campaign.type";
-import { useAddCampaignMutation, useGetCampaignByIdForManageQuery, useUpdateCampaignMutation } from "../../redux/features/campaign/campaign.api";
+import {
+  useAddCampaignMutation,
+  useGetCampaignByIdForManageQuery,
+  useUpdateCampaignMutation,
+} from "../../redux/features/campaign/campaign.api";
 import { toast } from "sonner";
 
 interface IProps {
   onAdd?: () => void;
-  id:string
+  id: string;
 }
 type TFieldError = Record<string, string>;
 
-const EditCampaignForm = ({ onAdd,id }: IProps) => {
-  const {data,isLoading,isError} =  useGetCampaignByIdForManageQuery(id)
-    
+const EditCampaignForm = ({ onAdd, id }: IProps) => {
+  const { data, isLoading, isError } = useGetCampaignByIdForManageQuery(id);
 
   const [coverPhoto, setCoverPhoto] = useState<File | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -39,8 +42,6 @@ const EditCampaignForm = ({ onAdd,id }: IProps) => {
     value: "",
   });
 
-  
-
   const [update] = useUpdateCampaignMutation();
   const handelSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -52,10 +53,10 @@ const EditCampaignForm = ({ onAdd,id }: IProps) => {
       "description",
       "startAt",
       "endAt",
-      "status"
+      "status",
     ]);
-   
-    const { title, minimumAmount, targetAmount, startAt, description, endAt,status } = values;
+
+    const { title, minimumAmount, targetAmount, startAt, description, endAt, status } = values;
     const fieldError: TFieldError = {};
 
     if (!title || title.trim().length < 3 || title.trim().length > 150) {
@@ -78,12 +79,11 @@ const EditCampaignForm = ({ onAdd,id }: IProps) => {
       fieldError["description"] =
         "Description is required and must be between 150 and 10000 characters.";
     }
-   
-    if(isScheduled){
-      
-    if (!startAt) {
-      fieldError["startAt"] = "Start date is required.";
-    }
+
+    if (isScheduled) {
+      if (!startAt) {
+        fieldError["startAt"] = "Start date is required.";
+      }
     }
 
     if (!endAt) {
@@ -92,33 +92,39 @@ const EditCampaignForm = ({ onAdd,id }: IProps) => {
       fieldError["endAt"] = "End date must be after the start date.";
     }
 
-   
     if (Object.values(fieldError).length) {
       return setFieldError(fieldError);
     }
 
     const loadingToast = toast.loading("Campaign is adding...");
     try {
-      let coverImageUrl =  campaign!.coverImageUrl
-    if(coverPhoto){
-       coverImageUrl = await uploadImageToImgBB(coverPhoto!);
-    }
+      let coverImageUrl = campaign!.coverImageUrl;
+      if (coverPhoto) {
+        coverImageUrl = await uploadImageToImgBB(coverPhoto!);
+      }
 
       const payload: Pick<
         ICampaign,
-        "title" | "description" |"category"| "targetAmount" | "startAt" | "endAt" | "coverImageUrl"|"status"
+        | "title"
+        | "description"
+        | "category"
+        | "targetAmount"
+        | "startAt"
+        | "endAt"
+        | "coverImageUrl"
+        | "status"
       > = {
         title,
         description,
         coverImageUrl,
-        category:selectedCategory!,
+        category: selectedCategory!,
         targetAmount: parseInt(targetAmount),
-        startAt:isScheduled ?  new Date(startAt) : new Date(campaign!.startAt),
+        startAt: isScheduled ? new Date(startAt) : new Date(campaign!.startAt),
         endAt: new Date(endAt),
-        status:campaign!.status
+        status: campaign!.status,
       };
-      const res = await update({id,payload});
-    
+      const res = await update({ id, payload });
+
       if (res.data.success) {
         toast.success("Campaign updated successfully");
         toast.dismiss(loadingToast);
@@ -127,34 +133,32 @@ const EditCampaignForm = ({ onAdd,id }: IProps) => {
         throw new Error();
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       toast.dismiss(loadingToast);
       toast.error("Something went wrong!");
     }
   };
 
-  const campaign =  data?.data;
+  const campaign = data?.data;
 
-  if(isLoading) return <></>
-  if(!campaign) return  <p>Something went wrong!</p>
-  const isScheduled = new Date(campaign.startAt).getTime () > new Date().getTime()
+  if (isLoading) return <></>;
+  if (!campaign) return <p>Something went wrong!</p>;
+  const isScheduled = new Date(campaign.startAt).getTime() > new Date().getTime();
   return (
     <form action="" onSubmit={handelSubmit}>
       <h1 className="lg:text-3xl text-2xl font-semibold text-black ">Add New Campaign</h1>
       <div className="mt-10">
         {/* Cover photo */}
         <>
-         
-          
-            <div className="p-2 border-2 w-fit rounded-md border-secondary">
-              <img
-                src={coverPhoto ? URL.createObjectURL(coverPhoto):campaign?.coverImageUrl}
-                alt=""
-                className=" h-60 rounded-lg hover:cursor-pointer"
-                onClick={() => ref.current && ref.current.click()}
-              />
-            </div>
-       
+          <div className="p-2 border-2 w-fit rounded-md border-secondary">
+            <img
+              src={coverPhoto ? URL.createObjectURL(coverPhoto) : campaign?.coverImageUrl}
+              alt=""
+              className=" h-60 rounded-lg hover:cursor-pointer"
+              onClick={() => ref.current && ref.current.click()}
+            />
+          </div>
+
           <input
             onChange={handelCoverPhotoInputOnChange}
             type="file"
@@ -190,7 +194,6 @@ const EditCampaignForm = ({ onAdd,id }: IProps) => {
                 type="number"
                 placeholder="Minimum Amount (optional)"
                 className="w-full py-3 px-2 border-2 text-black border-gray-700/15 rounded-md placeholder:font-secondary font-medium outline-secondary"
-                
               />
               <p className="mt-1 text-red-500">{fieldError["minimumAmount"]}</p>
             </div>
@@ -218,9 +221,7 @@ const EditCampaignForm = ({ onAdd,id }: IProps) => {
         {/* Start at and End at */}
         <div className="mt-5  overflow-x-auto">
           <h3 className="mb-2 md:text-xl text-lg text-gray-800 font-medium">
-          {
-            isScheduled ? "Change Start Date & End Date" :"Change End Date"
-          }
+            {isScheduled ? "Change Start Date & End Date" : "Change End Date"}
           </h3>
           {/* <DateRange
             editableDateInputs={true}
@@ -229,17 +230,17 @@ const EditCampaignForm = ({ onAdd,id }: IProps) => {
             ranges={dateState as any}
           /> */}
           <div className="grid grid-cols-2 gap-3">
-        {
-            isScheduled === true &&     <div>
-            <input
-              type="datetime-local"
-              name="startAt"
-              defaultValue={new Date(campaign.startAt).toISOString().slice(0, 16)}
-              className="w-full py-3 px-2 text-black border-2 border-gray-700/15 rounded-md placeholder:font-secondary font-medium outline-secondary"
-            />
-            <p className="mt-1 text-red-500">{fieldError["startAt"]}</p>
-          </div>
-        }
+            {isScheduled === true && (
+              <div>
+                <input
+                  type="datetime-local"
+                  name="startAt"
+                  defaultValue={new Date(campaign.startAt).toISOString().slice(0, 16)}
+                  className="w-full py-3 px-2 text-black border-2 border-gray-700/15 rounded-md placeholder:font-secondary font-medium outline-secondary"
+                />
+                <p className="mt-1 text-red-500">{fieldError["startAt"]}</p>
+              </div>
+            )}
             <div>
               <input
                 type="datetime-local"
@@ -251,17 +252,24 @@ const EditCampaignForm = ({ onAdd,id }: IProps) => {
             </div>
           </div>
         </div>
-   {
-    isScheduled === false &&      <div className="mt-5">
-      <label htmlFor="" className="font-medium block text-xl text-black">Status</label>
-    <select name="status" id=""  defaultValue={campaign.status}  className="mt-1 w-full py-3 px-2 border-2 border-gray-700/15 rounded-md placeholder:font-secondary font-medium outline-secondary md:w-1/2" >
-      <option value="Active">Active</option>
-      <option value="Paused">Paused</option>
-    </select>
-  </div>
-   }
+        {isScheduled === false && (
+          <div className="mt-5">
+            <label htmlFor="" className="font-medium block text-xl text-black">
+              Status
+            </label>
+            <select
+              name="status"
+              id=""
+              defaultValue={campaign.status}
+              className="mt-1 w-full py-3 px-2 border-2 border-gray-700/15 rounded-md placeholder:font-secondary font-medium outline-secondary md:w-1/2"
+            >
+              <option value="Active">Active</option>
+              <option value="Paused">Paused</option>
+            </select>
+          </div>
+        )}
       </div>
-       
+
       <div className="mt-5 lg:text-end">
         <button className=" py-3 lg:w-1/2 w-full bg-primary text-white rounded-md">Save</button>
       </div>

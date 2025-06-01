@@ -28,9 +28,7 @@ const CampaignCard = ({ campaign }: IProps) => {
         </div>
         <div className="md:mt-4 mt-3 space-y-1">
           <div className=" font-medium text-end md:text-[1rem] md:text-sm text-[0.5rem]">
-        {
-          getTimeLeft(campaign.endAt)
-        }
+            {getTimeLeft(campaign.endAt)}
           </div>
           <p className="text-yellow-600 font-medium text-[0.8rem]">{campaign.category}</p>
           <h2 className="md:text-xl text-[1rem] text-gray-950 font-medium">{campaign.title}</h2>

@@ -2,6 +2,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import Donation from "../sections/Campaign/Donation";
 import { RxCross1 } from "react-icons/rx";
 import { ICampaign } from "../../types/campaign.type";
+import useScreen, { EScreenType } from "../../hooks/UseScreen";
 
 interface IProps {
   children: ReactNode;
@@ -11,9 +12,19 @@ interface IProps {
 const DonationPopup = ({ children, campaign }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const { screenType } = useScreen();
+
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
   }, [isOpen]);
+
+  useEffect(() => {
+    if ([EScreenType.MD, EScreenType.SM].includes(screenType)) {
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  }, [screenType]);
 
   return (
     <>

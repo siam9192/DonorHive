@@ -70,9 +70,8 @@ export enum EDonationStatus {
   Refunded = "Refunded",
 }
 
-
 export enum EDonorType {
   Guest = "guest",
   Anonymous = "anonymous",
-  Registered ='registered'
+  Registered = "registered",
 }

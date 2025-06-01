@@ -55,9 +55,11 @@ const routes = [
           },
           {
             path: "profile",
-            element: <PrivateRouteProvider roles={[EUserRole.Donor]}>
-              <ProfileLayout />
-            </PrivateRouteProvider>,
+            element: (
+              <PrivateRouteProvider roles={[EUserRole.Donor]}>
+                <ProfileLayout />
+              </PrivateRouteProvider>
+            ),
             children: profileRoutes,
           },
         ],

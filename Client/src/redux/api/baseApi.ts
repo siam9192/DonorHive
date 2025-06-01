@@ -30,6 +30,6 @@ export const baseApi = createApi({
     "user-details",
     "manage-donations",
     "my-notifications",
-    "my-utils-count"
+    "my-utils-count",
   ],
 });

@@ -61,24 +61,24 @@ type TSort = {
   order: TOrder;
 };
 
-const statusSelectOptions = [{display:'All Status',value:''},...Object.values(EDonationStatus).map(st=>({
-  display:st,
-  value:st
-}))
-]
+const statusSelectOptions = [
+  { display: "All Status", value: "" },
+  ...Object.values(EDonationStatus).map((st) => ({
+    display: st,
+    value: st,
+  })),
+];
 
 const donorTypeSelectOptions = [
-{
-  display:"All Donor",
-  value:''
-}
-,
-...Object.entries(EDonorType).map(([key,value])=>({
-  display:key,
-  value
-}))
-]
-
+  {
+    display: "All Donor",
+    value: "",
+  },
+  ...Object.entries(EDonorType).map(([key, value]) => ({
+    display: key,
+    value,
+  })),
+];
 
 const DashboardShowDonations = () => {
   const [sort, setSort] = useState<TSort>({
@@ -88,14 +88,12 @@ const DashboardShowDonations = () => {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [searchTerm, setSearchTerm] = useState("");
-   const [status, setStatus] = useState("");
-   const [donorType,setDonorType] = useState('')
-   const [page, setPage] = useState(1);
+  const [status, setStatus] = useState("");
+  const [donorType, setDonorType] = useState("");
+  const [page, setPage] = useState(1);
   const handelSetSort = (value: string, order: TOrder) => setSort({ by: value, order });
- 
-  
 
- const params = [
+  const params = [
     {
       name: "searchTerm",
       value: searchTerm,
@@ -125,8 +123,7 @@ const DashboardShowDonations = () => {
 
   const { data } = useGetDonationsForManageQuery(params);
   const donations = data?.data;
-  const meta =  data?.meta
-
+  const meta = data?.meta;
 
   return (
     <section className="my-10 ">
@@ -146,13 +143,15 @@ const DashboardShowDonations = () => {
           <Select options={donorTypeSelectOptions} onChange={(value) => setDonorType(value)} />
         </div>
       </div>
-      <h4 className=" mt-5 text-xl font-semibold  text-primary">{meta?.totalResult} Donations Found</h4>
+      <h4 className=" mt-5 text-xl font-semibold  text-primary">
+        {meta?.totalResult} Donations Found
+      </h4>
 
       {/* Table */}
       <div className="  py-5 relative overflow-x-auto ">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
-            <tr>   
+            <tr>
               {heads.map((head) => (
                 <th scope="col" key={head.name} className="px-6 py-3 text-[1rem] font-semibold ">
                   <div className="flex items-center gap-2">
@@ -179,26 +178,28 @@ const DashboardShowDonations = () => {
             </tr>
           </thead>
           <tbody>
-          {
-         meta?.totalResult ?
-        donations?.map((_, index) => <ManageDonationTableCard donation={_} key={index} />)
-         :
-        <div className="h-52 p-10 ">
-           <h1 className="text-xl font-medium"> No donations found</h1>
-        </div>
-        }
+            {meta?.totalResult ? (
+              donations?.map((_, index) => <ManageDonationTableCard donation={_} key={index} />)
+            ) : (
+              <div className="h-52 p-10 ">
+                <h1 className="text-xl font-medium"> No donations found</h1>
+              </div>
+            )}
           </tbody>
         </table>
       </div>
       {/* Pagination */}
-      {
-      meta &&  <div className="py-5 ">
-      <Pagination {...meta}  onPageChange={(p) => {
+      {meta && (
+        <div className="py-5 ">
+          <Pagination
+            {...meta}
+            onPageChange={(p) => {
               setPage(p);
               containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-            }} />
-    </div>
-     }
+            }}
+          />
+        </div>
+      )}
     </section>
   );
 };

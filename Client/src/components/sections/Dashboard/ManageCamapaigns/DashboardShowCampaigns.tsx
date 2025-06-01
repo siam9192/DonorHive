@@ -8,7 +8,6 @@ import categories from "../../../../data/categories";
 import Select from "../../../select/Select";
 import SearchTermInput from "../../../input/SearchTermInput";
 
-
 type THead = {
   name: string;
   value: string;
@@ -171,19 +170,18 @@ const DashboardShowCampaigns = () => {
             </tr>
           </thead>
           <tbody>
-        {
-         meta?.totalResult ?
-         campaigns?.map((_, index) => <ManageCampaignCard campaign={_} key={index} />)
-         :
-        <div className="h-52 p-10 ">
-           <h1 className="text-xl font-medium"> No campaigns found</h1>
-        </div>
-        }
+            {meta?.totalResult ? (
+              campaigns?.map((_, index) => <ManageCampaignCard campaign={_} key={index} />)
+            ) : (
+              <div className="h-52 p-10 ">
+                <h1 className="text-xl font-medium"> No campaigns found</h1>
+              </div>
+            )}
           </tbody>
         </table>
       </div>
       {/* Pagination */}
-      { meta && meta.totalResult>0 && (
+      {meta && meta.totalResult > 0 && (
         <div className="py-5 ">
           <Pagination
             {...meta}

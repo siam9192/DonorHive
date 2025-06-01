@@ -119,7 +119,10 @@ const NavShortcut = () => {
                   <span>{item.name}</span>
                 </Link>
               ))}
-              <button onClick={logout} className="  hover:text-primary text-red-500 w-full  font-medium  flex items-center gap-1">
+              <button
+                onClick={logout}
+                className="  hover:text-primary text-red-500 w-full  font-medium  flex items-center gap-1"
+              >
                 <span className="p-2 bg-gray-50 rounded-md ">
                   <TbLogout />
                 </span>

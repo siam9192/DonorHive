@@ -93,18 +93,17 @@ const Header = () => {
               ))}
             </nav>
             <div className="flex items-center gap-3">
-            <Link to={'/campaigns'}>
-            <button className=" md:block hidden uppercase px-6 py-3 text-gray-900 hover:bg-gray-900 hover:text-white bg-secondary  font-medium">
-                Donate Now
-              </button>
-
-            </Link>
+              <Link to={"/campaigns"}>
+                <button className=" md:block hidden uppercase px-6 py-3 text-gray-900 hover:bg-gray-900 hover:text-white bg-secondary  font-medium">
+                  Donate Now
+                </button>
+              </Link>
               {!isLoading ? (
                 user ? (
-              <>
-                  <NavShortcut />
-                  <NotificationBar/>
-              </>
+                  <>
+                    <NavShortcut />
+                    <NotificationBar />
+                  </>
                 ) : (
                   <LoginPopup>
                     <span className="md:text-3xl text-2xl text-white">
@@ -113,7 +112,7 @@ const Header = () => {
                   </LoginPopup>
                 )
               ) : null}
-             
+
               <ResponsiveNavbar />
             </div>
           </div>

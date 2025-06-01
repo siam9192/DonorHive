@@ -19,11 +19,11 @@ const Hero = () => {
               creating safe and stable homes.
             </p>
             <div className="flex items-center gap-3">
-            <VideoPopup>
-            <button className=" text-primary lg:text-[70px] md:text-[60px] text-[40px] animate-pulse border-4 border-secondary rounded-full p-2">
-                <FaPlayCircle />
-              </button>
-            </VideoPopup>
+              <VideoPopup>
+                <button className=" text-primary lg:text-[70px] md:text-[60px] text-[40px] animate-pulse border-4 border-secondary rounded-full p-2">
+                  <FaPlayCircle />
+                </button>
+              </VideoPopup>
               <h2 className="text-gray-300 md:text-3xl text-2xl font-medium font-secondary">
                 Watching Video
               </h2>

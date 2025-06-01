@@ -8,7 +8,6 @@ const CampaignHeader = () => {
         <h1 className="lg:text-5xl md:text-4xl text-3xl  font-bold text-white font-secondary md:p-5 p-4 bg-primary ">
           Campaign
         </h1>
-    
       </Container>
     </section>
   );

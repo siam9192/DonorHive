@@ -20,7 +20,7 @@ const ManageCampaignCard = ({ campaign }: IProps) => {
     } else toast.error("Something went wrong");
   };
 
-  const isScheduled = new Date(campaign.startAt).getTime () > new Date().getTime()
+  const isScheduled = new Date(campaign.startAt).getTime() > new Date().getTime();
   return (
     <tr className="odd:bg-white  even:bg-gray-50  border-b  border-gray-200">
       <th
@@ -38,7 +38,7 @@ const ManageCampaignCard = ({ campaign }: IProps) => {
       <td className="px-6 py-4">
         {endAt.toDateString()}-{endAt.toLocaleTimeString()}
       </td>
-      <td className="px-6 py-4">{isScheduled ? 'Scheduled':campaign.status}</td>
+      <td className="px-6 py-4">{isScheduled ? "Scheduled" : campaign.status}</td>
       <td className="px-6 py-4">
         {createdAt.toDateString()}-{createdAt.toLocaleTimeString()}
       </td>
@@ -46,11 +46,10 @@ const ManageCampaignCard = ({ campaign }: IProps) => {
         {updatedAt.toDateString()}-{updatedAt.toLocaleTimeString()}
       </td>
       <td className="px-6 py-4 space-x-4">
-       
         <button className="text-black font-medium">Details</button>
-       <EditCampaignPopup id={campaign._id}>
-       <button className="text-primary font-medium">Edit</button>
-       </EditCampaignPopup>
+        <EditCampaignPopup id={campaign._id}>
+          <button className="text-primary font-medium">Edit</button>
+        </EditCampaignPopup>
         <ConfirmPopup onConfirm={handelDelete} heading="Delete Campaign">
           <button className="text-red-500 font-medium">Delete</button>
         </ConfirmPopup>

@@ -106,18 +106,24 @@ const AddCampaignForm = ({ onAdd }: IProps) => {
 
       const payload: Pick<
         ICampaign,
-        "title" | "description" |"category"| "targetAmount" | "startAt" | "endAt" | "coverImageUrl"
+        | "title"
+        | "description"
+        | "category"
+        | "targetAmount"
+        | "startAt"
+        | "endAt"
+        | "coverImageUrl"
       > = {
         title,
         description,
         coverImageUrl,
-        category:selectedCategory!,
+        category: selectedCategory!,
         targetAmount: parseInt(targetAmount),
         startAt: new Date(startAt),
         endAt: new Date(endAt),
       };
       const res = await add(payload);
-    
+
       if (res.data.success) {
         toast.success("Campaign added successfully");
         toast.dismiss(loadingToast);
@@ -126,7 +132,7 @@ const AddCampaignForm = ({ onAdd }: IProps) => {
         throw new Error();
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       toast.dismiss(loadingToast);
       toast.error("Something went wrong!");
     }

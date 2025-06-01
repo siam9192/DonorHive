@@ -18,8 +18,6 @@ const CampaignFilterBox = () => {
   });
   const searchParams = new URLSearchParams(window.location.search);
 
-
-  
   return (
     <section className="py-10">
       <Container>
@@ -28,12 +26,12 @@ const CampaignFilterBox = () => {
             <Select
               options={selectCategoryOptions}
               onChange={(value) => handelSearch([{ name: "category", value }], navigate)}
-              defaultValue={searchParams.get('category')}
+              defaultValue={searchParams.get("category")}
             />
           </div>
           <div className="lg:w-1/3 md:w-1/2">
             <SearchTermInput
-              defaultValue={searchParams.get('searchTerm')||''}
+              defaultValue={searchParams.get("searchTerm") || ""}
               onChange={(value) => handelSearch([{ name: "searchTerm", value }], navigate)}
               placeholder="Search campaign by keyword.."
             />

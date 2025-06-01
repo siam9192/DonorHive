@@ -69,7 +69,7 @@ const campaignApi = baseApi.injectEndpoints({
       }),
       transformResponse: (response: IResponse<ICampaign>) => {
         return response;
-      }
+      },
     }),
     deleteCampaign: builder.mutation({
       query: (id: string) => ({
@@ -86,8 +86,8 @@ const campaignApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["manage-campaigns"],
     }),
-   updateCampaign: builder.mutation({
-      query: ({id,payload}) => ({
+    updateCampaign: builder.mutation({
+      query: ({ id, payload }) => ({
         url: `/campaigns/${id}`,
         method: "PUT",
         body: payload,
@@ -107,5 +107,5 @@ export const {
   useGetCampaignByIdForManageQuery,
   useDeleteCampaignMutation,
   useAddCampaignMutation,
-  useUpdateCampaignMutation
+  useUpdateCampaignMutation,
 } = campaignApi;
