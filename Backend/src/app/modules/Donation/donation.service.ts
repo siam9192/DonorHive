@@ -31,21 +31,23 @@ const initDonationIntoDB = async (
     },
     amount: payload.amount,
     isAnonymously: payload.isAnonymously,
-    comment: payload.comment,
+    comment: payload.comment
   };
+
   if (authUser) {
     data.userId = authUser.id;
-  } else {
-    if (!payload.isAnonymously && !payload.guestDonorInfo) {
-      throw new AppError(httpStatus.NOT_ACCEPTABLE, 'Basic info required on Anonymous donation');
-    }
+ } 
+
+  
     if (!payload.isAnonymously) {
-      data.guestDonorInfo = payload.guestDonorInfo;
+      data.donorPersonalInfo = payload.donorPersonalInfo
     }
-  }
+  
 
   const session = await startSession();
   session.startTransaction();
+
+  
   try {
     const createdDonation = await Donation.create([data], { session });
 

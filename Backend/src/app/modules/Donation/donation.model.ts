@@ -6,7 +6,7 @@ const AddressSchema = new Schema({
     type: String,
     min: 2,
     max: 30,
-    default: null,
+    required:true,
   },
   city: {
     type: String,
@@ -28,7 +28,7 @@ const AddressSchema = new Schema({
   },
 });
 
-const GuestDonorPersonalInformationSchema = new Schema<IGuestDonorPersonalInfo>({
+const DonorPersonalInformationSchema = new Schema<IGuestDonorPersonalInfo>({
   fullName: {
     type: String,
     minlength: 2,
@@ -90,7 +90,10 @@ const DonationModelSchema = new Schema<IDonation>(
       type: Boolean,
       required: true,
     },
-    guestDonorInfo: GuestDonorPersonalInformationSchema,
+    donorPersonalInfo:{
+      type:DonorPersonalInformationSchema,
+      required:true
+    },
     status: {
       type: String,
       enum: Object.values(EDonationStatus),

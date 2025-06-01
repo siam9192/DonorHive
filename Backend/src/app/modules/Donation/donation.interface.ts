@@ -14,6 +14,18 @@ export interface IGuestDonorPersonalInfo {
   };
 }
 
+export interface IDonorPersonalInfo {
+  fullName: string;
+  email: string;
+  phoneNumber?: string;
+    address: {
+    street?: string;
+    city: string;
+    state?: string;
+    country: string;
+  };
+}
+
 export interface IDonation {
   _id: ObjectId;
   userId?: ObjectId;
@@ -25,7 +37,7 @@ export interface IDonation {
   };
   amount: number;
   comment?: string;
-  guestDonorInfo?: IGuestDonorPersonalInfo;
+  donorPersonalInfo?:IDonorPersonalInfo
   isAnonymously: boolean;
   status: TDonationStatus;
   paymentId?: ObjectId;
@@ -37,7 +49,7 @@ export interface IInitDonationPayload {
   campaignId: string;
   amount: number;
   isAnonymously: boolean;
-  guestDonorInfo: IGuestDonorPersonalInfo;
+  donorPersonalInfo?:IDonorPersonalInfo
   comment?: string;
   paymentMethod: TPaymentMethod;
 }
@@ -52,7 +64,7 @@ type TDonationStatus = `${EDonationStatus}`;
 
 export enum EDonationStatus {
   Pending = 'Pending',
-  Paid = 'Paid',
-  Unpaid = 'Unpaid',
+  Success =  'Success',
+  Failed = 'failed',
   Refunded = 'Refunded',
 }
