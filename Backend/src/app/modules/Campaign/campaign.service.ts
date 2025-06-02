@@ -68,6 +68,7 @@ const getCampaignsFromDB = async (
     status: {
       $in: [ECampaignStatus.Active, ECampaignStatus.Completed],
     },
+    endAt:{$gt:new Date()},
     isDeleted: false,
   };
 
@@ -99,7 +100,7 @@ const getCampaignsFromDB = async (
     .limit(limit);
 
   const data = campaigns;
-  const total = await Campaign.countDocuments();
+  const total = await Campaign.countDocuments(whereConditions);
   const totalResult = await Campaign.countDocuments(whereConditions);
   const meta = {
     page,
@@ -142,7 +143,6 @@ const getCampaignsFromDBForManage = async (
         },
       ];
     }
-    
   }
 
   if (filterOthers) {
@@ -300,9 +300,9 @@ const getRecentCampaignsFromDB = async () => {
   recentDate.setDate(recentDate.getDate() - 30);
   const campaigns = await Campaign.find(
     {
-      startAt: {
-        $gte: recentDate,
-      },
+      // startAt: {
+      //   $gte: recentDate,
+      // },
       status: {
         $in: [ECampaignStatus.Active, ECampaignStatus.Completed],
       },
@@ -368,6 +368,16 @@ const getCampaignsSummaryFromDB = async () => {
   ]);
 };
 
+const getRandomCampaignFromDB =  async ()=>{
+ const campaign =  await Campaign.aggregate([
+  {$match:{
+    status:ECampaignStatus.Active
+  }},
+  { $sample: { size: 1 } }
+]) ;
+return campaign[0]
+}
+
 const CampaignServices = {
   createCampaignIntoDB,
   createManyCampaignIntoDB,
@@ -381,6 +391,7 @@ const CampaignServices = {
   updateCampaignIntoDB,
   softDeleteCampaignFromDB,
   getCampaignByIdForManage,
+  getRandomCampaignFromDB
 };
 
 export default CampaignServices;

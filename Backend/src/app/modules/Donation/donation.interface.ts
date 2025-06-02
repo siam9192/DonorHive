@@ -18,7 +18,7 @@ export interface IDonorPersonalInfo {
   fullName: string;
   email: string;
   phoneNumber?: string;
-    address: {
+  address: {
     street?: string;
     city: string;
     state?: string;
@@ -37,7 +37,7 @@ export interface IDonation {
   };
   amount: number;
   comment?: string;
-  donorPersonalInfo?:IDonorPersonalInfo
+  donorPersonalInfo?: IDonorPersonalInfo;
   isAnonymously: boolean;
   status: TDonationStatus;
   paymentId?: ObjectId;
@@ -49,7 +49,7 @@ export interface IInitDonationPayload {
   campaignId: string;
   amount: number;
   isAnonymously: boolean;
-  donorPersonalInfo?:IDonorPersonalInfo
+  donorPersonalInfo?: IDonorPersonalInfo;
   comment?: string;
   paymentMethod: TPaymentMethod;
 }
@@ -64,7 +64,7 @@ type TDonationStatus = `${EDonationStatus}`;
 
 export enum EDonationStatus {
   Pending = 'Pending',
-  Success =  'Success',
+  Success = 'Success',
   Failed = 'failed',
   Refunded = 'Refunded',
 }

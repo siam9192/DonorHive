@@ -13,9 +13,12 @@ const getMyNotificationsFromDB = async (
   const whereConditions = {
     userId: objectId(authUser.id),
   };
-  const notifications = await Notification.find(whereConditions).skip(skip).limit(limit).sort({
+  const notifications = await Notification.find(whereConditions).sort({
     isRead: -1,
-  });
+    createdAt:-1
+  })
+.skip(skip).limit(limit)
+
 
   const data = notifications;
 

@@ -14,6 +14,8 @@ import ejs from 'ejs';
 import NodeMailerServices from '../NodeMailer/node-mailer.service';
 import Notification from '../Notification/notification.model';
 import { IPayment } from '../Payment/payment.interface';
+import { IUser } from '../User/user.interface';
+import { ENotificationAction, ENotificationCategory, ENotificationType } from '../Notification/notification.interface';
 
 const initDonationIntoDB = async (
   authUser: IAuthUser | undefined,
@@ -31,23 +33,20 @@ const initDonationIntoDB = async (
     },
     amount: payload.amount,
     isAnonymously: payload.isAnonymously,
-    comment: payload.comment
+    comment: payload.comment,
   };
 
   if (authUser) {
     data.userId = authUser.id;
- } 
+  }
 
-  
-    if (!payload.isAnonymously) {
-      data.donorPersonalInfo = payload.donorPersonalInfo
-    }
-  
+  if (!payload.isAnonymously) {
+    data.donorPersonalInfo = payload.donorPersonalInfo;
+  }
 
   const session = await startSession();
   session.startTransaction();
 
-  
   try {
     const createdDonation = await Donation.create([data], { session });
 
@@ -78,6 +77,7 @@ const initDonationIntoDB = async (
       paymentUrl,
     };
   } catch (error) {
+    console.log(error)
     await session.abortTransaction();
     await session.endSession();
     throw new Error();
@@ -87,69 +87,57 @@ const initDonationIntoDB = async (
 const manageDonationAfterSuccessfulPayment = async (id: string | ObjectId) => {
   try {
     const donation = await Donation.findById(id)
-      .populate('userId', {
-        _id: true,
-        email: true,
-        fullName: true,
-      })
-      .populate('paymentId', 'transactionId');
+      .populate([
+        'paymentId',
+        {
+          path: 'userId',
+          select: {
+            _id: true,
+            email: true,
+            fullName: true,
+          },
+        },
+      ])
+      .lean();
 
     if (!donation) throw new Error();
 
-    let email;
-    let name;
-    let transactionId = (donation.paymentId as any as IPayment).transactionId;
-    if (donation.userId) {
-      const { _doc: user } = { ...donation.userId } as any;
+    const user = donation.userId as any as IUser;
+    const payment = donation.paymentId as any as IPayment;
 
-      name = user.fullName;
-      if (user.email) {
-        email = user.email;
-      }
-
-      const notificationData = {
+    if (!donation.isAnonymously) {
+      Notification.create({
         userId: user._id,
         title: 'Donation Successful',
-        message: `Thank you for your generous donation of $${donation.amount}. Your support helps us continue our mission.`,
-        href: '/profile/my-donations',
-      };
-
-      // Create notification of successful donation
-      await Notification.create(notificationData);
-    } else {
-      const guestDonorInfo = donation.guestDonorInfo;
-
-      if (guestDonorInfo?.email) {
-        email = guestDonorInfo.email;
-      }
-      if (guestDonorInfo?.fullName) {
-        name = guestDonorInfo.fullName;
-      }
+        message: `Thank you for your generous donation of "$${donation.amount}" to our "${donation.campaign.title}" campaign. Your support helps us continue our mission.`,
+        type:ENotificationType.Info,
+        category:ENotificationCategory.Donation,
+        action:ENotificationAction.Visit,
+        visitId:donation._id
+      });
     }
 
-    // Send email if email exist
-    if (email) {
-      await ejs.renderFile(
-        path.join(process.cwd(), '/src/app/email-templates/donation-success.html'),
-        {
-          name,
-          transactionId,
-          amount: donation.amount,
-          date: `${new Date(donation.updatedAt).toDateString()} ${new Date(donation.updatedAt).toLocaleTimeString()}`,
-        },
-        async function (err, template) {
-          if (err) {
-            throw new AppError(400, 'Something went wrong');
-          } else {
-            await NodeMailerServices.sendEmail({
-              emailAddress: email,
-              subject: 'Donation successful',
-              template,
-            });
-          }
+    const donorInfo = donation.donorPersonalInfo!;
+    await ejs.renderFile(
+      path.join(process.cwd(), '/src/app/email-templates/donation-success.html'),
+      {
+        name,
+        transactionId: payment.transactionId,
+        amount: donation.amount,
+        date: `${new Date(donation.updatedAt).toDateString()} ${new Date(donation.updatedAt).toLocaleTimeString()}`,
+      },
+      async function (err, template) {
+        if (err) {
+          throw new AppError(400, 'Something went wrong');
+        } else {
+          await NodeMailerServices.sendEmail({
+            emailAddress: donorInfo.email,
+            subject: 'Donation successful',
+            template,
+          });
         }
-      );
-    }
+      }
+    );
   } catch (error) {}
 };
 
@@ -182,7 +170,7 @@ const getDonationsForManageFromDB = async (
     } else {
       whereConditions.$or = [
         { 'campaign.title': { $regex: searchTerm, $options: 'i' } },
-        { 'guestDonorInfo.fullName': { $regex: searchTerm, $options: 'i' } },
+        { 'donorPersonalInfo.fullName': { $regex: searchTerm, $options: 'i' } },
       ];
     }
   }
@@ -190,13 +178,6 @@ const getDonationsForManageFromDB = async (
     if (status) {
       whereConditions.status = status;
     }
-    //  else {
-    //   whereConditions.status = {
-    //     $not: {
-    //       $in: ['Pending', 'Unpaid'],
-    //     },
-    //   };
-    // }
 
     if (donorType) {
       switch (donorType) {
@@ -227,7 +208,7 @@ const getDonationsForManageFromDB = async (
   };
 
   const selectStr =
-    '_id amount isAnonymously campaign  userId guestDonorInfo status createdAt updatedAt';
+    '_id amount isAnonymously campaign  userId donorPersonalInfo status createdAt updatedAt';
 
   const donations = await Donation.find(whereConditions)
     .sort(sort)
@@ -237,12 +218,11 @@ const getDonationsForManageFromDB = async (
     .populate({
       path: 'userId',
       select: '_id  fullName profilePhotoUrl email phoneNumber address',
-    });
+    })
+    .lean();
 
   const data = donations.map((donation) => {
-    const {
-      _doc: { paymentId, userId, ...othersData },
-    }: any = { ...donation };
+    const { paymentId, userId, ...othersData } = donation;
 
     const result = {
       ...othersData,
@@ -288,7 +268,7 @@ const getMyDonationsFromDB = async (
   };
 
   const selectStr =
-    '_id amount comment userId paymentId isAnonymously campaign status createdAt updatedAt';
+    '_id amount comment userId paymentId isAnonymously donorPersonalInfo campaign status createdAt updatedAt';
 
   const donations = await Donation.find(whereConditions)
     .sort(sort)
@@ -304,12 +284,11 @@ const getMyDonationsFromDB = async (
     ])
     .select({
       __v: false,
-    });
+    })
+    .lean();
 
   const data = donations.map((donation) => {
-    const {
-      _doc: { paymentId, userId, ...othersData },
-    }: any = { ...donation };
+    const { paymentId, userId, ...othersData } = donation;
 
     const result = {
       ...othersData,
@@ -322,7 +301,7 @@ const getMyDonationsFromDB = async (
   const totalResult = await Donation.countDocuments(whereConditions);
   const total = await Donation.countDocuments({
     status: {
-      $in: [EDonationStatus.Paid, EDonationStatus.Refunded],
+      $in: [EDonationStatus.Success, EDonationStatus.Refunded],
     },
   });
   const meta = {
@@ -339,14 +318,15 @@ const getMyDonationsFromDB = async (
 };
 
 const getMyRecentDonationsFromDB = async (authUser: IAuthUser) => {
-  const selectStr = '_id amount comment isAnonymously campaign status createdAt updatedAt';
+  const selectStr =
+    '_id amount comment isAnonymously donorPersonalInfo campaign status createdAt updatedAt';
 
   const recentDate = new Date(new Date().toDateString());
   recentDate.setDate(new Date().getDate() - 15);
   const donations = await Donation.find({
     userId: authUser.id,
     status: {
-      $in: [EDonationStatus.Paid, EDonationStatus.Refunded],
+      $in: [EDonationStatus.Success, EDonationStatus.Refunded],
     },
     createdAt: {
       $gte: recentDate,
@@ -367,12 +347,11 @@ const getMyRecentDonationsFromDB = async (authUser: IAuthUser) => {
     ])
     .select({
       __v: false,
-    });
+    })
+    .lean();
 
   const data = donations.map((donation) => {
-    const {
-      _doc: { paymentId, userId, ...othersData },
-    }: any = { ...donation };
+    const { paymentId, userId, ...othersData } = donation;
 
     const result = {
       ...othersData,
@@ -384,12 +363,13 @@ const getMyRecentDonationsFromDB = async (authUser: IAuthUser) => {
 };
 
 const getRecentDonationsFromDB = async () => {
-  const selectStr = '_id amount comment isAnonymously campaign status createdAt updatedAt';
+  const selectStr =
+    '_id amount comment isAnonymously donorPersonalInfo  campaign status createdAt updatedAt';
   const recentDate = new Date(new Date().toDateString());
   recentDate.setDate(new Date().getDate() - 15);
   const donations = await Donation.find({
     status: {
-      $in: [EDonationStatus.Paid, EDonationStatus.Refunded],
+      $in: [EDonationStatus.Success, EDonationStatus.Refunded],
     },
     createdAt: {
       $gte: recentDate,
@@ -403,7 +383,7 @@ const getRecentDonationsFromDB = async () => {
     .populate([
       {
         path: 'userId',
-        select: '_id  fullName profilePhotoUrl email phoneNumber address',
+        select: '_id  fullName profilePhotoUrl email  phoneNumber address',
       },
       {
         path: 'paymentId',
@@ -414,12 +394,11 @@ const getRecentDonationsFromDB = async () => {
     ])
     .select({
       __v: false,
-    });
+    })
+    .lean();
 
   const data = donations.map((donation) => {
-    const {
-      _doc: { paymentId, userId, ...othersData },
-    }: any = { ...donation };
+    const { paymentId, userId, ...othersData } = donation;
 
     const result = {
       ...othersData,
@@ -447,13 +426,12 @@ const getDonationDetailsForManageFromDB = async (id: string) => {
     ])
     .select({
       __v: false,
-    });
+    })
+    .lean();
 
   if (!donation) throw new AppError(httpStatus.NOT_FOUND, 'Donation not found');
 
-  const {
-    _doc: { paymentId, userId, ...othersData },
-  }: any = { ...donation };
+  const { paymentId, userId, ...othersData } = donation;
 
   const result = {
     ...othersData,
@@ -483,13 +461,11 @@ const getMyDonationDetailsFromDB = async (authUser: IAuthUser, id: string) => {
     ])
     .select({
       __v: false,
-    });
+    })
+    .lean();
 
   if (!donation) throw new AppError(httpStatus.NOT_FOUND, 'Donation not found');
-  const {
-    _doc: { paymentId, userId, ...othersData },
-  }: any = { ...donation };
-
+  const { paymentId, userId, ...othersData } = donation;
   const result = {
     ...othersData,
     user: userId,
@@ -502,7 +478,7 @@ const getCampaignLatestDonationsFromDB = async (id: string) => {
   const donations = await Donation.find(
     {
       'campaign.id': objectId(id),
-      status: EDonationStatus.Paid,
+      status: EDonationStatus.Success,
     },
     {
       paymentId: false,
@@ -510,12 +486,11 @@ const getCampaignLatestDonationsFromDB = async (id: string) => {
   )
     .sort({ createdAt: -1 })
     .populate('userId', '_id fullName profilePhotoUrl address')
-    .limit(5);
+    .limit(5)
+    .lean();
 
   const data = donations.map((donation) => {
-    const {
-      _doc: { paymentId, userId, ...othersData },
-    }: any = { ...donation };
+    const { paymentId, userId, ...othersData } = donation;
 
     const result = {
       ...othersData,
@@ -531,7 +506,7 @@ const getCampaignDonationsFromDB = async (id: string, paginationOptions: IPagina
 
   const whereConditions = {
     'campaign.id': objectId(id),
-    status: EDonationStatus.Paid,
+    status: EDonationStatus.Success,
   };
   const donations = await Donation.find(whereConditions, {
     paymentId: false,
@@ -539,12 +514,11 @@ const getCampaignDonationsFromDB = async (id: string, paginationOptions: IPagina
     .sort({ createdAt: -1 })
     .populate('userId', '_id fullName profilePhotoUrl address')
     .skip(skip)
-    .limit(limit);
+    .limit(limit)
+    .lean();
 
   const data = donations.map((donation) => {
-    const {
-      _doc: { paymentId, userId, ...othersData },
-    }: any = { ...donation };
+    const { paymentId, userId, ...othersData } = donation;
 
     const result = {
       ...othersData,
@@ -570,14 +544,14 @@ const getCampaignDonationsFromDB = async (id: string, paginationOptions: IPagina
 
 const getDonationsSummaryFromDB = async () => {
   const totalDonationsCount = await Donation.countDocuments({
-    status: EDonationStatus.Paid,
+    status: EDonationStatus.Success,
   });
 
   const totalDonationAmount =
     (
       await Donation.aggregate([
         {
-          $match: { status: EDonationStatus.Paid },
+          $match: { status: EDonationStatus.Success },
         },
         {
           $group: {
@@ -591,7 +565,7 @@ const getDonationsSummaryFromDB = async () => {
   const today = new Date(new Date().toDateString());
 
   const todayDonations = await Donation.find({
-    status: EDonationStatus.Paid,
+    status: EDonationStatus.Success,
     createdAt: { $gte: today },
   }).select('amount');
 
@@ -606,7 +580,7 @@ const getDonationsSummaryFromDB = async () => {
   last30Days.setDate(last30Days.getDate() - 30);
 
   const last30DaysDonations = await Donation.find({
-    status: EDonationStatus.Paid,
+    status: EDonationStatus.Success,
     createdAt: { $gte: last30Days },
   }).select('amount');
 
@@ -626,7 +600,7 @@ const getDonationsSummaryFromDB = async () => {
   };
 };
 
-const DonationServices = {
+const DonationServices:Record<string,any> = {
   initDonationIntoDB,
   manageDonationAfterSuccessfulPayment,
   getDonationsForManageFromDB,

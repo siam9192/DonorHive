@@ -6,7 +6,7 @@ import { EUserRole } from '../User/user.interface';
 const getMyCountsFromDB = async (authUser: IAuthUser) => {
   const data: Record<string, number> = {};
   const newNotificationsTotal = await Notification.countDocuments({
-    userId:objectId(authUser.id),
+    userId: objectId(authUser.id),
     isRead: false,
   });
 

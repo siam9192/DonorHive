@@ -6,7 +6,7 @@ const AddressSchema = new Schema({
     type: String,
     min: 2,
     max: 30,
-    required:true,
+    required: true,
   },
   city: {
     type: String,
@@ -90,9 +90,9 @@ const DonationModelSchema = new Schema<IDonation>(
       type: Boolean,
       required: true,
     },
-    donorPersonalInfo:{
-      type:DonorPersonalInformationSchema,
-      required:true
+    donorPersonalInfo: {
+      type: DonorPersonalInformationSchema,
+      default:null
     },
     status: {
       type: String,

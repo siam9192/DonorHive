@@ -125,8 +125,8 @@ const validatePayment = async (res: Response, status: string, token: string) => 
         {
           status:
             statusObj[status] === EPaymentStatus.Success
-              ? EDonationStatus.Paid
-              : EDonationStatus.Unpaid,
+              ? EDonationStatus.Success
+              : EDonationStatus.Failed,
         },
         { session }
       );
@@ -181,6 +181,7 @@ const validatePayment = async (res: Response, status: string, token: string) => 
     } catch (error) {
       await session.abortTransaction();
       await session.endSession();
+      redirectUrl = `${envConfig.url.baseUrlClient as string}`;
     }
 
     res.redirect(`${redirectUrl}`);

@@ -82,6 +82,16 @@ const getRecentCampaigns = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+
+const getRandomCampaign = catchAsync(async (req: Request, res: Response) => {
+  const result = await CampaignServices.getRandomCampaignFromDB();
+  sendSuccessResponse(res, {
+    statusCode: httpStatus.OK,
+    message: 'Recent campaigns retrieved successfully',
+    data: result,
+  });
+});
+
 const getAlmostCompletedCampaigns = catchAsync(async (req: Request, res: Response) => {
   const result = await CampaignServices.getAlmostCompletedCampaignsFromDB();
   sendSuccessResponse(res, {
@@ -118,6 +128,7 @@ const CampaignControllers = {
   getAlmostCompletedCampaigns,
   getCampaignsForManage,
   getCampaignBySlug,
+  getRandomCampaign,
   updateCampaign,
   softDeleteCampaign,
   getCampaignByIdForManage,

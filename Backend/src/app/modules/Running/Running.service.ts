@@ -4,67 +4,64 @@ import { ERegistrationRequestStatus } from '../RegistrationRequest/registrationR
 import RegistrationRequest from '../RegistrationRequest/registrationRequest.model';
 
 const Run = async () => {
-  setInterval(
-   handel ,
-    1000 * 60 * 5
-  );
+  setInterval(handel, 1000 * 60 * 5);
 
-  function handel (){
+  function handel() {
     async () => {
-        await Campaign.updateMany(
-          {
-            startAt: {
-              $lte: new Date(),
-            },
-            endAt: {
-              $gt: new Date(),
-            },
-            status: ECampaignStatus.NotStarted,
+      await Campaign.updateMany(
+        {
+          startAt: {
+            $lte: new Date(),
           },
-          {
-            status: ECampaignStatus.Active,
-          }
-        );
-  
-        await Campaign.updateMany(
-          {
-            status: ECampaignStatus.Active,
-            $expr: { $gte: ['$raisedAmount', '$targetAmount'] },
+          endAt: {
+            $gt: new Date(),
           },
-          {
-            $set: { status: ECampaignStatus.Completed },
-          }
-        );
-  
-        await Campaign.updateMany(
-          {
-            status: ECampaignStatus.Active,
-            $expr: { $lt: ['$raisedAmount', '$targetAmount'] },
-            endAt: {
-              $lte: new Date(),
-            },
+          status: ECampaignStatus.NotStarted,
+        },
+        {
+          status: ECampaignStatus.Active,
+        }
+      );
+
+      await Campaign.updateMany(
+        {
+          status: ECampaignStatus.Active,
+          $expr: { $gte: ['$raisedAmount', '$targetAmount'] },
+        },
+        {
+          $set: { status: ECampaignStatus.Completed },
+        }
+      );
+
+      await Campaign.updateMany(
+        {
+          status: ECampaignStatus.Active,
+          $expr: { $lt: ['$raisedAmount', '$targetAmount'] },
+          endAt: {
+            $lte: new Date(),
           },
-          {
-            $set: {
-              status: ECampaignStatus.Incomplete,
-            },
-          }
-        );
-  
-        await RegistrationRequest.updateMany(
-          {
-            status: ERegistrationRequestStatus.PENDING,
-            expireAt: {
-              $lte: new Date(),
-            },
+        },
+        {
+          $set: {
+            status: ECampaignStatus.Incomplete,
           },
-          {
-            $set: {
-              status: ERegistrationRequestStatus.EXPIRED,
-            },
-          }
-        );
-      }
+        }
+      );
+
+      await RegistrationRequest.updateMany(
+        {
+          status: ERegistrationRequestStatus.PENDING,
+          expireAt: {
+            $lte: new Date(),
+          },
+        },
+        {
+          $set: {
+            status: ERegistrationRequestStatus.EXPIRED,
+          },
+        }
+      );
+    };
   }
 };
 

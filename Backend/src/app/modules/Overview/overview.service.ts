@@ -12,14 +12,14 @@ import User from '../User/user.model';
 const getDonorOverviewSummaryFromDB = async (authUser: IAuthUser) => {
   const donationsCount = await Donation.countDocuments({
     userId: objectId(authUser.id),
-    status: EDonationStatus.Paid,
+    status: EDonationStatus.Success,
   });
 
   const totalDonatedAmount = await Donation.aggregate([
     {
       $match: {
         userId: objectId(authUser.id),
-        status: EDonationStatus.Paid,
+        status: EDonationStatus.Success,
       },
     },
     {
@@ -47,12 +47,12 @@ const getDonorOverviewSummaryFromDB = async (authUser: IAuthUser) => {
 
 const getAdminOverviewSummary = async () => {
   const donationsCount = await Donation.countDocuments({
-    status: EDonationStatus.Paid,
+    status: EDonationStatus.Success,
   });
   const totalDonationAmount = await Donation.aggregate([
     {
       $match: {
-        status: EDonationStatus.Paid,
+        status: EDonationStatus.Success,
       },
     },
     {
@@ -86,7 +86,7 @@ const getTopDonorsFromDB = async () => {
   const data = await Donation.aggregate([
     {
       $match: {
-        status: EDonationStatus.Paid,
+        status: EDonationStatus.Success,
         userId: {
           $not: {
             $eq: null,

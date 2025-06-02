@@ -11,9 +11,8 @@ async function main() {
     app.listen(5000, () => {
       console.log('Server is connected');
     });
-   
-    await RunningServices.Run();
 
+    await RunningServices.Run();
   } catch (error) {
     console.log(error);
   }

@@ -4,7 +4,6 @@ import httpStatus from '../../shared/http-status';
 import { IPaginationOptions } from '../../types';
 import { bcryptHash } from '../../utils/bycrypt';
 import { isValidObjectId, objectId } from '../../utils/function';
-import { IAuthUser } from '../Auth/auth.interface';
 import { EUserRole, EUserStatus, IFilterUser, TUserStatus } from './user.interface';
 import User from './user.model';
 

@@ -30,6 +30,7 @@ router.get('/:slug/visit', CampaignControllers.getCampaignBySlug);
 router.get('/related/:slug', CampaignControllers.getRelatedCampaignsFromDB);
 router.get('/recent', CampaignControllers.getRecentCampaigns);
 router.get('/almost-completed', CampaignControllers.getAlmostCompletedCampaigns);
+router.get('/random',CampaignControllers.getRandomCampaign)
 const CampaignRouter = router;
 
 export default CampaignRouter;

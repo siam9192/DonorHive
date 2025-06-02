@@ -1,5 +1,10 @@
-import { model, Schema } from 'mongoose';
-import { INotification } from './notification.interface';
+import { model, Schema, Types } from 'mongoose';
+import {
+  ENotificationAction,
+  ENotificationCategory,
+  ENotificationType,
+  INotification,
+} from './notification.interface';
 
 const NotificationModelSchema = new Schema<INotification>(
   {
@@ -18,13 +23,37 @@ const NotificationModelSchema = new Schema<INotification>(
       maxlength: 200,
       default: null,
     },
-    href: {
-      type: String,
-      default: null,
-    },
     isRead: {
       type: Boolean,
       default: false,
+    },
+    visitId: {
+      type: Types.ObjectId,
+      default: null,
+    },
+    visitHref: {
+      type: String,
+      default: null,
+      trim: true,
+    },
+    type: {
+      type: String,
+      enum: Object.values(ENotificationType),
+      required: true,
+    },
+    category: {
+      type: String,
+      enum: Object.values(ENotificationCategory),
+      default: ENotificationCategory.System,
+    },
+    action: {
+      type: String,
+      enum: Object.values(ENotificationAction),
+      default: ENotificationAction.Default,
+    },
+    metaData: {
+      type: Object,
+      default: null,
     },
   },
   {
