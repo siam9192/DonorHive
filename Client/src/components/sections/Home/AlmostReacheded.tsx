@@ -3,7 +3,7 @@ import CampaignCard from "../../cards/CampaignCard";
 import Container from "../../container/Container";
 import Heading from "../../ui/Heading";
 import { CSSProperties, useEffect, useState } from "react";
-import UseScreen from "../../../hooks/UseScreen";
+import UseScreen, { EScreenType } from "../../../hooks/UseScreen";
 import { useGetAlmostCompletedCampaignsQuery } from "../../../redux/features/campaign/campaign.api";
 import useLoadingBounce from "../../../hooks/useLoadingBounce";
 import CampaignLoadingCard from "../../loading-cards/CampaignLoadingCard";
@@ -11,7 +11,7 @@ import CampaignLoadingCard from "../../loading-cards/CampaignLoadingCard";
 const headingProps = {
   heading: "Almost Reacheded",
   title:
-    "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi possimus perspiciatis, iste repudiandae laboriosam non quae repellat.",
+    "These campaigns are just steps away from reaching their goals. Lend your support and help make a lasting impact!",
 };
 
 const AlmostReacheded = () => {
@@ -23,7 +23,7 @@ const AlmostReacheded = () => {
   const campaigns = data?.data;
   const bouncedLoading = useLoadingBounce(isLoading);
   const total = bouncedLoading ? 3 : campaigns?.length || 0;
-  const limit = screenType === "lg" ? 3 : screenType === "md" ? 2 : 1;
+  const limit = screenType === EScreenType.SM ? 1 : screenType === "md" ? 2 : 3;
 
   const getCardStyle = (index: number): CSSProperties => {
     return {
@@ -73,7 +73,7 @@ const AlmostReacheded = () => {
               ))
             : campaigns?.map((campaign, index) => (
                 <div
-                  className="absolute  p-2  transition-all duration-500 ease-in-out"
+                  className="absolute  p-2  transition-all duration-500 ease-in-out h-full"
                   style={getCardStyle(index)}
                 >
                   <CampaignCard campaign={campaign} key={campaign._id} />

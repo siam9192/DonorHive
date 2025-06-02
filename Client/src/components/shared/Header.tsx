@@ -33,7 +33,7 @@ const navLinks = [
   },
   {
     name: "News",
-    href: "/",
+    href: "/news",
   },
   {
     name: "About Us",
@@ -106,9 +106,12 @@ const Header = () => {
                   </>
                 ) : (
                   <LoginPopup>
-                    <span className="md:text-3xl text-2xl text-white">
-                      <FaUser />
-                    </span>
+                    <button className="flex items-center gap-2 text-white">
+                      <span className="md:text-3xl text-2xl ">
+                        <FaUser />
+                      </span>
+                      <span className="md:block hidden">Login/Register</span>
+                    </button>
                   </LoginPopup>
                 )
               ) : null}

@@ -15,7 +15,7 @@ const DonationCard = ({ donation }: IProps) => {
   return (
     <div className="md:p-3 p-2 border-2 rounded-md border-gray-400/20 mt-4 space-y-2 relative">
       <h4
-        className={`font-medium ${donation.isAnonymously ? "text-primary" : "text-gray-950"} md:text-[1rem] text-[0.7rem] `}
+        className={`font-medium ${donation.isAnonymously ? "text-red-500" : "text-gray-950"} md:text-[1rem] text-[0.7rem] `}
       >
         {(donation.isAnonymously ? "Anonymous Donor" : donor.fullName)?.toUpperCase()}
       </h4>
@@ -25,12 +25,10 @@ const DonationCard = ({ donation }: IProps) => {
 
       <p className="font-medium text-sm text-gray-500 md:text-[1rem] text-[0.6rem]">
         {donor.address
-          ? [
-              donor.address.street,
-              donor.address.city,
-              donor.address.state,
-              donor.address.country,
-            ].join(".")
+          ? Object.values(donor.address)
+              .slice(0, -1)
+              .filter((_) => _)
+              .join(".")
           : ""}
       </p>
 

@@ -121,7 +121,7 @@ const DashboardShowDonations = () => {
     },
   ];
 
-  const { data } = useGetDonationsForManageQuery(params);
+  const { data, isFetching, isLoading } = useGetDonationsForManageQuery(params);
   const donations = data?.data;
   const meta = data?.meta;
 
@@ -189,7 +189,7 @@ const DashboardShowDonations = () => {
         </table>
       </div>
       {/* Pagination */}
-      {meta && (
+      {meta && !isLoading && !isFetching && (
         <div className="py-5 ">
           <Pagination
             {...meta}

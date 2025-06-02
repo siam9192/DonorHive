@@ -9,13 +9,9 @@ interface IProps {
 const ManageDonationTableCard = ({ donation }: IProps) => {
   const createdAt = new Date(donation.createdAt);
   const updatedAt = new Date(donation.updatedAt);
-  const guestDonorInfo = donation.guestDonorInfo;
+  const guestDonorInfo = donation.donorPersonalInfo;
   const donorName = guestDonorInfo ? guestDonorInfo.fullName : donation.user?.fullName;
-  const donorType = guestDonorInfo
-    ? "Guest"
-    : donation.isAnonymously
-      ? "Anonymously"
-      : "Registered";
+  const donorType = donation.user ? "Registered" : "Guest";
 
   return (
     <tr className="odd:bg-white  even:bg-gray-50 e border-b  border-gray-200">

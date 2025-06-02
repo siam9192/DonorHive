@@ -9,8 +9,8 @@ const AboutActions = () => {
           Join Us And Lets's Make A Better World,Today
         </h1>
         <p className="text-center font-secondary text-gray-100">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod, eum. Libero,
-          necessitatibus voluptate.
+          Be a part of something greater. Together, we can create lasting change and build a
+          brighter, more compassionate world — starting now.
         </p>
         <div className="mt-10 flex md:flex-row flex-col items-center gap-2">
           <button className=" md:w-fit w-full px-8 py-3 bg-secondary text-gray-950 rounded-full font-medium">

@@ -5,11 +5,11 @@ import { FaCheck } from "react-icons/fa";
 
 const WhatWeCanDo = () => {
   const list = [
-    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, vero?",
-    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, vero?",
-    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, vero?",
-    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, vero?",
-    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, vero?",
+    "This platform helped me raise funds faster than I expected. Truly life-changing!",
+    "An amazing experience — transparent, simple, and impactful.",
+    "I found genuine support and community here. Highly recommended!",
+    "Donating was easy, and I could see exactly where my money went.",
+    "Thanks to this service, I was able to help someone in real need. Grateful!",
   ];
   return (
     <section className="md:py-10 py-8">
@@ -22,8 +22,8 @@ const WhatWeCanDo = () => {
               We Make A Difference In Their Life
             </h1>
             <p className="text-gray-700 md:text-[1rem] text-sm font-secondary">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores laudantium natus
-              veritatis id repudiandae magni tenetur voluptas ipsum neque aliquam?
+              Every contribution creates real change. See how your support transforms lives and
+              brings hope to those who need it most.
             </p>
           </div>
           <div className="space-y-2">

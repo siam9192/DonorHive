@@ -85,7 +85,6 @@ const NotificationBar = () => {
     // }
   };
 
-
   const [setReadAll] = useSetAsReadMyAllNotificationsMutation();
 
   useEffect(() => {
@@ -94,18 +93,17 @@ const NotificationBar = () => {
     }
   }, [isOpen]);
 
-  function getTypeColor (type:ENotificationType){
+  function getTypeColor(type: ENotificationType) {
     let color;
-  switch (type){
-    case ENotificationType.Info:
-      color = 'text-blue-500'
-      break
-    case ENotificationType.Warning:
-      color =  'text-red-500'
+    switch (type) {
+      case ENotificationType.Info:
+        color = "text-blue-500";
+        break;
+      case ENotificationType.Warning:
+        color = "text-red-500";
+    }
+    return color;
   }
-  return  color
-  }
-
 
   return (
     <div className="relative">
@@ -131,30 +129,39 @@ const NotificationBar = () => {
           className="absolute right-0 w-60 h-60 z-40 overflow-y-auto no-scrollbar p-3 bg-white shadow-2xl  rounded-md "
         >
           <h3 className="text-xl font-semibold font-jost">Notifications</h3>
+          {meta?.total === 0 ? (
+            <div className="h-40 flex justify-center items-center">
+              {" "}
+              <p className="text-center text-sm -mt-10">No notifications</p>
+            </div>
+          ) : null}
           <div className=" mt-2">
             {allNotifications.map((notification, index) => {
-              const typeColor =  getTypeColor(notification.type)
-           return   <div
-                key={index}
-                onClick={() => handelOnClick(notification)}
-                className="p-2 flex  gap-1 hover:bg-gray-50 hover:cursor-pointer z-50"
-              >
-                <div className={`${!notification.isRead ? "text-red-600" : "text-green-600"}`}>
-                  <span>
-                    <GoDotFill />
-                  </span>
+              const typeColor = getTypeColor(notification.type);
+              return (
+                <div
+                  key={index}
+                  onClick={() => handelOnClick(notification)}
+                  className="p-2 flex  gap-1 hover:bg-gray-50 hover:cursor-pointer z-50"
+                >
+                  <div className={`${!notification.isRead ? "text-red-600" : "text-green-600"}`}>
+                    <span>
+                      <GoDotFill />
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-gray-600 text-[0.8rem]">
+                      {getTimeAgo(notification.createdAt)}{" "}
+                      {notification.type ? (
+                        <span className={`${typeColor} font-medium`}>({notification.type})</span>
+                      ) : null}
+                    </p>
+                    <h2 className="text-[1rem] font-medium">{notification.title}</h2>
+                    <p>{notification.message}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-gray-600 text-[0.8rem]">
-                    {getTimeAgo(notification.createdAt)} {notification.type ? <span className= {`${typeColor} font-medium`}>({notification.type})</span>
-                    :
-                    null}
-                  </p>
-                  <h2 className="text-[1rem] font-medium">{notification.title}</h2>
-                  <p>{notification.message}</p>
-                </div>
-              </div>
-})}
+              );
+            })}
           </div>
           {(notificationsIsLoading || notificationsIsRefetching) && (
             <p className="mt-1 text-gray-700 font-medium">Loading..</p>

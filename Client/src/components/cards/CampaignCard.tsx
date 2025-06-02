@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import UseScreen from "../../hooks/UseScreen";
 import { ICampaign } from "../../types/campaign.type";
 import { getTimeLeft } from "../../utils/function";
+import useRemainingDaysCounter from "../../hooks/useRemainingDaysCounter";
 
 interface IProps {
   campaign: ICampaign;
@@ -15,18 +16,38 @@ const CampaignCard = ({ campaign }: IProps) => {
   const shortDescription = description.slice(0, showLength);
 
   const progressPercentage = Math.round((campaign.raisedAmount / campaign.targetAmount) * 100);
+
+  const timeLeft = useRemainingDaysCounter(campaign.endAt);
+
   return (
     <Link to={`/campaigns/${campaign.slug}`}>
-      <div className="bg-white">
+      <div className="bg-white h-full flex flex-col">
         <div className="relative">
-          <img src={campaign.coverImageUrl} alt="" className="rounded-md h-40 lg:h-72 w-full" />
+          <img
+            src={campaign.coverImageUrl}
+            alt=""
+            className="rounded-md h-40 md:h-60 lg:h-72 w-full"
+          />
+
           <div className="absolute w-full bottom-1  flex items-center justify-end gap-1  px-1">
-          <div className=" p-2 bg-secondary text-gray-900 font-medium text-sm">2H</div>
-          <div className=" p-2 bg-secondary text-gray-900 font-medium text-sm">12M</div>
-          <div className="p-2 bg-secondary text-gray-900 font-medium text-sm">43S</div>
+            <div className=" p-1 md:p-2 bg-secondary text-gray-900 font-medium text-[.7rem] md:text-sm">
+              {timeLeft.days}D
+            </div>
+            <div className=" p-1 md:p-2 bg-secondary text-gray-900 font-medium text-[.7rem] md:text-sm">
+              {timeLeft.hours < 10 ? 0 : ""}
+              {timeLeft.hours}H
+            </div>
+            <div className="p-1 md:p-2 bg-secondary text-gray-900 font-medium text-[.7rem] md:text-sm">
+              {timeLeft.minutes < 10 ? 0 : ""}
+              {timeLeft.minutes}M
+            </div>
+            <div className="p-1 md:p-2 bg-secondary text-gray-900 font-medium text-[.7rem] md:text-sm">
+              {timeLeft.seconds < 10 ? 0 : ""}
+              {timeLeft.seconds}S
+            </div>
+          </div>
         </div>
-        </div>
-        <div className="md:mt-4 mt-3 space-y-1">
+        <div className="md:mt-4 mt-3 space-y-1  grow">
           <div className=" font-medium text-end md:text-[1rem] md:text-sm text-[0.5rem]">
             {getTimeLeft(campaign.endAt)}
           </div>

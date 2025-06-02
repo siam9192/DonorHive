@@ -110,7 +110,7 @@ const DashboardShowUsers = () => {
     },
   ];
 
-  const { data } = useGetUsersForManageQuery(params);
+  const { data, isLoading, isFetching } = useGetUsersForManageQuery(params);
   const users = data?.data;
   const meta = data?.meta;
 
@@ -175,7 +175,7 @@ const DashboardShowUsers = () => {
         </table>
       </div>
       {/* Pagination */}
-      {meta && (
+      {meta && !isLoading && !isFetching && (
         <div className="py-5 ">
           <Pagination
             {...meta}

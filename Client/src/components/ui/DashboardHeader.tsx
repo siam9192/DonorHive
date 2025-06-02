@@ -2,6 +2,7 @@ import React from "react";
 import ResponsiveDashboardSidebar from "./ResponsiveDashboardSidebar";
 import { useLocation } from "react-router-dom";
 import dashboardPathTitles from "../../data/dashboardPathTitles";
+import NotificationBar from "./NotificationBar";
 
 const DashboardHeader = () => {
   const { pathname } = useLocation();
@@ -22,7 +23,10 @@ const DashboardHeader = () => {
             </h4>
           )}
         </div>
-        <ResponsiveDashboardSidebar />
+        <div className="flex items-center gap-2">
+          <NotificationBar />
+          <ResponsiveDashboardSidebar />
+        </div>
       </div>
     </div>
   );

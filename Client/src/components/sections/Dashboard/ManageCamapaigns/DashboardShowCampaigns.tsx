@@ -103,7 +103,7 @@ const DashboardShowCampaigns = () => {
     },
   ];
 
-  const { data } = useGetCampaignsForManageQuery(params);
+  const { data, isLoading, isFetching } = useGetCampaignsForManageQuery(params);
   const campaigns = data?.data;
   const meta = data?.meta;
   const handelSetSort = (value: string, order: TOrder) => setSort({ by: value, order });
@@ -181,7 +181,7 @@ const DashboardShowCampaigns = () => {
         </table>
       </div>
       {/* Pagination */}
-      {meta && meta.totalResult > 0 && (
+      {meta && !isLoading && !isFetching && meta.totalResult > 0 && (
         <div className="py-5 ">
           <Pagination
             {...meta}

@@ -51,8 +51,8 @@ const Features = () => {
                 Donate To People In Our Featured
               </h1>
               <p className="text-gray-700 md:text-[1rem] text-sm font-secondary">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores laudantium natus
-                veritatis id repudiandae magni tenetur voluptas ipsum neque aliquam?
+                Meet the individuals and causes that need your help the most. Your donation can
+                bring hope and change to lives featured in our spotlight.
               </p>
             </div>
             <div className="space-y-4">

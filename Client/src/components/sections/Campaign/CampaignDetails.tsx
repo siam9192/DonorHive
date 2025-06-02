@@ -9,20 +9,39 @@ interface IProps {
 
 const CampaignDetails = ({ campaign }: IProps) => {
   const progressPercentage = Math.round((campaign.raisedAmount / campaign.targetAmount) * 100);
+
+  function shareContent() {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: `${campaign.title}`,
+          text: `Donate here to support "${campaign.title}" and make a difference.`,
+          url: window.location.href, // or a specific campaign URL
+        })
+        .then(() => console.log("Thanks for sharing!"))
+        .catch((err) => console.error("Error sharing:", err));
+    } else {
+      alert("Sharing is not supported in this browser.");
+    }
+  }
+
   return (
     <section>
       <div className="md:space-y-8 space-y-6">
         <div className="flex items-center justify-end gap-2">
           <p className="text-gray-700">Share :</p>
-          <span className=" md:text-2xl text-xl p-2 bg-gray-50 rounded-full">
+          <button
+            onClick={shareContent}
+            className=" md:text-2xl text-xl p-2 bg-gray-50 rounded-full"
+          >
             <FaFacebook />
-          </span>
-          <span className="text-2xl p-2 bg-gray-50 rounded-full">
+          </button>
+          <button onClick={shareContent} className="text-2xl p-2 bg-gray-50 rounded-full">
             <FaInstagram />
-          </span>
-          <span className="text-2xl p-2 bg-gray-50 rounded-full">
+          </button>
+          <button onClick={shareContent} className="text-2xl p-2 bg-gray-50 rounded-full">
             <FaTwitter />
-          </span>
+          </button>
         </div>
         <h1 className="md:text-5xl text-3xl  font-secondary font-bold text-gray-950">
           {campaign.title}

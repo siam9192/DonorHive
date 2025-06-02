@@ -1,4 +1,3 @@
-import React from "react";
 import { CiCalendar } from "react-icons/ci";
 import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
 import { MdCampaign } from "react-icons/md";
@@ -21,7 +20,7 @@ const data = [
     icon: <FaRegThumbsUp />,
   },
   {
-    title: "Uncompleted",
+    title: "Incomplete",
     value: 200,
     icon: <FaRegThumbsDown />,
   },

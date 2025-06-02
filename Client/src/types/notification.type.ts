@@ -1,4 +1,3 @@
-
 export interface INotification {
   _id: string;
   userId: string;
@@ -16,19 +15,19 @@ export interface INotification {
 }
 
 export enum ENotificationType {
-  Info = 'Info',
-  Warning = 'Warning',
+  Info = "Info",
+  Warning = "Warning",
 }
 
 export enum ENotificationAction {
-  Visit = 'visit',
-  Download = 'Download',
-  Default = 'Default',
+  Visit = "visit",
+  Download = "Download",
+  Default = "Default",
 }
 
 export enum ENotificationCategory {
-  System = 'System',
-  Campaign = 'Campaign',
-  Donation = 'Donation',
-  Watchlist = 'Watchlist',
+  System = "System",
+  Campaign = "Campaign",
+  Donation = "Donation",
+  Watchlist = "Watchlist",
 }

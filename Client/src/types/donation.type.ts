@@ -1,7 +1,6 @@
 import { IPayment, TPaymentMethod } from "./payment.type";
 import { IUser } from "./user.type";
 
-
 export interface IDonation {
   _id: string;
   userId?: string;
@@ -14,17 +13,14 @@ export interface IDonation {
   };
   amount: number;
   comment: string;
-  donorPersonalInfo:IDonorPersonalInfo
+  donorPersonalInfo: IDonorPersonalInfo;
   isAnonymously: boolean;
   status: TDonationStatus;
   paymentId?: string;
   payment: IPayment;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
-
-
-
 
 export interface IDonorPersonalInfo {
   fullName: string;
@@ -37,8 +33,6 @@ export interface IDonorPersonalInfo {
     country: string;
   };
 }
-
-
 
 export type TMyDonation = Pick<
   IDonation,
@@ -56,7 +50,7 @@ export interface IInitDonationPayload {
   campaignId: string;
   amount: number;
   isAnonymously: boolean;
-  guestDonorInfo:IDonorPersonalInfo
+  guestDonorInfo: IDonorPersonalInfo;
   comment: string;
   paymentMethod: TPaymentMethod;
 }
@@ -69,13 +63,11 @@ export interface IFilterDonation {
 
 type TDonationStatus = `${EDonationStatus}`;
 
-
-
 export enum EDonationStatus {
-  Pending = 'Pending',
-  Success = 'Success',
-  Failed = 'failed',
-  Refunded = 'Refunded',
+  Pending = "Pending",
+  Success = "Success",
+  Failed = "failed",
+  Refunded = "Refunded",
 }
 
 export enum EDonorType {

@@ -5,14 +5,14 @@ export interface ICampaign {
   description: string;
   category: string;
   slug: string;
-  startAt: Date;
-  endAt: Date;
+  startAt: string;
+  endAt: string;
   targetAmount: number;
   raisedAmount: number;
   status: TCampaignStatus;
   isDeleted: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ICreateCampaignPayload {

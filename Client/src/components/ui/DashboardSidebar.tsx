@@ -6,6 +6,8 @@ import { HiMiniUsers, HiOutlineHome } from "react-icons/hi2";
 import { Link, useLocation } from "react-router-dom";
 import { CiLogout } from "react-icons/ci";
 import { TbLogout2 } from "react-icons/tb";
+import { useCurrentUser } from "../../provider/CurrentUserProvider";
+import { logout } from "../../utils/function";
 
 const routes = [
   {
@@ -43,6 +45,8 @@ const routes = [
 
 const DashboardSidebar = () => {
   const { pathname } = useLocation();
+
+  const {user} =  useCurrentUser()
   return (
     <div className="h-full lg:px-10 lg:py-6 py-2 px-2  flex flex-col justify-between overflow-y-auto no-scrollbar ">
       <div className="">
@@ -64,14 +68,14 @@ const DashboardSidebar = () => {
           <Link to="/dashboard/personal-information">
             <div className="p-3  rounded-md  mx-auto">
               <img
-                src="https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
+                src={user?.profilePhotoUrl||'https://cdn-icons-png.flaticon.com/512/3001/3001758.png'}
                 alt=""
                 className="size-12 rounded-md mx-auto"
               />
               <h6 className=" font-medium text-gray-800 text-center mt-3">John Doe</h6>
             </div>
           </Link>
-          <div className="p-3 hover:cursor-pointer group  rounded-md  mx-auto text-center flex flex-col justify-center items-center  ">
+          <div onClick={logout} className="p-3 hover:cursor-pointer group  rounded-md  mx-auto text-center flex flex-col justify-center items-center  ">
             <p className="text-3xl  text-black group-hover:text-red-500 p-2  rounded-md">
               <TbLogout2 />
             </p>

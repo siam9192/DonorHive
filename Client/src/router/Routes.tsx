@@ -8,6 +8,8 @@ import DashboardLayout from "../pages/dashboard/DashboardLayout";
 import DonationFailed from "../pages/DonationFailed";
 import DonationSuccessful from "../pages/DonationSuccessful";
 import Home from "../pages/Home";
+import InternalError from "../pages/InternalError";
+import NotFound from "../pages/NotFound";
 import ProfileLayout from "../pages/profile/ProfileLayout";
 import ResetPassword from "../pages/ResetPassword";
 import VerifyAccount from "../pages/VerifyAccount";
@@ -20,6 +22,7 @@ const routes = [
   {
     path: "",
     element: <App />,
+    errorElement: <InternalError />,
     children: [
       {
         path: "/",
@@ -66,7 +69,11 @@ const routes = [
       },
       {
         path: "/dashboard",
-        element: <DashboardLayout />,
+        element: (
+          <PrivateRouteProvider roles={[EUserRole.Admin]}>
+            <DashboardLayout />
+          </PrivateRouteProvider>
+        ),
         children: dashboardRoutes,
       },
       {
@@ -78,6 +85,10 @@ const routes = [
         element: <ResetPassword />,
       },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ];
 

@@ -15,7 +15,6 @@ const DonationDetailsPopup = ({ children, enableManageButtons, id }: IProps) => 
     document.body.style.overflow = isOpen ? "hidden" : "";
   }, [isOpen]);
 
-
   return (
     <>
       <button onClick={() => setIsOpen(true)}>{children}</button>

@@ -8,7 +8,7 @@ const HowItWorks = () => {
   const headingProps = {
     heading: "How it Works",
     title:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi possimus perspiciatis, iste repudiandae laboriosam non quae repellat.",
+      "Discover how our platform works — from getting started to making an impact. We've made it simple, transparent, and effective every step of the way",
   };
   const data = [
     {

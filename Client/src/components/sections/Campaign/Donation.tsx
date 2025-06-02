@@ -21,13 +21,10 @@ const Donation = ({ campaign }: IProps) => {
   const [error, setError] = useState<Record<string, any>>({});
   const { user: currentUser } = useCurrentUser();
   const amountInputRef = useRef<HTMLInputElement>(null);
-  const [isValidForm,setIsValidForm] =  useState(false)
-  const {screenType} =  useScreen()
-  
+  const [isValidForm, setIsValidForm] = useState(false);
+  const { screenType } = useScreen();
 
-  useEffect(()=>{
-     
-  },[screenType])
+  useEffect(() => {}, [screenType]);
 
   const handelOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,7 +37,7 @@ const Donation = ({ campaign }: IProps) => {
       field?.focus();
       return;
     }
-    setIsOpen(true)
+    setIsOpen(true);
   };
 
   const handelFormOnChange = (e: ChangeEvent<HTMLFormElement>) => {
@@ -138,42 +135,57 @@ const Donation = ({ campaign }: IProps) => {
         fieldError["guestDonorInfo.address.country"] = "Country must be at most 20 characters";
       }
     }
-    if (!data.comment || Comment.length > 3) {
+    if (!data.comment) {
+      fieldError.comment = "Comment is required";
+    } else if (Comment.length > 3) {
       fieldError.comment = "Comment must be minimum 3 character";
     }
 
-    if (Object.values(fieldError).length) 
-      {
-       
-      setIsValidForm(false)
+    if (Object.values(fieldError).length) {
+      setIsValidForm(false);
       return setError(fieldError);
     } else {
-     
       setValues(data);
-       setError({})
-      setIsValidForm(true)
+      setError({});
+      setIsValidForm(true);
     }
-   
   };
 
   const closeDetails = () => {
     setIsOpen(false);
   };
-  
 
-const isDonor =  currentUser ? currentUser?.role === EUserRole.Donor:true
-const isValid = isDonor && isValidForm
-
-
+  const isDonor = currentUser ? currentUser?.role === EUserRole.Donor : true;
+  const isValid = isDonor && isValidForm;
 
   return (
     <section className="p-5  min-h-[700px] ">
       <form ref={ref} action="" onSubmit={handelOnSubmit} onChange={handelFormOnChange}>
         <h2 className="text-2xl font-medium text-gray-950">Secure Donation</h2>
 
-        <div className="mt-5 grid grid-cols-3 gap-3 font-secondary">
+        <div className="mt-5 grid grid-cols-3 gap-5 font-secondary">
           {featuredAmounts.map((amount) => (
-            <button
+            <div key={amount} className="relative h-10">
+              <label
+                htmlFor={`amount-select-${amount}`}
+                className={`w-full px-2 h-full flex justify-center items-center absolute top-0 left-0  bg-white  z-10  border-gray-600/15 rounded-md font-medium hover:cursor-pointer ${selectedAmount === amount ? "border-primary border-2" : "border"}`}
+              >
+                $ {amount}
+              </label>
+              <input
+                type="radio"
+                name="amount_select"
+                id={`amount-select-${amount}`}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    const current = amountInputRef.current;
+                    if (!current) return;
+                    setSelectedAmount(amount);
+                    current.value = amount.toFixed(2);
+                  }
+                }}
+              />
+              {/* <button
               type="button"
               onClick={() => {
                 const current = amountInputRef.current;
@@ -182,10 +194,11 @@ const isValid = isDonor && isValidForm
                 current.value = amount.toFixed(2);
               }}
               key={amount}
-              className={`w-full py-2    border-gray-600/15 rounded-md font-medium ${selectedAmount === amount ? "border-primary border-2" : "border"}`}
+           
             >
               ${amount}
-            </button>
+            </button> */}
+            </div>
           ))}
         </div>
 
@@ -222,7 +235,7 @@ const isValid = isDonor && isValidForm
 
         {!isAnonymously && error ? <DonorDetailsForm error={error} /> : null}
 
-        <div className="mt-10 space-y-2">
+        <div className="mt-10 space-y-1">
           <button
             type="button"
             className=" text-gray-900 border-b font-medium block"
@@ -238,7 +251,7 @@ const isValid = isDonor && isValidForm
             placeholder="Your comment"
             className=" w-full h-40 bg-gray-50  border-2 border-gray-600/10 rounded-lg resize-none p-2 outline-secondary "
           />
-          {error["comment"] && <p className="mt-1 text-red-500">{error["comment"]}</p>}
+          {error["comment"] && <p className="text-red-500">{error["comment"]}</p>}
         </div>
         <div className="mt-14">
           <button

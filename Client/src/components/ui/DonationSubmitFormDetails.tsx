@@ -41,16 +41,13 @@ const DonationSubmitFormDetails = ({ values, close, onSuccess }: IProps) => {
         paymentMethod: selectedPaymentMethod,
         amount: values.amount,
         isAnonymously: values.isAnonymously,
-        comment:values.comment
+        comment: values.comment,
       };
 
-      if (
-        !values.isAnonymously
-      ) {
+      if (!values.isAnonymously) {
         payload.donorPersonalInfo = values.guestDonorInfo;
       }
 
-    
       const cleanObject = (obj: any): any => {
         if (Array.isArray(obj)) {
           return obj.map(cleanObject).filter((item) => item && Object.keys(item).length > 0);
@@ -72,7 +69,7 @@ const DonationSubmitFormDetails = ({ values, close, onSuccess }: IProps) => {
       payload = cleanObject(payload);
       const res = await gotoPay(payload);
       if (res.data?.success) {
-        window.location.href = res.data.data.paymentUrl
+        window.location.href = res.data.data.paymentUrl;
         onSuccess();
       } else throw new Error();
     } catch (error) {
@@ -138,7 +135,7 @@ const DonationSubmitFormDetails = ({ values, close, onSuccess }: IProps) => {
             <div>
               <h3 className=" md:text-xl text-lg font-medium">Select Method:</h3>
               <div className="mt-3 grid grid-cols-3 gap-3 ">
-                {paymentMethods.map((method,index) => (
+                {paymentMethods.map((method, index) => (
                   <div
                     key={index}
                     onClick={() => setSelectedPaymentMethod(method.value)}
@@ -152,7 +149,7 @@ const DonationSubmitFormDetails = ({ values, close, onSuccess }: IProps) => {
           </div>
           <div className="mt-5">
             <button
-              disabled={isLoading|| selectedPaymentMethod == null}
+              disabled={isLoading || selectedPaymentMethod == null}
               onClick={handelGotoPay}
               className="w-full py-3 bg-primary text-white disabled:bg-gray-100 disabled:text-gray-600 font-medium hover:bg-secondary hover:text-gray-900 duration-100  rounded-lg disabled:bg-gray-100"
             >

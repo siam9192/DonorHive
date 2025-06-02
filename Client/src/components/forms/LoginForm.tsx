@@ -4,6 +4,7 @@ import { getFormValues } from "../../utils/function";
 import { useLoginMutation } from "../../redux/features/auth/auth.api";
 import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../../provider/CurrentUserProvider";
+import DemoLogin from "../ui/DemoLogin";
 
 interface IProps {
   onSuccess?(): void;
@@ -61,6 +62,7 @@ const LoginForm = ({ onSuccess }: IProps) => {
         {errorMessage && <p className="mt-2 text-red-500">{errorMessage}</p>}
       </form>
       <AuthProviderButtons />
+      <DemoLogin />
     </>
   );
 };

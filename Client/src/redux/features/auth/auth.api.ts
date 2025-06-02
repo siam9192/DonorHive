@@ -32,8 +32,8 @@ const authApi = baseApi.injectEndpoints({
       transformResponse: (response: IResponse<{ accessToken: string; refreshToken: string }>) => {
         if (response.success) {
           const { accessToken, refreshToken } = response.data;
-          Cookies.set("accessToken", accessToken);
-          Cookies.set("refreshToken", refreshToken);
+          Cookies.set("accessToken", accessToken, { expires: 30 });
+          Cookies.set("refreshToken", refreshToken, { expires: 60 });
         }
         return response;
       },

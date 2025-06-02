@@ -41,7 +41,7 @@ const sortOptions = [
 ];
 
 const ShowCampaigns = () => {
-  const popularSearchers = ["Food", "House", "Education", "Children"];
+  const popularSearchers = ["Food", "House", "Education", "Children", "Health"];
   const { search } = useLocation();
   const urlSearchParams = new URLSearchParams(search);
   const navigate = useNavigate();
@@ -88,7 +88,11 @@ const ShowCampaigns = () => {
           <p>Popular Search:</p>
           <div className="flex items-center flex-wrap gap-2">
             {popularSearchers.map((item) => (
-              <Link to="" key={item} className="text-secondary font-medium hover:text-primary">
+              <Link
+                to={`?searchTerm=${item}`}
+                key={item}
+                className="text-secondary font-medium hover:text-primary"
+              >
                 {item}
               </Link>
             ))}

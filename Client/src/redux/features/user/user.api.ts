@@ -52,6 +52,16 @@ const userApi = baseApi.injectEndpoints({
         return response;
       },
     }),
+    getRecentUsers: builder.query({
+      query: (id) => ({
+        url: `/users/recent`,
+        method: "GET",
+      }),
+      providesTags: ["recent-users"],
+      transformResponse: (response: IResponse<IUser[]>) => {
+        return response;
+      },
+    }),
   }),
 });
 
@@ -60,4 +70,5 @@ export const {
   useGetUserForManageQuery,
   useChangeUserStatusMutation,
   useDeleteUserMutation,
+  useGetRecentUsersQuery,
 } = userApi;
