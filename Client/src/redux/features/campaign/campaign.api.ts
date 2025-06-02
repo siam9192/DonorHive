@@ -71,6 +71,15 @@ const campaignApi = baseApi.injectEndpoints({
         return response;
       },
     }),
+      getRandomCampaign: builder.query({
+      query: () => ({
+        url: `/campaigns/random`,
+        method: "GET",
+      }),
+      transformResponse: (response: IResponse<ICampaign>) => {
+        return response;
+      },
+    }),
     deleteCampaign: builder.mutation({
       query: (id: string) => ({
         url: `/campaigns/${id}`,
@@ -105,6 +114,7 @@ export const {
   useGetAlmostCompletedCampaignsQuery,
   useGetCampaignsForManageQuery,
   useGetCampaignByIdForManageQuery,
+  useGetRandomCampaignQuery,
   useDeleteCampaignMutation,
   useAddCampaignMutation,
   useUpdateCampaignMutation,

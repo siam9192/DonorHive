@@ -8,6 +8,7 @@ import LoginPopup from "../ui/LoginPopup";
 import NavShortcut from "../ui/NavShortcut";
 import { useCurrentUser } from "../../provider/CurrentUserProvider";
 import NotificationBar from "../ui/NotificationBar";
+import RandomDonate from "../ui/RandomDonate";
 const socialLinks = [
   {
     icon: FaFacebook,
@@ -93,11 +94,7 @@ const Header = () => {
               ))}
             </nav>
             <div className="flex items-center gap-3">
-              <Link to={"/campaigns"}>
-                <button className=" md:block hidden uppercase px-6 py-3 text-gray-900 hover:bg-gray-900 hover:text-white bg-secondary  font-medium">
-                  Donate Now
-                </button>
-              </Link>
+            <RandomDonate/>
               {!isLoading ? (
                 user ? (
                   <>
