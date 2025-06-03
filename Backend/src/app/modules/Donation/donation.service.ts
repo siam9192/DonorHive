@@ -9,7 +9,7 @@ import PaymentServices from '../Payment/payment.service';
 import { objectId } from '../../utils/function';
 import { IPaginationOptions } from '../../types';
 import { calculatePagination } from '../../helpers/paginationHelper';
-import path from 'path';
+import path, { join } from 'path';
 import ejs from 'ejs';
 import NodeMailerServices from '../NodeMailer/node-mailer.service';
 import Notification from '../Notification/notification.model';
@@ -608,6 +608,9 @@ const getDonationsSummaryFromDB = async () => {
 
 const generateDonationReceipt = async(res: Response, id: string) => {
   
+  if(!isValidObjectId(id)){
+    throw new AppError(httpStatus.BAD_REQUEST,"Invalid id")
+  }
   const donation = await Donation.findById(id).populate('paymentId').lean()
 
   if(!donation){
@@ -666,9 +669,9 @@ const generateDonationReceipt = async(res: Response, id: string) => {
   const doc = new PDFDocument({ margin, size });
   let y = doc.y;
   let x =  margin
-  doc.registerFont('regular', 'fonts/roboto/Roboto-Regular.ttf');
-  doc.registerFont('semi-bold', 'fonts/roboto/Roboto-Regular.ttf');
-  doc.registerFont('bold', 'fonts/roboto/Roboto-SemiBold.ttf');
+  doc.registerFont('regular', path.join(process.cwd(),'fonts/roboto/Roboto-Regular.ttf'))
+  doc.registerFont('semi-bold', path.join(process.cwd(),'fonts/roboto/Roboto-Regular.ttf'));
+  doc.registerFont('bold', path.join(process.cwd(),'fonts/roboto/Roboto-SemiBold.ttf'));
 
   doc.font('regular').fillColor(color.black);
 

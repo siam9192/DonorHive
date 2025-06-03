@@ -11,11 +11,11 @@ export interface IFbDataResponse {
   };
 }
 
-export type TEnvironment = `${EEnvironment}`;
+export type TEnvironment = EEnvironment
 
 export enum EEnvironment {
-  Development = 'DEVELOPMENT',
-  Production = 'Production',
+  Development = 'DEV',
+  Production = 'PROD',
 }
 
 export interface IPaginationOptions {
