@@ -1,11 +1,14 @@
+import { EEnvironment, TEnvironment } from "../types";
+
+const environment =  import.meta.env.VITE_ENVIRONMENT as TEnvironment
 const envConfig = {
-  serverBaseUrl: import.meta.env.SERVER_BASE_URL,
+  serverBaseUrl: environment === EEnvironment.Development ? import.meta.env.VITE_SERVER_BASE_URL_DEV : import.meta.env.VITE_SERVER_BASE_URL_PROD,
   google: {
-    clientId: "598864068465-tbutplssnfr10u7bru5shp14rnhco1a4.apps.googleusercontent.com",
+    clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
   },
   imgBB: {
-    apiKey: "c9c302a9d5cee64c8eb4dde4d9803027",
-    uploadUrl: "https://api.imgbb.com/1/upload",
+    apiKey: import.meta.env.VITE_IMG_BB_API_KEY,
+    uploadUrl: import.meta.env.IMG_BB_UPLOAD_URL,
   },
 };
 

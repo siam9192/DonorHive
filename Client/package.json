@@ -20,6 +20,7 @@
     "html2canvas-pro": "^1.5.8",
     "js-cookie": "^3.0.5",
     "jspdf": "^3.0.0",
+    "passport-facebook": "^3.0.0",
     "path": "^0.12.7",
     "react": "^19.0.0",
     "react-countup": "^6.5.3",

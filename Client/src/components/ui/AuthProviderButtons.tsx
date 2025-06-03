@@ -28,6 +28,8 @@ const AuthProviderButtons = ({ onSuccess }: IProps) => {
       }
     },
   });
+
+  
   return (
     <div className="md:p-5 p-3 ">
       <button
@@ -42,7 +44,7 @@ const AuthProviderButtons = ({ onSuccess }: IProps) => {
         />
         <p className="font-semibold font-secondary">Continue With Google</p>
       </button>
-      <button
+      {/* <button
         disabled={isLoading}
         className=" w-full flex  justify-center  items-center gap-2 py-2 border border-gray-400  mt-2 hover:bg-gray-100"
       >
@@ -51,8 +53,8 @@ const AuthProviderButtons = ({ onSuccess }: IProps) => {
           alt=""
           className="size-9 rounded-full"
         />
-        <p className="font-semibold font-secondary">Continue With Google</p>
-      </button>
+        <p className="font-semibold font-secondary">Continue With Facebook</p>
+      </button> */}
     </div>
   );
 };
