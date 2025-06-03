@@ -92,7 +92,7 @@ const DonationModelSchema = new Schema<IDonation>(
     },
     donorPersonalInfo: {
       type: DonorPersonalInformationSchema,
-      default:null
+      default: null,
     },
     status: {
       type: String,

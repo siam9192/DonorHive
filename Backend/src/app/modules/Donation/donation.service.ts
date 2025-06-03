@@ -15,8 +15,14 @@ import NodeMailerServices from '../NodeMailer/node-mailer.service';
 import Notification from '../Notification/notification.model';
 import { IPayment } from '../Payment/payment.interface';
 import { IUser } from '../User/user.interface';
-import { ENotificationAction, ENotificationCategory, ENotificationType } from '../Notification/notification.interface';
-
+import {
+  ENotificationAction,
+  ENotificationCategory,
+  ENotificationType,
+} from '../Notification/notification.interface';
+import { Response } from 'express';
+import PDFDocument from 'pdfkit';
+import fs from 'fs';
 const initDonationIntoDB = async (
   authUser: IAuthUser | undefined,
   payload: IInitDonationPayload
@@ -77,7 +83,7 @@ const initDonationIntoDB = async (
       paymentUrl,
     };
   } catch (error) {
-    console.log(error)
+    console.log(error);
     await session.abortTransaction();
     await session.endSession();
     throw new Error();
@@ -110,10 +116,10 @@ const manageDonationAfterSuccessfulPayment = async (id: string | ObjectId) => {
         userId: user._id,
         title: 'Donation Successful',
         message: `Thank you for your generous donation of "$${donation.amount}" to our "${donation.campaign.title}" campaign. Your support helps us continue our mission.`,
-        type:ENotificationType.Info,
-        category:ENotificationCategory.Donation,
-        action:ENotificationAction.Visit,
-        visitId:donation._id
+        type: ENotificationType.Info,
+        category: ENotificationCategory.Donation,
+        action: ENotificationAction.Visit,
+        visitId: donation._id,
       });
     }
 
@@ -600,7 +606,149 @@ const getDonationsSummaryFromDB = async () => {
   };
 };
 
-const DonationServices:Record<string,any> = {
+const generateDonationReceipt = async(res: Response, id: string) => {
+  
+  const donation = await Donation.findById(id).populate('paymentId').lean()
+
+  if(!donation){
+    throw new AppError(httpStatus.NOT_FOUND,"Donation not found")
+  }
+
+  const isAnonymously =  donation.isAnonymously
+  const donarPersonalInfo =   donation.donorPersonalInfo!
+  const payment =  donation.paymentId as any as IPayment
+
+  const data = [
+    {
+      heading: 'Donation:',
+      values: [
+        { name: 'Id', value: donation._id },
+        { name: 'Asymonyes', value: isAnonymously ? 'Yes':'No' },
+        { name: 'Date', value: donation.createdAt.toLocaleDateString() },
+      ],
+    },
+    {
+      heading: 'Campaign Information:',
+      values: [
+        { name: 'Name', value: donation.campaign.title },
+        { name: 'Category', value: donation.campaign.category },
+      ],
+    },
+    {
+      heading: 'Personal Information:',
+      values: donation.isAnonymously ? []:
+      [
+          { name: 'Full Name', value:donarPersonalInfo.fullName  },
+        { name: 'Email Address', value: donarPersonalInfo.email },
+        { name: 'Phone Number', value: donarPersonalInfo.fullName },
+        { name: 'Address', value: Object.values(donarPersonalInfo.address).slice(0,-1).filter(_=>_).join(',') },
+      ]
+    },
+    {
+      heading: 'Payment Information:',
+      values: [
+        { name: 'Transaction Id', value: payment.transactionId },
+        { name: 'Amount', value: payment.amount.toFixed(2) },
+        { name: 'Currency', value: 'USD' },
+        { name: 'Method', value: payment.method }
+      ],
+    },
+  ];
+
+  const color = {
+    primary: '#04B563',
+    black: '#000000',
+  };
+
+  const margin = 20
+  const size = 'A4'
+  
+  const doc = new PDFDocument({ margin, size });
+  let y = doc.y;
+  let x =  margin
+  doc.registerFont('regular', 'fonts/roboto/Roboto-Regular.ttf');
+  doc.registerFont('semi-bold', 'fonts/roboto/Roboto-Regular.ttf');
+  doc.registerFont('bold', 'fonts/roboto/Roboto-SemiBold.ttf');
+
+  doc.font('regular').fillColor(color.black);
+
+  // doc.fillColor(color.primary).text('https://www.xyz.com',doc.page.width - 150,5,{align:'left',continued:false})
+ 
+  doc.fontSize(30).fillColor(color.black).text('DonorHive', { align: 'center', continued: false });
+  doc.moveDown(0.3);
+  doc
+    .fontSize(14)
+    .fillColor(color.black)
+    .opacity(0.8)
+    .text('Donation Receipt', { align: 'center', underline: true });
+
+     doc
+    // .fontSize(12)
+    // .fillColor(color.black)
+    // .opacity(0.8)
+    // .text('Date: ',{continued:true}).text(new Date().toDateString());
+
+  doc.moveDown(3);
+
+
+  
+  x = doc.page.width / 2 - 70;
+  y =  doc.y
+  doc
+    .font('bold')
+    .fontSize(40)
+    .fillColor(color.primary)
+    .text('500', x, y, { continued: true })
+    .font('regular')
+    .fillColor(color.black)
+    .opacity(0.7)
+    .fontSize(25)
+    .text('/USD', x, y + 12, { align: 'justify', continued: false });
+
+  doc.moveDown(0.6);
+  x = 20;
+  y = doc.y;
+
+
+  data.forEach((data) => {
+   if(!data.values.length) return
+    doc
+      .font('semi-bold')
+      .fontSize(14)
+      .opacity(1)
+      .fillColor(color.black)
+      .text(data.heading, x, y, { align: 'left', continued: false });
+    doc.moveDown(0.3);
+    y = doc.y;
+    data.values.forEach((value) => {
+      doc
+        .font('semi-bold')
+        .fontSize(10)
+        .opacity(1)
+        .fillColor(color.black)
+        .text(value.name, x, y)
+        .font('regular')
+        .text(': ' + value.value, x + 100, y);
+      doc.moveDown(0.1);
+      y = doc.y;
+    });
+    doc.moveDown(1);
+    y = doc.y;
+  });
+
+  doc
+    .fontSize(12)
+    .text(
+      `Thank you for your generous donation of ${donation.amount}. Your support helps us continue our mission.`,
+      60,
+      doc.page.height - 60
+    );
+  doc.pipe(fs.createWriteStream('/example')); // write to PDF
+  doc.pipe(res); // HTTP response
+  doc.end();
+};
+
+const DonationServices: Record<string, any> = {
   initDonationIntoDB,
   manageDonationAfterSuccessfulPayment,
   getDonationsForManageFromDB,
@@ -612,6 +760,7 @@ const DonationServices:Record<string,any> = {
   getCampaignLatestDonationsFromDB,
   getCampaignDonationsFromDB,
   getDonationsSummaryFromDB,
+  generateDonationReceipt,
 };
 
 export default DonationServices;

@@ -68,7 +68,7 @@ const getCampaignsFromDB = async (
     status: {
       $in: [ECampaignStatus.Active, ECampaignStatus.Completed],
     },
-    endAt:{$gt:new Date()},
+    endAt: { $gt: new Date() },
     isDeleted: false,
   };
 
@@ -368,15 +368,17 @@ const getCampaignsSummaryFromDB = async () => {
   ]);
 };
 
-const getRandomCampaignFromDB =  async ()=>{
- const campaign =  await Campaign.aggregate([
-  {$match:{
-    status:ECampaignStatus.Active
-  }},
-  { $sample: { size: 1 } }
-]) ;
-return campaign[0]
-}
+const getRandomCampaignFromDB = async () => {
+  const campaign = await Campaign.aggregate([
+    {
+      $match: {
+        status: ECampaignStatus.Active,
+      },
+    },
+    { $sample: { size: 1 } },
+  ]);
+  return campaign[0];
+};
 
 const CampaignServices = {
   createCampaignIntoDB,
@@ -391,7 +393,7 @@ const CampaignServices = {
   updateCampaignIntoDB,
   softDeleteCampaignFromDB,
   getCampaignByIdForManage,
-  getRandomCampaignFromDB
+  getRandomCampaignFromDB,
 };
 
 export default CampaignServices;

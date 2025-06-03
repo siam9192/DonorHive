@@ -82,7 +82,6 @@ const getRecentCampaigns = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-
 const getRandomCampaign = catchAsync(async (req: Request, res: Response) => {
   const result = await CampaignServices.getRandomCampaignFromDB();
   sendSuccessResponse(res, {

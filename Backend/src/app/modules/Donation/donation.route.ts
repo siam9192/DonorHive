@@ -28,7 +28,7 @@ router.get(
 router.get('/campaign/:id/latest', DonationControllers.getCampaignLatestDonations);
 router.get('/campaign/:id', DonationControllers.getCampaignDonations);
 router.get('/summary', DonationControllers.getDonationsSummary);
-
+router.get('/:id/receipt', DonationControllers.generateDonationReceipt);
 const DonationRouter = router;
 
 export default DonationRouter;

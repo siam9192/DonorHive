@@ -94,6 +94,15 @@ const getCampaignDonations = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const generateDonationReceipt = catchAsync(async (req: Request, res: Response) => {
+  const result = await DonationServices.generateDonationReceipt(res, req.params.id);
+  // sendSuccessResponse(res, {
+  //   statusCode: httpStatus.OK,
+  //   message: 'Campaign donations retrieved successfully',
+  //   ...result,
+  // });
+});
+
 const DonationControllers = {
   initDonation,
   getDonationsForManage,
@@ -104,6 +113,7 @@ const DonationControllers = {
   getCampaignLatestDonations,
   getCampaignDonations,
   getDonationsSummary,
+  generateDonationReceipt,
 };
 
 export default DonationControllers;
