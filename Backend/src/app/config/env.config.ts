@@ -4,16 +4,16 @@ import { EEnvironment, TEnvironment } from '../types';
 
 dotenv.config({ path: path.join((process.cwd(), '.env')) });
 const environment = process.env.ENVIRONMENT as TEnvironment
+const baseUrlClient =  environment === EEnvironment.Development
+        ? process.env.BASE_URL_CLIENT_DEV
+        : process.env.BASE_URL_CLIENT_PROD
 const envConfig = {
   environment: process.env.ENVIRONMENT as TEnvironment,
   url: {
     database: process.env.DATABASE_URL,
     baseUrlClientDev: process.env.BASE_URL_CLIENT_DEV,
     baseUrlClientProd: process.env.BASE_URL_CLIENT_PROD,
-    baseUrlClient:
-      environment === EEnvironment.Development
-        ? process.env.BASE_URL_CLIENT_DEV
-        : process.env.BASE_URL_CLIENT_PROD,
+    baseUrlClient,
     baseUrlServerDev: process.env.BASE_URL_CLIENT_DEV,
     baseUrlServerProd: process.env.BASE_URL_CLIENT_PROD,
     baseUrlServer:
@@ -57,9 +57,9 @@ const envConfig = {
     secret: process.env.PAYPAL_SECRET,
   },
   payment: {
-    success_url: process.env.PAYMENT_SUCCESS_URL,
-    cancel_url: process.env.PAYMENT_CANCEL_URL,
-    fail_url: process.env.PAYMENT_FAIL_URL,
+    success_url: baseUrlClient + (process.env.PAYMENT_SUCCESS_PATH as string),
+    cancel_url: baseUrlClient + (process.env.PAYMENT_FAIL_PATH as string),
+    fail_url: baseUrlClient + (process.env.PAYMENT_FAIL_PATH as string),
     success_redirect_url: process.env.PAYMENT_SUCCESS_REDIRECT_URL,
     token_secret: process.env.PAYMENT_TOKEN_SECRET,
   },

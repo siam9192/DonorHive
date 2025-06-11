@@ -617,8 +617,9 @@ const generateDonationReceipt = async(res: Response, id: string) => {
     throw new AppError(httpStatus.NOT_FOUND,"Donation not found")
   }
 
+
   const isAnonymously =  donation.isAnonymously
-  const donarPersonalInfo =   donation.donorPersonalInfo!
+  const donarPersonalInfo =   donation?.donorPersonalInfo!
   const payment =  donation.paymentId as any as IPayment
 
   const data = [
@@ -641,10 +642,10 @@ const generateDonationReceipt = async(res: Response, id: string) => {
       heading: 'Personal Information:',
       values: donation.isAnonymously ? []:
       [
-          { name: 'Full Name', value:donarPersonalInfo.fullName  },
-        { name: 'Email Address', value: donarPersonalInfo.email },
-        { name: 'Phone Number', value: donarPersonalInfo.fullName },
-        { name: 'Address', value: Object.values(donarPersonalInfo.address).slice(0,-1).filter(_=>_).join(',') },
+        { name: 'Full Name', value:donarPersonalInfo?.fullName||'N/A'  },
+        { name: 'Email Address', value: donarPersonalInfo?.email ||'N/A'},
+        { name: 'Phone Number', value: donarPersonalInfo?.phoneNumber || 'N/A'},
+        { name: 'Address', value: donarPersonalInfo?.address ? Object.values(donarPersonalInfo.address).slice(0,-1).filter(_=>_).join(',') : 'N/A'},
       ]
     },
     {
