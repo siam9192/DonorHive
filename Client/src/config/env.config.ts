@@ -1,8 +1,11 @@
 import { EEnvironment, TEnvironment } from "../types";
 
-const environment =  import.meta.env.VITE_ENVIRONMENT as TEnvironment
+const environment = import.meta.env.VITE_ENVIRONMENT as TEnvironment;
 const envConfig = {
-  serverBaseUrl: environment === EEnvironment.Development ? import.meta.env.VITE_SERVER_BASE_URL_DEV : import.meta.env.VITE_SERVER_BASE_URL_PROD,
+  serverBaseUrl:
+    environment === EEnvironment.Development
+      ? import.meta.env.VITE_SERVER_BASE_URL_DEV
+      : import.meta.env.VITE_SERVER_BASE_URL_PROD,
   google: {
     clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
   },

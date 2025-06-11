@@ -30,10 +30,11 @@ const Hero = () => {
               </h2>
             </div>
             <div className="absolute bottom-0 left-0 w-full  px-2 lg:hidden">
-             <Link to={'/campaigns'} className="block  mt-2">
-              <button className="w-full py-3 font-medium bg-secondary text-gray-950 float-right  lg:hidden">
-                Donate Now
-              </button></Link>
+              <Link to={"/campaigns"} className="block  mt-2">
+                <button className="w-full py-3 font-medium bg-secondary text-gray-950 float-right  lg:hidden">
+                  Donate Now
+                </button>
+              </Link>
               <button className="w-full py-3 font-medium bg-primary text-gray-950 float-right  lg:hidden mt-2">
                 Become a volunteer
               </button>

@@ -17,7 +17,7 @@ const UserContext = createContext<TContextValue | null>(null);
 
 function CurrentUserProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<ICurrentUser | null>(null);
-  const [isLoading,setIsLoading] =  useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const {
     data,
     error,
@@ -26,17 +26,14 @@ function CurrentUserProvider({ children }: { children: ReactNode }) {
     refetch,
   } = useGetCurrentUserQuery(undefined);
   useEffect(() => {
-    setIsLoading(true)
-    if (!userLoading &&!isFetching && data?.success) {
+    setIsLoading(true);
+    if (!userLoading && !isFetching && data?.success) {
       setUser(data.data as ICurrentUser);
     } else if (!userLoading && !data?.success) {
-    };
-    setIsLoading(false)
-  }, [data, userLoading,isFetching]);
+    }
+    setIsLoading(false);
+  }, [data, userLoading, isFetching]);
 
-
- 
-  
   const value = {
     user,
     setUser,

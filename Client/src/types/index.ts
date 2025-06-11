@@ -1,7 +1,6 @@
-
-export type TEnvironment = EEnvironment
+export type TEnvironment = EEnvironment;
 
 export enum EEnvironment {
-  Development = 'DEV',
-  Production = 'PROD',
+  Development = "DEV",
+  Production = "PROD",
 }

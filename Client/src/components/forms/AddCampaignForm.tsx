@@ -104,7 +104,7 @@ const AddCampaignForm = ({ onAdd }: IProps) => {
     try {
       const coverImageUrl = await uploadImageToImgBB(coverPhoto!);
 
-      const payload= {
+      const payload = {
         title,
         description,
         coverImageUrl,

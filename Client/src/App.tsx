@@ -8,9 +8,8 @@ import HelmetCustom from "./components/ui/HelmetCustom";
 import { PATH_TITLES } from "./utils/constant";
 import envConfig from "./config/env.config";
 function App() {
-  
   const [isLoading, setIsLoading] = useState(true);
-  const {pathname} = useLocation()
+  const { pathname } = useLocation();
   useEffect(() => {
     const timeout = setTimeout(() => {
       setIsLoading(false);
@@ -24,10 +23,9 @@ function App() {
 
   return (
     <>
-    <HelmetCustom subtitle={(PATH_TITLES as any )[pathname]}/>
-    <Provider>
-      <Outlet />
-    </Provider>
+      <Provider>
+        <Outlet />
+      </Provider>
     </>
   );
 }

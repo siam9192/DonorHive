@@ -46,7 +46,7 @@ const routes = [
 const DashboardSidebar = () => {
   const { pathname } = useLocation();
 
-  const {user} =  useCurrentUser()
+  const { user } = useCurrentUser();
   return (
     <div className="h-full lg:px-10 lg:py-6 py-2 px-2  flex flex-col justify-between overflow-y-auto no-scrollbar ">
       <div className="">
@@ -68,14 +68,19 @@ const DashboardSidebar = () => {
           <Link to="/dashboard/personal-information">
             <div className="p-3  rounded-md  mx-auto">
               <img
-                src={user?.profilePhotoUrl||'https://cdn-icons-png.flaticon.com/512/3001/3001758.png'}
+                src={
+                  user?.profilePhotoUrl || "https://cdn-icons-png.flaticon.com/512/3001/3001758.png"
+                }
                 alt=""
                 className="size-12 rounded-md mx-auto"
               />
               <h6 className=" font-medium text-gray-800 text-center mt-3">John Doe</h6>
             </div>
           </Link>
-          <div onClick={logout} className="p-3 hover:cursor-pointer group  rounded-md  mx-auto text-center flex flex-col justify-center items-center  ">
+          <div
+            onClick={logout}
+            className="p-3 hover:cursor-pointer group  rounded-md  mx-auto text-center flex flex-col justify-center items-center  "
+          >
             <p className="text-3xl  text-black group-hover:text-red-500 p-2  rounded-md">
               <TbLogout2 />
             </p>

@@ -13,7 +13,7 @@ interface IProps {
 const PrivateRouteProvider = ({ roles, children }: IProps) => {
   const { isLoading, user } = useCurrentUser();
   if (isLoading) return <RouteLoading />;
-  else if (!user || !roles.includes(user.role)) return <Navigate to={'/'}/>
+  else if (!user || !roles.includes(user.role)) return <Navigate to={"/"} />;
   return children;
 };
 

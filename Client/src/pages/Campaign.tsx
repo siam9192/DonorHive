@@ -9,6 +9,8 @@ import { useParams } from "react-router-dom";
 import { useGetCampaignForVisitQuery } from "../redux/features/campaign/campaign.api";
 import useLoadingBounce from "../hooks/useLoadingBounce";
 import { useEffect } from "react";
+import { Helmet } from "react-helmet";
+import useScreen, { EScreenType } from "../hooks/UseScreen";
 
 const Campaign = () => {
   const { slug } = useParams();
@@ -16,7 +18,7 @@ const Campaign = () => {
   const campaign = data?.data;
 
   const bouncedLoading = useLoadingBounce(isLoading, 500);
-
+  const { screenType } = useScreen();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [slug]);
@@ -27,15 +29,18 @@ const Campaign = () => {
   if (bouncedLoading) return <div className="h-screen">Loading...</div>;
   return (
     <div>
-      <CampaignHeader />
+      <Helmet title="Campaign| DonorHive" />
+
       <Container>
         <div className=" py-10 lg:grid grid-cols-6 gap-10">
           <div className="col-span-4">
             <CampaignDetails campaign={campaign!} />
           </div>
-          <div className="col-span-2 lg:block hidden">
-            <Donation campaign={campaign!} />
-          </div>
+          {[EScreenType.SM, EScreenType.MD].includes(screenType) === false ? (
+            <div className="col-span-2 lg:block hidden">
+              <Donation campaign={campaign!} />
+            </div>
+          ) : null}
         </div>
       </Container>
       <RelatedCampaigns />

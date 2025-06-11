@@ -7,17 +7,17 @@ interface IProps {
 }
 
 const MyDonationCard = ({ donation }: IProps) => {
-  const downloadUrl:string =  `${envConfig.serverBaseUrl}/donations/${donation._id}/receipt`
- function downloadReceipt() {
-  const a = document.createElement('a');
-  a.href = downloadUrl;
-   a.setAttribute('target',`_blank`); 
-  a.setAttribute('download',`donation receipt-${new Date().toString()}`); // Fallback filename
-  // DO NOT set target="_blank" to prevent opening in a new tab
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-}
+  const downloadUrl: string = `${envConfig.serverBaseUrl}/donations/${donation._id}/receipt`;
+  function downloadReceipt() {
+    const a = document.createElement("a");
+    a.href = downloadUrl;
+    a.setAttribute("target", `_blank`);
+    a.setAttribute("download", `donation receipt-${new Date().toString()}`); // Fallback filename
+    // DO NOT set target="_blank" to prevent opening in a new tab
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
 
   return (
     <div className=" md:p-3 p-2 border-2 rounded-md border-gray-400/20 mt-3 space-y-2 relative">
@@ -37,7 +37,9 @@ const MyDonationCard = ({ donation }: IProps) => {
           <MyDonationDetailsPopup id={donation._id}>
             <div className="text-primary font-medium">Details</div>
           </MyDonationDetailsPopup>
-          <button onClick={downloadReceipt} className="text-amber-500 font-medium">Download Receipt</button>
+          <button onClick={downloadReceipt} className="text-amber-500 font-medium">
+            Download Receipt
+          </button>
         </div>
       </div>
       <h4 className="absolute top-2 right-2 font-semibold text-sm text-primary">

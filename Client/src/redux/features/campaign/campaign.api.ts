@@ -71,7 +71,7 @@ const campaignApi = baseApi.injectEndpoints({
         return response;
       },
     }),
-      getRandomCampaign: builder.query({
+    getRandomCampaign: builder.query({
       query: () => ({
         url: `/campaigns/random`,
         method: "GET",

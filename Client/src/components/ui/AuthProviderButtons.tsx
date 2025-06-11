@@ -29,7 +29,6 @@ const AuthProviderButtons = ({ onSuccess }: IProps) => {
     },
   });
 
-  
   return (
     <div className="md:p-5 p-3 ">
       <button

@@ -103,7 +103,7 @@ const EditCampaignForm = ({ onAdd, id }: IProps) => {
         coverImageUrl = await uploadImageToImgBB(coverPhoto!);
       }
 
-      const payload= {
+      const payload = {
         title,
         description,
         coverImageUrl,

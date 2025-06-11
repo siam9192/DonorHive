@@ -69,7 +69,7 @@ const DonationSubmitFormDetails = ({ values, close, onSuccess }: IProps) => {
       payload = cleanObject(payload);
       const res = await gotoPay(payload);
       if (res.data?.success) {
-        window.location.href = res.data.data.paymentUrl;
+        window.open(res.data.data.paymentUrl);
         onSuccess();
       } else throw new Error();
     } catch (error) {
