@@ -606,28 +606,26 @@ const getDonationsSummaryFromDB = async () => {
   };
 };
 
-const generateDonationReceipt = async(res: Response, id: string) => {
-  
-  if(!isValidObjectId(id)){
-    throw new AppError(httpStatus.BAD_REQUEST,"Invalid id")
+const generateDonationReceipt = async (res: Response, id: string) => {
+  if (!isValidObjectId(id)) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Invalid id');
   }
-  const donation = await Donation.findById(id).populate('paymentId').lean()
+  const donation = await Donation.findById(id).populate('paymentId').lean();
 
-  if(!donation){
-    throw new AppError(httpStatus.NOT_FOUND,"Donation not found")
+  if (!donation) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Donation not found');
   }
 
-
-  const isAnonymously =  donation.isAnonymously
-  const donarPersonalInfo =   donation?.donorPersonalInfo!
-  const payment =  donation.paymentId as any as IPayment
+  const isAnonymously = donation.isAnonymously;
+  const donarPersonalInfo = donation?.donorPersonalInfo!;
+  const payment = donation.paymentId as any as IPayment;
 
   const data = [
     {
       heading: 'Donation:',
       values: [
         { name: 'Id', value: donation._id },
-        { name: 'Asymonyes', value: isAnonymously ? 'Yes':'No' },
+        { name: 'Asymonyes', value: isAnonymously ? 'Yes' : 'No' },
         { name: 'Date', value: donation.createdAt.toLocaleDateString() },
       ],
     },
@@ -640,13 +638,22 @@ const generateDonationReceipt = async(res: Response, id: string) => {
     },
     {
       heading: 'Personal Information:',
-      values: donation.isAnonymously ? []:
-      [
-        { name: 'Full Name', value:donarPersonalInfo?.fullName||'N/A'  },
-        { name: 'Email Address', value: donarPersonalInfo?.email ||'N/A'},
-        { name: 'Phone Number', value: donarPersonalInfo?.phoneNumber || 'N/A'},
-        { name: 'Address', value: donarPersonalInfo?.address ? Object.values(donarPersonalInfo.address).slice(0,-1).filter(_=>_).join(',') : 'N/A'},
-      ]
+      values: donation.isAnonymously
+        ? []
+        : [
+            { name: 'Full Name', value: donarPersonalInfo?.fullName || 'N/A' },
+            { name: 'Email Address', value: donarPersonalInfo?.email || 'N/A' },
+            { name: 'Phone Number', value: donarPersonalInfo?.phoneNumber || 'N/A' },
+            {
+              name: 'Address',
+              value: donarPersonalInfo?.address
+                ? Object.values(donarPersonalInfo.address)
+                    .slice(0, -1)
+                    .filter((_) => _)
+                    .join(',')
+                : 'N/A',
+            },
+          ],
     },
     {
       heading: 'Payment Information:',
@@ -654,7 +661,7 @@ const generateDonationReceipt = async(res: Response, id: string) => {
         { name: 'Transaction Id', value: payment.transactionId },
         { name: 'Amount', value: payment.amount.toFixed(2) },
         { name: 'Currency', value: 'USD' },
-        { name: 'Method', value: payment.method }
+        { name: 'Method', value: payment.method },
       ],
     },
   ];
@@ -664,20 +671,20 @@ const generateDonationReceipt = async(res: Response, id: string) => {
     black: '#000000',
   };
 
-  const margin = 20
-  const size = 'A4'
-  
+  const margin = 20;
+  const size = 'A4';
+
   const doc = new PDFDocument({ margin, size });
   let y = doc.y;
-  let x =  margin
-  doc.registerFont('regular', path.join(process.cwd(),'fonts/roboto/Roboto-Regular.ttf'))
-  doc.registerFont('semi-bold', path.join(process.cwd(),'fonts/roboto/Roboto-Regular.ttf'));
-  doc.registerFont('bold', path.join(process.cwd(),'fonts/roboto/Roboto-SemiBold.ttf'));
+  let x = margin;
+  doc.registerFont('regular', path.join(process.cwd(), 'fonts/roboto/Roboto-Regular.ttf'));
+  doc.registerFont('semi-bold', path.join(process.cwd(), 'fonts/roboto/Roboto-Regular.ttf'));
+  doc.registerFont('bold', path.join(process.cwd(), 'fonts/roboto/Roboto-SemiBold.ttf'));
 
   doc.font('regular').fillColor(color.black);
 
   // doc.fillColor(color.primary).text('https://www.xyz.com',doc.page.width - 150,5,{align:'left',continued:false})
- 
+
   doc.fontSize(30).fillColor(color.black).text('DonorHive', { align: 'center', continued: false });
   doc.moveDown(0.3);
   doc
@@ -686,18 +693,16 @@ const generateDonationReceipt = async(res: Response, id: string) => {
     .opacity(0.8)
     .text('Donation Receipt', { align: 'center', underline: true });
 
-     doc
-    // .fontSize(12)
-    // .fillColor(color.black)
-    // .opacity(0.8)
-    // .text('Date: ',{continued:true}).text(new Date().toDateString());
+  doc;
+  // .fontSize(12)
+  // .fillColor(color.black)
+  // .opacity(0.8)
+  // .text('Date: ',{continued:true}).text(new Date().toDateString());
 
   doc.moveDown(3);
 
-
-  
   x = doc.page.width / 2 - 70;
-  y =  doc.y
+  y = doc.y;
   doc
     .font('bold')
     .fontSize(40)
@@ -713,9 +718,8 @@ const generateDonationReceipt = async(res: Response, id: string) => {
   x = 20;
   y = doc.y;
 
-
   data.forEach((data) => {
-   if(!data.values.length) return
+    if (!data.values.length) return;
     doc
       .font('semi-bold')
       .fontSize(14)

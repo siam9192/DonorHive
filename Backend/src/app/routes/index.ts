@@ -8,6 +8,7 @@ import PaymentRouter from '../modules/Payment/payment.route';
 import NotificationRouter from '../modules/Notification/notification.route';
 import OverviewRouter from '../modules/Overview/overview.route';
 import UtilsRouter from '../modules/Utils/Utils.route';
+import watchListItemRouter from '../modules/WatchListItem/watch-list-item.route';
 
 type TModuleRoutes = { path: string; router: Router }[];
 
@@ -40,6 +41,10 @@ const moduleRoutes: TModuleRoutes = [
   {
     path: '/notifications',
     router: NotificationRouter,
+  },
+  {
+    path: '/watch-list-items',
+    router: watchListItemRouter,
   },
   {
     path: '/overview',

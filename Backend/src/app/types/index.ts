@@ -11,7 +11,7 @@ export interface IFbDataResponse {
   };
 }
 
-export type TEnvironment = EEnvironment
+export type TEnvironment = EEnvironment;
 
 export enum EEnvironment {
   Development = 'DEV',

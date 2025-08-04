@@ -162,7 +162,7 @@ const validatePayment = async (res: Response, status: string, token: string) => 
             status: EPaymentStatus.Failed,
           },
           {
-            session
+            session,
           }
         );
         redirectUrl = `${envConfig.payment.cancel_url as string}?campaign=${campaign?.slug}`;
@@ -176,7 +176,7 @@ const validatePayment = async (res: Response, status: string, token: string) => 
             status: EPaymentStatus.Canceled,
           },
           {
-            session
+            session,
           }
         );
         redirectUrl = `${envConfig.url.baseUrlClient as string}/campaigns/${campaign?.slug}`;
@@ -192,7 +192,7 @@ const validatePayment = async (res: Response, status: string, token: string) => 
 
     res.redirect(`${redirectUrl}`);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     throw new AppError(httpStatus.BAD_GATEWAY, 'Bad gateway');
   }
 };

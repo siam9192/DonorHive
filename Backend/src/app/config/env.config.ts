@@ -3,10 +3,11 @@ import path from 'node:path';
 import { EEnvironment, TEnvironment } from '../types';
 
 dotenv.config({ path: path.join((process.cwd(), '.env')) });
-const environment = process.env.ENVIRONMENT as TEnvironment
-const baseUrlClient =  environment === EEnvironment.Development
-        ? process.env.BASE_URL_CLIENT_DEV
-        : process.env.BASE_URL_CLIENT_PROD
+const environment = process.env.ENVIRONMENT as TEnvironment;
+const baseUrlClient =
+  environment === EEnvironment.Development
+    ? process.env.BASE_URL_CLIENT_DEV
+    : process.env.BASE_URL_CLIENT_PROD;
 const envConfig = {
   environment: process.env.ENVIRONMENT as TEnvironment,
   url: {
@@ -17,7 +18,7 @@ const envConfig = {
     baseUrlServerDev: process.env.BASE_URL_CLIENT_DEV,
     baseUrlServerProd: process.env.BASE_URL_CLIENT_PROD,
     baseUrlServer:
-     environment === EEnvironment.Development
+      environment === EEnvironment.Development
         ? process.env.BASE_URL_SERVER_DEV
         : process.env.BASE_URL_SERVER_PROD,
   },

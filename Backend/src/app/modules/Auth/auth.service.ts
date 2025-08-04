@@ -61,7 +61,7 @@ const register = async (payload: IRegistrationPayload) => {
     );
 
     const verificationLink = `${envConfig.url.baseUrlClient}/registration-verify/${token}`;
-    console.log(token);
+
     const emailSendStatus = await ejs.renderFile(
       path.join(process.cwd(), '/src/app/email-templates/registration-verification.html'),
       { name: payload.fullName, link: verificationLink },
