@@ -12,16 +12,15 @@ const CampaignCard = ({ campaign }: IProps) => {
   const { screenType } = UseScreen();
   let description = campaign.description;
 
-  const showLength = screenType === "lg" ? 150 : screenType === "md" ? 90 : 60;
-  const shortDescription = description.slice(0, showLength);
+
 
   const progressPercentage = Math.round((campaign.raisedAmount / campaign.targetAmount) * 100);
 
   const timeLeft = useRemainingDaysCounter(campaign.endAt);
 
   return (
-    <Link to={`/campaigns/${campaign.slug}`}>
-      <div className="bg-white h-full flex flex-col">
+    <Link to={`/campaigns/${campaign.slug}`} >
+      <div className="bg-white h-full flex flex-col ">
         <div className="relative">
           <img
             src={campaign.coverImageUrl}
@@ -53,9 +52,10 @@ const CampaignCard = ({ campaign }: IProps) => {
           </div>
           <p className="text-yellow-600 font-medium text-[0.8rem]">{campaign.category}</p>
           <h2 className="md:text-xl text-[1rem] text-gray-950 font-medium">{campaign.title}</h2>
-          <p className="text-gray-800 font-secondary text-[0.9rem]">
-            {shortDescription}
-            {description.length !== shortDescription.length ? "..." : null}
+          <p className="text-gray-800 line-clamp-2 font-secondary text-[0.9rem]">
+           {
+            campaign.description
+           }
           </p>
         </div>
         <div className=" md:mt-8 mt-6 space-y-1 relative">

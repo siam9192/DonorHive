@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import { ICampaign } from "../../../types/campaign.type";
 import RecentDonations from "./RecentDonations";
+import { FiEye } from "react-icons/fi";
+import { toast } from "sonner";
 
 interface IProps {
   campaign: ICampaign;
@@ -25,11 +27,23 @@ const CampaignDetails = ({ campaign }: IProps) => {
     }
   }
 
+function toggleWatchList () {
+  toast.success("This added to your watch list",{
+    position:'top-right'
+  })
+}
+
   return (
     <section>
       <div className="md:space-y-8 space-y-6">
-        <div className="flex items-center justify-end gap-2">
-          <p className="text-gray-700">Share :</p>
+        <div className="flex items-center justify-between gap-2">
+          <div>
+            <button onClick={toggleWatchList} className="p-2 bg-gray-200 rounded-lg">
+              <FiEye size={28}/>
+            </button>
+          </div>
+         <div className="flex items-center  gap-2">
+           <p className="text-gray-700">Share :</p>
           <button
             onClick={shareContent}
             className=" md:text-2xl text-xl p-2 bg-gray-50 rounded-full"
@@ -42,6 +56,7 @@ const CampaignDetails = ({ campaign }: IProps) => {
           <button onClick={shareContent} className="text-2xl p-2 bg-gray-50 rounded-full">
             <FaTwitter />
           </button>
+         </div>
         </div>
         <h1 className="md:text-5xl text-3xl  font-secondary font-bold text-gray-950">
           {campaign.title}

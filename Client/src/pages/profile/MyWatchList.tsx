@@ -1,4 +1,3 @@
-import React from "react";
 import WatchListCard from "../../components/cards/WatchListCard";
 
 const MyWatchList = () => {
@@ -14,14 +13,14 @@ const MyWatchList = () => {
         >
           <option value="">Sortby (Default)</option>
           {Array.from({ length: 10 }).map((_, index) => (
-            <option>Option {index + 1}</option>
+            <option key={index}>Option {index + 1}</option>
           ))}
         </select>
       </div>
       <div className="mt-10 grid  grid-cols-1 md:gap-5 gap-3">
-        {/* {Array.from({ length: 4 }).map((_, index) => (
+        {Array.from({ length: 4 }).map((_, index) => (
           <WatchListCard key={index} />
-        ))} */}
+        ))}
         <h1>Not Available Now</h1>
       </div>
     </div>

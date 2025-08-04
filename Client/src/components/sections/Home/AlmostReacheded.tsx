@@ -61,14 +61,15 @@ const AlmostReacheded = () => {
             <MdOutlineArrowForwardIos />
           </button>
         </div>
-        <div className="mt-10 flex   relative md:h-[60vh] h-[65vh]  overflow-hidden ">
+        <div className="mt-10 flex   relative h-[500px] overflow-hidden ">
           {bouncedLoading
             ? Array.from({ length: total }).map((_, index) => (
                 <div
+                key={index}
                   className="absolute  p-2  transition-all duration-500 ease-in-out"
                   style={getCardStyle(index)}
                 >
-                  <CampaignLoadingCard key={index} />
+                  <CampaignLoadingCard />
                 </div>
               ))
             : campaigns?.map((campaign, index) => (

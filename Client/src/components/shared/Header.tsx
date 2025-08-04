@@ -86,7 +86,7 @@ const Header = () => {
               </span>
               <h1 className="md:text-2xl text-lg font-semibold text-gray-200">DonorHive</h1>
             </div>
-            <nav className="lg:flex items-center gap-2 text-white uppercase lg:block hidden ">
+            <nav className="lg:flex items-center gap-4 text-white uppercase lg:block hidden ">
               {navLinks.map((item) => (
                 <Link to={item.href} key={item.name} className="hover:text-black ">
                   {item.name}
