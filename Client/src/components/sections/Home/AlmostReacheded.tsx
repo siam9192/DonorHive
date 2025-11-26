@@ -65,7 +65,7 @@ const AlmostReacheded = () => {
           {bouncedLoading
             ? Array.from({ length: total }).map((_, index) => (
                 <div
-                key={index}
+                  key={index}
                   className="absolute  p-2  transition-all duration-500 ease-in-out"
                   style={getCardStyle(index)}
                 >

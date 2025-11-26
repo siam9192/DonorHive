@@ -32,5 +32,6 @@ export const baseApi = createApi({
     "my-notifications",
     "my-utils-count",
     "recent-users",
+    "my-watch-list-items",
   ],
 });

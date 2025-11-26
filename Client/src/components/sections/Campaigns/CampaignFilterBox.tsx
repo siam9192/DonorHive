@@ -4,10 +4,15 @@ import categories from "../../../data/categories";
 import SearchTermInput from "../../input/SearchTermInput";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { handelSearch } from "../../../utils/function";
+import { useGetAllExistingCategoriesQuery } from "../../../redux/features/utils/utils.api";
 
 const CampaignFilterBox = () => {
-  const navigate = useNavigate();
-  const selectCategoryOptions = categories.map((category) => ({
+  const { data: existingCategoriesData } = useGetAllExistingCategoriesQuery(undefined);
+  const existingCategories = existingCategoriesData?.data;
+
+  const selectCategoryOptions = (
+    existingCategories?.length ? existingCategories.map((_) => _.name) : categories
+  ).map((category) => ({
     display: category,
     value: category,
   }));
@@ -16,8 +21,9 @@ const CampaignFilterBox = () => {
     display: "All Categories",
     value: "",
   });
-  const searchParams = new URLSearchParams(window.location.search);
 
+  const searchParams = new URLSearchParams(window.location.search);
+  const navigate = useNavigate();
   return (
     <section className="py-10">
       <Container>

@@ -23,7 +23,6 @@ const LoginForm = ({ onSuccess }: IProps) => {
       const res = await login(values);
 
       if (res.data?.success) {
-        onSuccess && onSuccess();
         navigate("/");
       } else {
         throw new Error((res.error as any).data.message);
@@ -62,7 +61,7 @@ const LoginForm = ({ onSuccess }: IProps) => {
         {errorMessage && <p className="mt-2 text-red-500">{errorMessage}</p>}
       </form>
       <AuthProviderButtons />
-      <DemoLogin />
+      <DemoLogin onSuccess={onSuccess} />
     </>
   );
 };

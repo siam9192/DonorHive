@@ -1,15 +1,23 @@
 import { Link } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
-import { ICampaign } from "../../../types/campaign.type";
+import { ICampaign, IVisitCampaign } from "../../../types/campaign.type";
 import RecentDonations from "./RecentDonations";
 import { FiEye } from "react-icons/fi";
 import { toast } from "sonner";
+import { useState } from "react";
+import {
+  useCreateWatchListItemMutation,
+  useDeleteWatchListItemMutation,
+} from "../../../redux/features/watch-list-item/watch-list-item.api";
+import { useCurrentUser } from "../../../provider/CurrentUserProvider";
 
 interface IProps {
-  campaign: ICampaign;
+  campaign: IVisitCampaign;
 }
 
 const CampaignDetails = ({ campaign }: IProps) => {
+  const { user } = useCurrentUser();
+  const [isWatchListed, setIsWatchListed] = useState(campaign.isWatchListed);
   const progressPercentage = Math.round((campaign.raisedAmount / campaign.targetAmount) * 100);
 
   function shareContent() {
@@ -27,36 +35,75 @@ const CampaignDetails = ({ campaign }: IProps) => {
     }
   }
 
-function toggleWatchList () {
-  toast.success("This added to your watch list",{
-    position:'top-right'
-  })
-}
+  const [addToWatchList] = useCreateWatchListItemMutation();
+  const [removeFromWatchList] = useDeleteWatchListItemMutation();
+  async function toggleWatchList() {
+    if (!user) {
+      return toast.info("Please login first");
+    }
+    const prev = isWatchListed;
+    const toggle = !isWatchListed;
+
+    let data;
+
+    if (toggle === true) {
+      const response = await addToWatchList({
+        campaignId: campaign._id,
+      });
+
+      data = response.data;
+    } else {
+      const response = await removeFromWatchList(campaign._id);
+
+      data = response.data;
+    }
+    if (!data?.success) {
+      throw new Error("Something went wrong");
+    }
+
+    setIsWatchListed((p) => !p);
+    try {
+      toast.success(
+        toggle === true ? "Watch listed  successfully" : "Unwatch listed successfully",
+        {
+          position: "top-right",
+        },
+      );
+    } catch (error: any) {
+      toast.error(error.message, {
+        position: "top-right",
+      });
+      setIsWatchListed(prev);
+    }
+  }
 
   return (
     <section>
       <div className="md:space-y-8 space-y-6">
         <div className="flex items-center justify-between gap-2">
           <div>
-            <button onClick={toggleWatchList} className="p-2 bg-gray-200 rounded-lg">
-              <FiEye size={28}/>
+            <button
+              onClick={toggleWatchList}
+              className={`p-2 ${isWatchListed ? "bg-primary text-white" : "bg-gray-200"} rounded-lg`}
+            >
+              <FiEye size={28} />
             </button>
           </div>
-         <div className="flex items-center  gap-2">
-           <p className="text-gray-700">Share :</p>
-          <button
-            onClick={shareContent}
-            className=" md:text-2xl text-xl p-2 bg-gray-50 rounded-full"
-          >
-            <FaFacebook />
-          </button>
-          <button onClick={shareContent} className="text-2xl p-2 bg-gray-50 rounded-full">
-            <FaInstagram />
-          </button>
-          <button onClick={shareContent} className="text-2xl p-2 bg-gray-50 rounded-full">
-            <FaTwitter />
-          </button>
-         </div>
+          <div className="flex items-center  gap-2">
+            <p className="text-gray-700">Share :</p>
+            <button
+              onClick={shareContent}
+              className=" md:text-2xl text-xl p-2 bg-gray-50 rounded-full"
+            >
+              <FaFacebook />
+            </button>
+            <button onClick={shareContent} className="text-2xl p-2 bg-gray-50 rounded-full">
+              <FaInstagram />
+            </button>
+            <button onClick={shareContent} className="text-2xl p-2 bg-gray-50 rounded-full">
+              <FaTwitter />
+            </button>
+          </div>
         </div>
         <h1 className="md:text-5xl text-3xl  font-secondary font-bold text-gray-950">
           {campaign.title}

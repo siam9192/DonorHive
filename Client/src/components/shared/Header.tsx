@@ -1,4 +1,3 @@
-import React from "react";
 import Container from "../container/Container";
 import { FaDonate, FaFacebook, FaFacebookSquare, FaInstagram, FaUser } from "react-icons/fa";
 import { FaX } from "react-icons/fa6";
@@ -50,7 +49,7 @@ const Header = () => {
   const { user, isLoading } = useCurrentUser();
 
   return (
-    <header className="">
+    <header className="lg:sticky top-0 z-40">
       <div className="bg-gray-900 py-2">
         <Container>
           <div className="flex justify-between items-center">

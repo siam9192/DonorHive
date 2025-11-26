@@ -50,3 +50,7 @@ export enum ECampaignStatus {
   Completed = "Completed",
   Expired = "Expired",
 }
+
+export interface IVisitCampaign extends ICampaign {
+  isWatchListed: boolean;
+}

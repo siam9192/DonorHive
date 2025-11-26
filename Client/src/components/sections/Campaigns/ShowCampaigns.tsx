@@ -8,6 +8,7 @@ import { useGetCampaignsQuery } from "../../../redux/features/campaign/campaign.
 import { IParam } from "../../../interfaces/response.interface";
 import { ChangeEvent, useEffect, useRef } from "react";
 import { handelSearch } from "../../../utils/function";
+import { useGetAllExistingCategoriesQuery } from "../../../redux/features/utils/utils.api";
 
 const sortOptions = [
   {
@@ -41,7 +42,12 @@ const sortOptions = [
 ];
 
 const ShowCampaigns = () => {
-  const popularSearchers = ["Food", "House", "Education", "Children", "Health"];
+  const { data: existingCategoriesData } = useGetAllExistingCategoriesQuery(undefined);
+  const existingCategories = existingCategoriesData?.data;
+
+  const popularSearchers = existingCategories?.length
+    ? existingCategories.slice(0, 6).map((_) => _.name)
+    : ["Food", "House", "Education", "Children", "Health"];
   const { search } = useLocation();
   const urlSearchParams = new URLSearchParams(search);
   const navigate = useNavigate();

@@ -7,6 +7,7 @@ import { useGetCampaignsForManageQuery } from "../../../../redux/features/campai
 import categories from "../../../../data/categories";
 import Select from "../../../select/Select";
 import SearchTermInput from "../../../input/SearchTermInput";
+import { useGetAllExistingCategoriesQuery } from "../../../../redux/features/utils/utils.api";
 
 type THead = {
   name: string;
@@ -108,7 +109,12 @@ const DashboardShowCampaigns = () => {
   const meta = data?.meta;
   const handelSetSort = (value: string, order: TOrder) => setSort({ by: value, order });
 
-  const selectCategoryOptions = categories.map((category) => ({
+ const { data: existingCategoriesData } = useGetAllExistingCategoriesQuery(undefined);
+  const existingCategories = existingCategoriesData?.data;
+
+  const selectCategoryOptions = (
+    existingCategories?.length ? existingCategories.map((_) => _.name) : categories
+  ).map((category) => ({
     display: category,
     value: category,
   }));

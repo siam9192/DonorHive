@@ -1,4 +1,5 @@
-import { IParam, IResponse } from "../../../interfaces/response.interface";
+import { IResponse } from "../../../interfaces/response.interface";
+import { TExistingCategory } from "../../../types/category.type";
 import { baseApi } from "../../api/baseApi";
 
 const utilsApi = baseApi.injectEndpoints({
@@ -13,7 +14,17 @@ const utilsApi = baseApi.injectEndpoints({
       },
       providesTags: ["my-utils-count"],
     }),
+    getAllExistingCategories: builder.query({
+      query: () => ({
+        url: `/utils/exist-categories`,
+        method: "GET",
+      }),
+      transformResponse: (response: IResponse<TExistingCategory[]>) => {
+        return response;
+      },
+      providesTags: ["my-utils-count"],
+    }),
   }),
 });
 
-export const { useGetMyUtilsCountQuery } = utilsApi;
+export const { useGetMyUtilsCountQuery, useGetAllExistingCategoriesQuery } = utilsApi;

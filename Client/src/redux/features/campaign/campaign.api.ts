@@ -1,5 +1,5 @@
 import { IParam, IResponse } from "../../../interfaces/response.interface";
-import { ICampaign } from "../../../types/campaign.type";
+import { ICampaign, IVisitCampaign } from "../../../types/campaign.type";
 import { paramsToString } from "../../../utils/function";
 import { baseApi } from "../../api/baseApi";
 
@@ -20,7 +20,7 @@ const campaignApi = baseApi.injectEndpoints({
         url: `/campaigns/${slug}/visit`,
         method: "GET",
       }),
-      transformResponse: (response: IResponse<ICampaign>) => {
+      transformResponse: (response: IResponse<IVisitCampaign>) => {
         return response;
       },
       providesTags: ["campaign-visit"],

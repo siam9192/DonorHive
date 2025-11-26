@@ -13,6 +13,7 @@ const LoginPopup = ({ children }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
+    console.log(isOpen);
     document.body.style.overflow = isOpen ? "hidden" : "";
   }, [isOpen]);
 

@@ -5,7 +5,10 @@ import { useLoginMutation } from "../../redux/features/auth/auth.api";
 import { useNavigate } from "react-router-dom";
 import { EUserRole } from "../../types/user.type";
 import { useCurrentUser } from "../../provider/CurrentUserProvider";
-function DemoLogin() {
+interface IProps {
+  onSuccess?: () => void;
+}
+function DemoLogin({ onSuccess }: IProps) {
   const [errorMessage, setErrorMessage] = useState("");
   const { refetch } = useCurrentUser();
   const [login, { isLoading }] = useLoginMutation();
@@ -22,6 +25,7 @@ function DemoLogin() {
       const res = await login(payload);
 
       if (res.data?.success) {
+        onSuccess && onSuccess();
         if (isAdmin) {
           refetch();
           setTimeout(() => {
