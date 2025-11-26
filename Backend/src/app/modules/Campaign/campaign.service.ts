@@ -11,6 +11,9 @@ import {
   IUpdateCampaignPayload,
 } from './campaign.interface';
 import Campaign from './campaign.model';
+import { IAuthUser } from '../Auth/auth.interface';
+import { EUserRole } from '../User/user.interface';
+import WatchListItem from '../WatchListItem/watch-list-item.model';
 
 const createCampaignIntoDB = async (payload: ICreateCampaignPayload) => {
   let slug = generateSlug(payload.title);
@@ -83,10 +86,10 @@ const getCampaignsFromDB = async (
     ];
   }
 
-  ['category'].forEach((item) => {
-    let data = (othersData as any)[item];
+  Object.entries(othersData).forEach(([key, value]) => {
+    let data = value;
     if (data) {
-      whereConditions[item] = data;
+      whereConditions[key] = value;
     }
   });
 
@@ -252,7 +255,7 @@ const softDeleteCampaignFromDB = async (id: string) => {
   if (!updateStatus.modifiedCount) throw new AppError(500, 'Campaign could not be delete!');
 };
 
-const getCampaignBySlugFromDB = async (slug: string) => {
+const getCampaignBySlugFromDB = async (authUser: IAuthUser | undefined, slug: string) => {
   const campaign = await Campaign.findOne(
     {
       slug,
@@ -262,9 +265,25 @@ const getCampaignBySlugFromDB = async (slug: string) => {
       status: ECampaignStatus.Active,
     },
     { isDeleted: false }
-  );
+  ).lean();
   if (!campaign) throw new AppError(httpStatus.NOT_FOUND, 'Campaign not found');
-  return campaign;
+
+  let isWatchListed = false;
+
+  if (authUser && authUser.role === EUserRole.Donor) {
+    const isExist = await WatchListItem.findOne({
+      user: objectId(authUser.id),
+      campaign: campaign._id,
+    });
+    isWatchListed = !!isExist;
+  }
+
+  const data = {
+    ...campaign,
+    isWatchListed,
+  };
+
+  return data as any;
 };
 
 const getRelatedCampaignsFromDB = async (slug: string) => {

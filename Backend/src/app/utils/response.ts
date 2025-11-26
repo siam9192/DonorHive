@@ -18,7 +18,7 @@ export type TMeta = {
   limit: number;
   pages?: number[];
   totalResult: number;
-  total: number;
+  total?: number;
 };
 
 export const sendSuccessResponse = (res: Response, responseData: TResponseData) => {

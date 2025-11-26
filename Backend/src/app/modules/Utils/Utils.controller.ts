@@ -15,8 +15,18 @@ const getMyCountsFromDB = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getAllExistCategories = catchAsync(async (req: Request, res: Response) => {
+  const result = await UtilsServices.getAllExistCategories();
+  sendSuccessResponse(res, {
+    statusCode: httpStatus.OK,
+    message: 'All exist categories retrieved successfully',
+    data: result,
+  });
+});
+
 const UtilsControllers = {
   getMyCountsFromDB,
+  getAllExistCategories,
 };
 
 export default UtilsControllers;

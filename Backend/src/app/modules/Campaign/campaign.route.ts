@@ -4,6 +4,7 @@ import CampaignValidations from './campaign.validation';
 import CampaignControllers from './campaign.controller';
 import auth from '../../middlewares/auth';
 import { EUserRole } from '../User/user.interface';
+import authUserProvider from '../../middlewares/authUserProvider';
 
 const router = Router();
 
@@ -26,7 +27,11 @@ router.delete('/:id', auth(EUserRole.Admin), CampaignControllers.softDeleteCampa
 router.get('/', CampaignControllers.getCampaigns);
 router.get('/manage', auth(EUserRole.Admin), CampaignControllers.getCampaignsForManage);
 router.get('/manage/:id', auth(EUserRole.Admin), CampaignControllers.getCampaignByIdForManage);
-router.get('/:slug/visit', CampaignControllers.getCampaignBySlug);
+router.get(
+  '/:slug/visit',
+  authUserProvider(EUserRole.Admin, EUserRole.Donor),
+  CampaignControllers.getCampaignBySlug
+);
 router.get('/related/:slug', CampaignControllers.getRelatedCampaignsFromDB);
 router.get('/recent', CampaignControllers.getRecentCampaigns);
 router.get('/almost-completed', CampaignControllers.getAlmostCompletedCampaigns);

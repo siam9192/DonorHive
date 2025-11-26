@@ -7,7 +7,6 @@ import { IAuthUser } from '../Auth/auth.interface';
 import { ICreateWatchListItemPayload } from './watch-list-item.interface';
 import WatchListItem from './watch-list-item.model';
 
-
 const createWatchListItem = async (authUser: IAuthUser, payload: ICreateWatchListItemPayload) => {
   const item = await WatchListItem.findOne({
     user: objectId(authUser.id),
@@ -36,18 +35,18 @@ const deleteWatchListItem = async (authUser: IAuthUser, campaignId: string) => {
   return null;
 };
 
-
 const getMyWatchListItemsFromDB = async (
   authUser: IAuthUser,
   paginationOptions: IPaginationOptions
 ) => {
-  const { page, limit, skip} = calculatePagination(paginationOptions);
+  const { page, limit, skip } = calculatePagination(paginationOptions);
 
   const items = await WatchListItem.find({
     user: objectId(authUser.id),
   })
     .skip(skip)
-    .limit(limit);
+    .limit(limit)
+    .populate('campaign');
 
   const totalResult = await WatchListItem.countDocuments({
     user: objectId(authUser.id),
@@ -59,10 +58,10 @@ const getMyWatchListItemsFromDB = async (
       page,
       limit,
       totalResult,
+      total: 0,
     },
   };
 };
-
 
 const watchListItemServices = {
   createWatchListItem,

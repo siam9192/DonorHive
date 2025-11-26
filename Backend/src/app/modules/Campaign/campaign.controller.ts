@@ -47,7 +47,7 @@ const getCampaignsForManage = catchAsync(async (req: Request, res: Response) => 
 });
 
 const getCampaignBySlug = catchAsync(async (req: Request, res: Response) => {
-  const result = await CampaignServices.getCampaignBySlugFromDB(req.params.slug);
+  const result = await CampaignServices.getCampaignBySlugFromDB(req.user, req.params.slug);
   sendSuccessResponse(res, {
     statusCode: httpStatus.OK,
     message: 'Campaign retrieved successfully',

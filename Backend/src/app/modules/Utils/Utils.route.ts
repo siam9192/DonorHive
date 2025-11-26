@@ -6,7 +6,7 @@ import UtilsControllers from './Utils.controller';
 const router = Router();
 
 router.get('/my-count', auth(EUserRole.Admin, EUserRole.Donor), UtilsControllers.getMyCountsFromDB);
-
+router.get('/exist-categories', UtilsControllers.getAllExistCategories);
 const UtilsRouter = router;
 
 export default UtilsRouter;

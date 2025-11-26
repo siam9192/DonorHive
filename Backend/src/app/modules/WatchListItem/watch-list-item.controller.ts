@@ -30,7 +30,7 @@ const getMyWatchListItems = catchAsync(async (req: Request, res: Response) => {
   sendSuccessResponse(res, {
     statusCode: httpStatus.OK,
     message: 'Retrieved successfully',
-    data: result,
+    ...result,
   });
 });
 
