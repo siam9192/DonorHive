@@ -8,10 +8,25 @@
     --font-secondary:"Open Sans", "serif";
 }
 body{
+    min-width: 320px;
+    background-color: #ffffff;
+    color: #0f172a;
     font-family: "Poppins", serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 button:hover{
     cursor: pointer;
+}
+
+::selection {
+    background: rgb(4 181 99 / 18%);
+    color: #064e3b;
+}
+
+:focus-visible {
+    outline: 2px solid #047857;
+    outline-offset: 3px;
 }
 
 .get-involved-section{

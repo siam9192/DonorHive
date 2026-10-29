@@ -3,7 +3,6 @@ import AuthProviderButtons from "../ui/AuthProviderButtons";
 import { getFormValues } from "../../utils/function";
 import { useLoginMutation } from "../../redux/features/auth/auth.api";
 import { useNavigate } from "react-router-dom";
-import { useCurrentUser } from "../../provider/CurrentUserProvider";
 import DemoLogin from "../ui/DemoLogin";
 
 interface IProps {
@@ -23,12 +22,23 @@ const LoginForm = ({ onSuccess }: IProps) => {
       const res = await login(values);
 
       if (res.data?.success) {
+        onSuccess?.();
         navigate("/");
       } else {
-        throw new Error((res.error as any).data.message);
+        const apiError = res.error;
+        const message =
+          apiError &&
+          "data" in apiError &&
+          typeof apiError.data === "object" &&
+          apiError.data !== null &&
+          "message" in apiError.data &&
+          typeof apiError.data.message === "string"
+            ? apiError.data.message
+            : "Unable to sign in. Please try again.";
+        throw new Error(message);
       }
-    } catch (error: any) {
-      setErrorMessage(error.message);
+    } catch (error: unknown) {
+      setErrorMessage(error instanceof Error ? error.message : "Unable to sign in. Please try again.");
     }
   };
   return (
@@ -60,7 +70,7 @@ const LoginForm = ({ onSuccess }: IProps) => {
         </button>
         {errorMessage && <p className="mt-2 text-red-500">{errorMessage}</p>}
       </form>
-      <AuthProviderButtons />
+      <AuthProviderButtons onSuccess={onSuccess} />
       <DemoLogin onSuccess={onSuccess} />
     </>
   );

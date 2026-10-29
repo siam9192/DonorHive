@@ -23,6 +23,10 @@ const dashboardPathTitles = [
     path: "/dashboard/edit-profile",
     title: "Edit Profile",
   },
+  {
+    path: "/dashboard/setting",
+    title: "Settings",
+  },
 ];
 
 export default dashboardPathTitles;

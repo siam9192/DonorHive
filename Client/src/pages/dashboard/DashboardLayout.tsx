@@ -5,15 +5,15 @@ import DashboardHeader from "../../components/ui/DashboardHeader";
 
 const DashboardLayout = () => {
   return (
-    <div className="lg:flex h-screen overflow-hidden">
-      <div className="lg:w-[10%] h-full bg-white shadow  lg:block hidden">
+    <div className="min-h-screen bg-slate-50 lg:flex lg:h-screen lg:overflow-hidden">
+      <aside className="hidden h-full w-64 shrink-0 border-r border-slate-200 bg-white lg:block">
         <DashboardSidebar />
-      </div>
-      <div className="lg:w-[90%] ">
+      </aside>
+      <div className="min-w-0 flex-1">
         <DashboardHeader />
-        <div className="lg:p-10 p-2 h-[calc(100vh-82px)] overflow-y-auto ">
+        <main className="min-h-[calc(100vh-82px)] overflow-y-auto p-4 sm:p-6 lg:h-[calc(100vh-82px)] lg:p-8">
           <Outlet />
-        </div>
+        </main>
       </div>
     </div>
   );

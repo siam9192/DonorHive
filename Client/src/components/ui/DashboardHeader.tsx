@@ -1,34 +1,44 @@
-import React from "react";
 import ResponsiveDashboardSidebar from "./ResponsiveDashboardSidebar";
 import { useLocation } from "react-router-dom";
 import dashboardPathTitles from "../../data/dashboardPathTitles";
 import NotificationBar from "./NotificationBar";
+import { useCurrentUser } from "../../provider/CurrentUserProvider";
 
 const DashboardHeader = () => {
   const { pathname } = useLocation();
-
-  const pathTitle = dashboardPathTitles.find((ele) => ele.path === pathname);
+  const { user } = useCurrentUser();
+  const pathTitle =
+    dashboardPathTitles.find((item) => item.path === pathname) ||
+    dashboardPathTitles.find(
+      (item) => item.path !== "/dashboard" && pathname.startsWith(`${item.path}/`)
+    );
 
   return (
-    <div className="bg-white  px-5 lg:py-8 md:py-6 py-5 border-b-2 border-gray-500/15 ">
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="md:text-2xl text-xl font-semibold text-gray-950">
-            <span className="font-bold text-primary">Welcome</span>,John Doe
-          </h2>
-          <p className="mt-1 text-sm text-gray-700 font-medium">{new Date().toDateString()}</p>
+    <header className="border-b border-slate-200 bg-white px-4 py-4 sm:px-6 lg:px-8 lg:py-5">
+      <div className="flex items-center justify-between gap-4">
+        <div className="min-w-0">
+          <p className="text-sm font-medium text-slate-500">
+            {new Date().toLocaleDateString(undefined, {
+              weekday: "long",
+              month: "long",
+              day: "numeric",
+            })}
+          </p>
+          <h1 className="mt-1 truncate text-xl font-semibold tracking-tight text-slate-900 md:text-2xl">
+            Welcome back, <span className="text-emerald-700">{user?.fullName || "there"}</span>
+          </h1>
           {pathTitle && (
-            <h4 className=" mt-2  md:text-lg text-[0.9rem] font-semibold  text-gray-700">
+            <p className="mt-1 text-sm text-slate-500">
               {pathTitle.title}
-            </h4>
+            </p>
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <NotificationBar />
           <ResponsiveDashboardSidebar />
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 

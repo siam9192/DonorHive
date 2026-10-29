@@ -6,8 +6,10 @@ import Hero from "../components/sections/Home/Hero";
 import HowItWorks from "../components/sections/Home/HowItWorks";
 import RecentCauses from "../components/sections/Home/RecentCauses";
 import SuccessGallery from "../components/sections/Home/SuccessGallery";
+import envConfig from "../config/env.config";
 
 const Home = () => {
+ 
   return (
     <>
       <div className="space-y-10 overflow-x-hidden">

@@ -1,10 +1,13 @@
 import { FormEvent, useRef, useState } from "react";
 import AuthProviderButtons from "../ui/AuthProviderButtons";
 import { getFormValues } from "../../utils/function";
-import envConfig from "../../config/env.config";
 import { useRegisterMutation } from "../../redux/features/auth/auth.api";
 
-const RegisterForm = () => {
+interface IProps {
+  onSuccess?(): void;
+}
+
+const RegisterForm = ({ onSuccess }: IProps) => {
   const [error, setError] = useState<Record<string, string>>({});
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState("");
@@ -16,7 +19,7 @@ const RegisterForm = () => {
     setErrorMessage("");
     setSuccessMessage("");
     try {
-      const fieldError: any = {};
+      const fieldError: Record<string, string> = {};
 
       const target = e.target as HTMLFormElement;
       const values = getFormValues(target, ["fullName", "email", "password", "confirmPassword"]);
@@ -54,10 +57,22 @@ const RegisterForm = () => {
         setSuccessMessage(res.data.message);
         ref.current?.reset();
       } else {
-        throw new Error((res.error as any).data.message);
+        const apiError = res.error;
+        const message =
+          apiError &&
+          "data" in apiError &&
+          typeof apiError.data === "object" &&
+          apiError.data !== null &&
+          "message" in apiError.data &&
+          typeof apiError.data.message === "string"
+            ? apiError.data.message
+            : "Unable to create your account. Please try again.";
+        throw new Error(message);
       }
-    } catch (error: any) {
-      setErrorMessage(error.message);
+    } catch (error: unknown) {
+      setErrorMessage(
+        error instanceof Error ? error.message : "Unable to create your account. Please try again."
+      );
     }
   };
 
@@ -83,7 +98,7 @@ const RegisterForm = () => {
               name="email"
               className="px-2 py-4 w-full bg-gray-100 placeholder:font-secondary placeholder:font-medium   outline-secondary"
             />
-            {error.email && <p className="mt-1 text-red-600">{error.fullName}</p>}
+            {error.email && <p className="mt-1 text-red-600">{error.email}</p>}
           </div>
           <div>
             <input
@@ -115,7 +130,7 @@ const RegisterForm = () => {
         {errorMessage && <p className="mt-2 text-red-500">{errorMessage}</p>}
         {successMessage && <p className="mt-2 text-primary">{successMessage}</p>}
       </form>
-      <AuthProviderButtons />
+      <AuthProviderButtons onSuccess={onSuccess} />
     </>
   );
 };

@@ -17,7 +17,7 @@ const RecentCauses = () => {
     <section className="py-10">
       <Container>
         <Heading {...headingProps} />
-        <div className="mt-10 grid lg:grid-cols-3 grid-cols-2  md:gap-6 gap-3">
+        <div className="mt-10 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1  md:gap-6 gap-3">
           {bouncedLoading
             ? Array.from({ length: 3 }).map((_, index) => <CampaignLoadingCard key={index} />)
             : campaigns?.map((campaign, index) => (

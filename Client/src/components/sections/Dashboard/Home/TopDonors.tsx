@@ -1,5 +1,3 @@
-import React from "react";
-import ChartBar from "../../../ui/ChartBar";
 import DonorCard from "../../../cards/DonorCard";
 import { useGetTopDonorsQuery } from "../../../../redux/features/overview/overview.api";
 import useLoadingBounce from "../../../../hooks/useLoadingBounce";
@@ -10,14 +8,17 @@ const TopDonors = () => {
   const bouncedLoading = useLoadingBounce(isLoading);
 
   return (
-    <section className=" md:p-5 p-3  border-2 border-gray-600/10 rounded-lg ">
-      <h1 className="md:text-2xl text-xl font-semibold ">Top Donors</h1>
-      <div className="mt-8 space-y-2   h-[35vh] overflow-y-auto  customize-scrollbar">
+    <section className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6">
+      <h2 className="text-lg font-semibold tracking-tight text-slate-900">Top donors</h2>
+      <p className="mt-1 text-sm text-slate-500">The generous people powering your community.</p>
+      <div className="mt-5 max-h-[360px] space-y-3 overflow-y-auto customize-scrollbar">
         {bouncedLoading
-          ? Array.from({ length: 5 }).map(() => (
-              <div className="h-32 bg-gray-200 animate-pulse"></div>
+          ? Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className="h-16 animate-pulse rounded-xl bg-slate-100"></div>
             ))
-          : donors?.map((donor) => <DonorCard donor={donor} key={donor._id} />)}
+          : donors?.length
+            ? donors.map((donor) => <DonorCard donor={donor} key={donor._id} />)
+            : <p className="rounded-xl bg-slate-50 px-4 py-8 text-center text-sm text-slate-500">No donor activity yet.</p>}
       </div>
     </section>
   );

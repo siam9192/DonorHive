@@ -61,7 +61,7 @@ const AlmostReacheded = () => {
             <MdOutlineArrowForwardIos />
           </button>
         </div>
-        <div className="mt-10 flex   relative h-[500px] overflow-hidden ">
+        <div className="mt-10 flex   relative h-[400px] lg:h-[500px] overflow-hidden ">
           {bouncedLoading
             ? Array.from({ length: total }).map((_, index) => (
                 <div

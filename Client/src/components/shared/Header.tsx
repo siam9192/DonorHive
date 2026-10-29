@@ -1,27 +1,12 @@
 import Container from "../container/Container";
-import { FaDonate, FaFacebook, FaFacebookSquare, FaInstagram, FaUser } from "react-icons/fa";
-import { FaX } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { FaDonate, FaUser } from "react-icons/fa";
+import { Link, NavLink } from "react-router-dom";
 import ResponsiveNavbar from "../ui/ResponsiveNavbar";
 import LoginPopup from "../ui/LoginPopup";
 import NavShortcut from "../ui/NavShortcut";
 import { useCurrentUser } from "../../provider/CurrentUserProvider";
 import NotificationBar from "../ui/NotificationBar";
 import RandomDonate from "../ui/RandomDonate";
-const socialLinks = [
-  {
-    icon: FaFacebook,
-    href: "",
-  },
-  {
-    icon: FaX,
-    href: "",
-  },
-  {
-    icon: FaInstagram,
-    href: "",
-  },
-];
 const navLinks = [
   {
     name: "Home",
@@ -30,10 +15,6 @@ const navLinks = [
   {
     name: "Campaigns",
     href: "/campaigns",
-  },
-  {
-    name: "News",
-    href: "/news",
   },
   {
     name: "About Us",
@@ -49,47 +30,44 @@ const Header = () => {
   const { user, isLoading } = useCurrentUser();
 
   return (
-    <header className="lg:sticky top-0 z-40">
-      <div className="bg-gray-900 py-2">
+    <header className="sticky top-0 z-40">
+      <div className="bg-emerald-950 py-2 text-emerald-50 hidden lg:block">
         <Container>
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-4 md:text-[0.9rem] text-[0.6rem]">
-              <p className="text-white">DonorHive</p>
-              <p className="text-white ">+87368746</p>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                {socialLinks.map((link, index) => (
-                  <a
-                    href={link.href}
-                    key={index}
-                    className=" md:text-xl text-[0.7rem] text-white p-2 bg-black rounded-full"
-                  >
-                    <link.icon />
-                  </a>
-                ))}
-              </div>
-              {/* <Link to="/login" className="text-gray-200 md:block hidden">
-                Login
-              </Link> */}
-            </div>
+          <div className="flex items-center justify-between gap-3 text-xs sm:text-sm">
+            <p>Small acts of generosity create lasting change.</p>
+            <Link to="/campaigns" className="font-medium text-amber-300 transition hover:text-white">
+              Find a cause <span aria-hidden="true">→</span>
+            </Link>
           </div>
         </Container>
       </div>
-      <div className="bg-primary md:py-6 py-4 ">
+      <div className="border-b border-slate-200/80 bg-white/95 py-3 shadow-sm backdrop-blur-md md:py-4">
         <Container>
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <span className="md:text-5xl text-3xl text-white">
+            <Link to="/" className="flex items-center gap-3" aria-label="DonorHive home">
+              <span className="flex size-10 items-center justify-center rounded-xl bg-primary text-xl text-white shadow-md shadow-primary/20 md:size-12 md:text-2xl">
                 <FaDonate />
               </span>
-              <h1 className="md:text-2xl text-lg font-semibold text-gray-200">DonorHive</h1>
-            </div>
-            <nav className="lg:flex items-center gap-4 text-white uppercase lg:block hidden ">
+              <span className="text-xl font-semibold tracking-tight text-slate-900 md:text-2xl">
+                Donor<span className="text-primary">Hive</span>
+              </span>
+            </Link>
+            <nav className="hidden items-center gap-1 lg:flex" aria-label="Main navigation">
               {navLinks.map((item) => (
-                <Link to={item.href} key={item.name} className="hover:text-black ">
+                <NavLink
+                  to={item.href}
+                  key={item.name}
+                  end={item.href === "/"}
+                  className={({ isActive }) =>
+                    `rounded-full px-4 py-2 text-sm font-medium transition ${
+                      isActive
+                        ? "bg-emerald-50 text-emerald-800"
+                        : "text-slate-600 hover:bg-slate-50 hover:text-emerald-800"
+                    }`
+                  }
+                >
                   {item.name}
-                </Link>
+                </NavLink>
               ))}
             </nav>
             <div className="flex items-center gap-3">
@@ -102,11 +80,11 @@ const Header = () => {
                   </>
                 ) : (
                   <LoginPopup>
-                    <button className="flex items-center gap-2 text-white">
-                      <span className="md:text-3xl text-2xl ">
+                    <button className="flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-primary/20 transition hover:bg-emerald-700">
+                      <span className="text-lg">
                         <FaUser />
                       </span>
-                      <span className="md:block hidden">Login/Register</span>
+                      <span className="hidden md:block">Login / Register</span>
                     </button>
                   </LoginPopup>
                 )

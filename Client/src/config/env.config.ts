@@ -11,7 +11,7 @@ const envConfig = {
   },
   imgBB: {
     apiKey: import.meta.env.VITE_IMG_BB_API_KEY,
-    uploadUrl: import.meta.env.IMG_BB_UPLOAD_URL,
+    uploadUrl: import.meta.env.VITE_IMG_BB_UPLOAD_URL,
   },
 };
 

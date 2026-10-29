@@ -19,7 +19,7 @@ interface IProps {
 type TFieldError = Record<string, string>;
 
 const EditCampaignForm = ({ onAdd, id }: IProps) => {
-  const { data, isLoading, isError } = useGetCampaignByIdForManageQuery(id);
+  const { data, isLoading, } = useGetCampaignByIdForManageQuery(id);
 
   const [coverPhoto, setCoverPhoto] = useState<File | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);

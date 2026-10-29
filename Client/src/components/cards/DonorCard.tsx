@@ -1,4 +1,3 @@
-import React from "react";
 import { FiDollarSign } from "react-icons/fi";
 import { ITopDonor } from "../../types/overview.type";
 
@@ -8,21 +7,23 @@ interface IProps {
 
 const DonorCard = ({ donor }: IProps) => {
   return (
-    <div className="p-3 border-2 border-gray-400/15 rounded-md flex items-center  justify-between">
-      <div className="flex items-center gap-2">
-        <img src={donor.profilePhotoUrl} alt="" className="size-12 rounded-full" />
+    <article className="flex items-center justify-between gap-3 rounded-xl border border-slate-100 bg-slate-50/70 p-3 transition hover:border-emerald-100 hover:bg-emerald-50/40">
+      <div className="flex min-w-0 items-center gap-3">
+        <img
+          src={donor.profilePhotoUrl || "https://cdn-icons-png.flaticon.com/512/3001/3001758.png"}
+          alt=""
+          className="size-11 shrink-0 rounded-full bg-white object-cover"
+        />
         <div>
-          <h1 className="text-xl font-medium font-secondary">{donor.fullName}</h1>
-          <p className="mt-1 text-primary text-sm">#{donor._id}</p>
+          <h3 className="truncate text-sm font-semibold text-slate-800">{donor.fullName}</h3>
+          <p className="mt-0.5 text-xs text-slate-500">Top community supporter</p>
         </div>
       </div>
-      <p className="text-lg font-medium ">
-        <span className="text-2xl text-black">
-          <FiDollarSign className="inline" />
-        </span>
-        {3762}
+      <p className="shrink-0 text-sm font-semibold tabular-nums text-emerald-800">
+        <FiDollarSign className="mr-0.5 inline" />
+        {donor.donatedAmount.toLocaleString()}
       </p>
-    </div>
+    </article>
   );
 };
 

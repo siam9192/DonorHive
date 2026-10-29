@@ -50,7 +50,7 @@ const ExploreActivities = () => {
       <Container>
         <Heading {...headingProps} />
 
-        <div className="mt-10 grid lg:grid-cols-2  grid-cols-2 lg:gap-8 gap-4 ">
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2 lg:gap-8">
           {activities.map((_, index) => (
             <ActivityCard activity={_} key={index} />
           ))}

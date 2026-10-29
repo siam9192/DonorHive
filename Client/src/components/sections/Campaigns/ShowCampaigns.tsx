@@ -123,7 +123,7 @@ const ShowCampaigns = () => {
           </select>
         </div>
 
-        <div className="mt-10 grid lg:grid-cols-3 grid-cols-2  md:gap-5 gap-3">
+        <div className="mt-10 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1  md:gap-5 gap-3">
           {bouncedLoading || isFetching
             ? Array.from({ length: 14 }).map((_, index) => <CampaignLoadingCard key={index} />)
             : campaigns?.map((campaign, index) => (

@@ -19,7 +19,7 @@ const Activities = () => {
             <img
               src="https://st2.depositphotos.com/2801443/5683/i/450/depositphotos_56835989-stock-photo-indian-kids-in-the-jaisalmer.jpg"
               alt=""
-              className="h-full w-full"
+              className="h-full w-full object-cover"
             />
             <div className="absolute inset-0 flex justify-center items-center bg-transparent">
               <VideoPopup>

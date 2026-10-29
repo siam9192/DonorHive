@@ -1,4 +1,3 @@
-import React from "react";
 import { IUser } from "../../types/user.type";
 import { getTimeAgo } from "../../utils/function";
 interface IProps {
@@ -7,25 +6,20 @@ interface IProps {
 const UserCard = (props: IProps) => {
   const user = props.user;
   return (
-    <div className=" mt-3 p-5 border-2 border-gray-600/15 rounded-md relative">
-      <div className="flex items-center gap-2">
+    <article className="rounded-xl border border-slate-100 bg-slate-50/70 p-4">
+      <div className="flex items-center gap-3">
         <img
           src={user.profilePhotoUrl || "https://cdn-icons-png.flaticon.com/512/3001/3001758.png"}
           alt=""
-          className="md:size-16 size-12 rounded-full"
+          className="size-11 rounded-full bg-white object-cover"
         />
-        <div className="font-secondary">
-          <h3 className="md:text-xl text-lg font-medium text-gray-900">{user.fullName}</h3>
-          <p className="text-gray-500 text-sm ">{user.email}</p>
+        <div className="min-w-0 flex-1 font-secondary">
+          <h3 className="truncate text-sm font-semibold text-slate-800">{user.fullName}</h3>
+          <p className="truncate text-xs text-slate-500">{user.email}</p>
         </div>
+        <span className="shrink-0 text-xs text-slate-500">{getTimeAgo(user.createdAt)} ago</span>
       </div>
-      <div className="flex justify-end items-center gap-2">
-        <button className="text-primary font-medium text-sm ">Details</button>
-      </div>
-      <p className="text-sm font-medium text-gray-600 absolute top-2 right-2 ">
-        {getTimeAgo(user.createdAt)} ago
-      </p>
-    </div>
+    </article>
   );
 };
 
